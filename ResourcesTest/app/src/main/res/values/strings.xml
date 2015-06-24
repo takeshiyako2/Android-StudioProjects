@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">ResourcesTest</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="msg">press the <i>right</i> button</string>
+    <string name="hello">hello</string>
+</resources>
