@@ -41,7 +41,7 @@ public class MainActivity extends Activity
                         swipeView.setRefreshing(false);
                         browser.loadUrl("http://www.yahoo.co.jp/");
                     }
-                }, 4000);
+                }, 1000);
             }
         });
     }
