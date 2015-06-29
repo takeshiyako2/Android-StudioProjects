@@ -58,7 +58,14 @@ public class MainActivity extends ActionBarActivity {
         newData();
 
         // トグル
+        toggleData();
+    }
+
+
+    public void toggleData() {
+        // トグル
         CompoundButton toggle = (CompoundButton)findViewById(R.id.toggle);
+
         // トグルのデフォルト
         // DBからすべてのデータを取得する。
         List<MyDBEntity> entityList = dao.findAll();
@@ -86,11 +93,6 @@ public class MainActivity extends ActionBarActivity {
                 changeData();
             }
         });
-    }
-
-
-    public void onToggleClicked(View view) {
-
     }
 
 
