@@ -76,7 +76,7 @@ public class MainActivity extends ActionBarActivity {
         }
         Log.i(TAG, e.getValue());
 
-        // トグルの状態変更
+        // トグルの状態変更 (トグル操作のリスナーを登録)
         toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -94,7 +94,6 @@ public class MainActivity extends ActionBarActivity {
             }
         });
     }
-
 
     /**
      * 追加ボタンのクリックイベント
