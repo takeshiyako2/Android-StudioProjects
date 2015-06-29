@@ -23,6 +23,7 @@ public class MainActivity extends ActionBarActivity {
 
     private MemoDao dao;
     private LinearLayout showData;
+    private LinearLayout TextView;
     private EditText dataEdit;
 
     @Override
@@ -45,6 +46,9 @@ public class MainActivity extends ActionBarActivity {
 
         // 表示データの更新
         changeData();
+
+        // 最新データの表示
+        newData();
     }
 
 
@@ -92,12 +96,31 @@ public class MainActivity extends ActionBarActivity {
         // DBからすべてのデータを取得する。
         List<MyDBEntity> entityList = dao.findAll();
 
+
         // データを表示領域に追加する
         for(MyDBEntity entity: entityList) {
             TextView textView = new TextView(this);
             textView.setText(entity.getRowId() + "： " + entity.getValue());
             showData.addView(textView);
         }
+
+        // 最新データの表示aaaaa
+        newData();
+    }
+
+    /**
+     * 最新データを表示
+     */
+    private void newData() {
+
+        // DBからすべてのデータを取得する。
+        List<MyDBEntity> entityList = dao.findAll();
+        // Listの最後の要素を取得
+        MyDBEntity e = entityList.get(entityList.size() - 1);
+
+        TextView textView = (TextView)findViewById(R.id.txtView);
+//        textView.setText(dao.findById(13).getValue());
+        textView.setText(e.getValue());
     }
 
 
