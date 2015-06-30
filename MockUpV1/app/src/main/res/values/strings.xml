@@ -13,6 +13,7 @@
 
         <string name="hello_world">Hello world!</string>
 
+    <string name="action_home">Home</string>
     <string name="action_settings">Settings</string>
 
 <!-- TODO: Remove or change this placeholder text -->
@@ -33,12 +34,10 @@
     <string name="opt_menu_01">My設定</string>
     <string name="opt_menu_02">ヘルプ</string>
 
-    <!-- preference strings -->
-    <string name="preference_title">simple設定画面</string>
+    <!-- SettingsActivity used -->
+    <string name="title_activity_settings">9ポスト 設定</string>
+    <string name="toggle">通知</string>
+    <string name="toggle_description">プッシュ通知をせっていします。</string>
 
-    <string name="checkbox_01_title">ネットワーク通信許可</string>
-    <string name="checkbox_01_summary">ネットワーク通信を有効にします</string>
-    <string name="checkbox_02_title">GPS許可</string>
-    <string name="checkbox_02_summary">GPSを有効にします</string>
 
 </resources>

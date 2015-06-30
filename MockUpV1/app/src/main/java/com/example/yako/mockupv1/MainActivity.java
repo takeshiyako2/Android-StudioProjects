@@ -2,6 +2,7 @@ package com.example.yako.mockupv1;
 
 import java.util.Locale;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -21,6 +22,7 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity implements ActionBar.TabListener {
 
@@ -86,7 +88,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         }
     }
 
-
+    // メニュー
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -94,11 +96,13 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         return true;
     }
 
+    // メニュー Settingsを押したとき
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+        /*
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
@@ -107,6 +111,17 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         }
 
         return super.onOptionsItemSelected(item);
+        */
+
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                startActivity(new Intent(this, SettingsActivity.class));
+                return true;
+            case R.id.action_home:
+                startActivity(new Intent(this, MainActivity.class));
+                return true;
+        }
+        return false;
     }
 
     // タブを選択した時の処理
