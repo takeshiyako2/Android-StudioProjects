@@ -1,11 +1,20 @@
 <resources>
     <string name="app_name">MockUpV2</string>
 
-    <string name="title_section1">Section 1</string>
-    <string name="title_section2">Section 2</string>
-    <string name="title_section3">Section 3</string>
+    <string name="title_section1">人気</string>
+    <string name="title_section2">すごい</string>
+    <string name="title_section3">ワロタ</string>
+    <string name="title_section4">泣いた</string>
+    <string name="title_section5">動物</string>
+    <string name="title_section6">スポーツ</string>
+    <string name="title_section7">社会問題</string>
+    <string name="title_section8">音楽</string>
+    <string name="title_section9">設定</string>
 
     <string name="hello_world">Hello world!</string>
 
     <string name="action_settings">Settings</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -16,6 +16,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
@@ -43,20 +45,24 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         setContentView(R.layout.activity_main);
 
         // Set up the action bar.
+        // Action barのモードをタブモードに切り替え
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
+        // FragmentPagerAdapterを継承したクラスのアダプターを作成
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
+        // ViewPagerにSectionPagerAdapterをセット
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         // When swiping between different sections, select the corresponding
         // tab. We can also use ActionBar.Tab#select() to do this if we have
         // a reference to the Tab.
+        // スワイプしたときにもActionbarのタブ（NavigationItem）を常に表示させる処理
         mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
@@ -65,11 +71,14 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         });
 
         // For each of the sections in the app, add a tab to the action bar.
+        // getCountでタブの数を指定。
         for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
             // Create a tab with text corresponding to the page title defined by
             // the adapter. Also specify this Activity object, which implements
             // the TabListener interface, as the callback (listener) for when
             // this tab is selected.
+            // Actionbarにタブを追加。
+            // getPageTitleでタブのタイトルを表示
             actionBar.addTab(
                     actionBar.newTab()
                             .setText(mSectionsPagerAdapter.getPageTitle(i))
@@ -100,6 +109,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         return super.onOptionsItemSelected(item);
     }
 
+    // タブを選択した時の処理
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
         // When the given tab is selected, switch to the corresponding page in
@@ -107,10 +117,12 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         mViewPager.setCurrentItem(tab.getPosition());
     }
 
+    // タブの選択が外れた場合の処理
     @Override
     public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
     }
 
+    // タブが2度目以降に選択された場合の処理
     @Override
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
     }
@@ -119,6 +131,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
+    // ViewPagerの動作を作成
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         public SectionsPagerAdapter(FragmentManager fm) {
@@ -132,12 +145,14 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
             return PlaceholderFragment.newInstance(position + 1);
         }
 
+        // タブの数を決定
         @Override
         public int getCount() {
             // Show 4 total pages.
-            return 4;
+            return 8;
         }
 
+        // タブのタイトルを決定
         @Override
         public CharSequence getPageTitle(int position) {
             Locale l = Locale.getDefault();
@@ -150,6 +165,14 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                     return getString(R.string.title_section3).toUpperCase(l);
                 case 3:
                     return getString(R.string.title_section4).toUpperCase(l);
+                case 4:
+                    return getString(R.string.title_section5).toUpperCase(l);
+                case 5:
+                    return getString(R.string.title_section6).toUpperCase(l);
+                case 6:
+                    return getString(R.string.title_section7).toUpperCase(l);
+                case 7:
+                    return getString(R.string.title_section8).toUpperCase(l);
             }
             return null;
         }
@@ -219,6 +242,26 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
             else if(position == 4){
                 fragmentManager.beginTransaction()
                         .replace(layout.getId(), Fragment4.newInstance())
+                        .commit();
+            }
+            else if(position == 5){
+                fragmentManager.beginTransaction()
+                        .replace(layout.getId(), Fragment5.newInstance())
+                        .commit();
+            }
+            else if(position == 6){
+                fragmentManager.beginTransaction()
+                        .replace(layout.getId(), Fragment6.newInstance())
+                        .commit();
+            }
+            else if(position == 7){
+                fragmentManager.beginTransaction()
+                        .replace(layout.getId(), Fragment7.newInstance())
+                        .commit();
+            }
+            else if(position == 8){
+                fragmentManager.beginTransaction()
+                        .replace(layout.getId(), Fragment8.newInstance())
                         .commit();
             }
             return rootView;
