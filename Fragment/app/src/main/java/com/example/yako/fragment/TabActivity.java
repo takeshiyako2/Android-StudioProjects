@@ -196,7 +196,7 @@ public class TabActivity extends ActionBarActivity implements ActionBar.TabListe
             layout.setId(ViewUtil.generateViewId());
 
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-            if(position == 1){
+            if(position == 3){
                 fragmentManager.beginTransaction()
                         .replace(layout.getId(), ImageFragment.newInstance(R.drawable.hanabatake))
                         .commit();
@@ -206,7 +206,7 @@ public class TabActivity extends ActionBarActivity implements ActionBar.TabListe
                         .replace(layout.getId(), TextFragment.newInstance())
                         .commit();
             }
-            else if(position == 3){
+            else if(position == 1){
                 fragmentManager.beginTransaction()
                         .replace(layout.getId(), ItemFragment.newInstance())
                         .commit();

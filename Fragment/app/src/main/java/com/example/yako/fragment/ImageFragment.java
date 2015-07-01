@@ -4,6 +4,7 @@ package com.example.yako.fragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.app.Activity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,9 @@ import android.widget.ImageView;
  *
  */
 public class ImageFragment extends Fragment {
+
+    static final String TAG = "ImageFragment";
+
     private static final String ARG_PARAM_RESOURCE_ID = "resource_id";
 
     private int mResourceId;
@@ -61,6 +65,41 @@ public class ImageFragment extends Fragment {
         return rootView;
     }
 
+    /***
+     * Activityの「onResume」に基づき開始される
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume");
+    }
+
+    /***
+     * Activityが「onPause」になった場合や、Fragmentが変更更新されて操作を受け付けなくなった場合に呼び出される
+     */
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause");
+    }
+
+    /***
+     * フォアグラウンドでなくなった場合に呼び出される
+     */
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop");
+    }
+
+    /***
+     * Fragmentの内部のViewリソースの整理を行う
+     */
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.d(TAG, "onDestroyView");
+    }
 
 
 }

@@ -3,6 +3,7 @@ package com.example.yako.fragment;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +33,8 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
     private static final String ARG_SECTION_NUMBER = "section_number";
 
     private OnFragmentInteractionListener mListener;
+
+    static final String TAG = "ItemFragment";
 
     /**
      * The fragment's ListView/GridView.
@@ -68,6 +71,8 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
         // TODO: Change Adapter to display your content
         mAdapter = new ArrayAdapter<DummyContent.DummyItem>(getActivity(),
                 android.R.layout.simple_list_item_1, android.R.id.text1, DummyContent.ITEMS);
+
+        Log.d(TAG, "onCreate");
     }
 
     @Override
@@ -82,6 +87,8 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
 
+        Log.d(TAG, "onCreateView");
+
         return view;
     }
 
@@ -94,12 +101,14 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+        Log.d(TAG, "onAttach");
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        Log.d(TAG, "onDetach");
     }
 
     @Override
@@ -138,5 +147,55 @@ public class ItemFragment extends Fragment implements AbsListView.OnItemClickLis
         // TODO: Update argument type and name
         public void onFragmentInteraction(String id);
     }
+
+
+
+
+    /***
+     * Activityの「onResume」に基づき開始される
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume");
+    }
+
+    /***
+     * Activityが「onPause」になった場合や、Fragmentが変更更新されて操作を受け付けなくなった場合に呼び出される
+     */
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause");
+    }
+
+    /***
+     * フォアグラウンドでなくなった場合に呼び出される
+     */
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop");
+    }
+
+    /***
+     * Fragmentの内部のViewリソースの整理を行う
+     */
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.d(TAG, "onDestroyView");
+    }
+
+
+
+
+
+
+
+
+
+
+
 
 }

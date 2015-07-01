@@ -19,12 +19,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.webkit.WebViewFragment;
 import android.widget.TextView;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+import android.util.Log;
 
 public class MainActivity extends ActionBarActivity implements ActionBar.TabListener {
+
+    private static String TAG = "MainActivity";
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -99,20 +106,6 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
     // メニュー Settingsを押したとき
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        /*
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-        */
-
         switch (item.getItemId()) {
             case R.id.action_settings:
                 startActivity(new Intent(this, SettingsActivity.class));
@@ -188,6 +181,8 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                     return getString(R.string.title_section7).toUpperCase(l);
                 case 7:
                     return getString(R.string.title_section8).toUpperCase(l);
+                case 8:
+                    return getString(R.string.title_section9).toUpperCase(l);
             }
             return null;
         }
@@ -218,21 +213,10 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         public PlaceholderFragment() {
         }
 
-/*
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            return rootView;
-        }
-*/
-
-
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             int position = getArguments().getInt(ARG_SECTION_NUMBER);
             RelativeLayout rootView = (RelativeLayout)inflater.inflate(R.layout.fragment_main, container, false);
-
 
             FrameLayout layout = (FrameLayout)rootView.getChildAt(0);
 
@@ -279,10 +263,18 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
                         .replace(layout.getId(), Fragment8.newInstance())
                         .commit();
             }
+            else if(position == 9){
+                fragmentManager.beginTransaction()
+                        .replace(layout.getId(), Fragment9.newInstance())
+                        .commit();
+            }
             return rootView;
         }
 
 
     }
+
+
+
 
 }

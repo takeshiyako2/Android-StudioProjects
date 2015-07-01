@@ -4,6 +4,7 @@ package com.example.yako.fragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.app.Activity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,9 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class TextFragment extends Fragment {
+
+    static final String TAG = "TextFragment";
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -46,5 +50,42 @@ public class TextFragment extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
     }
+
+    /***
+     * Activityの「onResume」に基づき開始される
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume");
+    }
+
+    /***
+     * Activityが「onPause」になった場合や、Fragmentが変更更新されて操作を受け付けなくなった場合に呼び出される
+     */
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause");
+    }
+
+    /***
+     * フォアグラウンドでなくなった場合に呼び出される
+     */
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop");
+    }
+
+    /***
+     * Fragmentの内部のViewリソースの整理を行う
+     */
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.d(TAG, "onDestroyView");
+    }
+
 
 }

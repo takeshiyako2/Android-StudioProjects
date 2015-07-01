@@ -201,6 +201,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
             layout.setId(ViewUtil.generateViewId());
 
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+
             if(position == 1){
                 fragmentManager.beginTransaction()
                         .replace(layout.getId(), TextFragment.newInstance())

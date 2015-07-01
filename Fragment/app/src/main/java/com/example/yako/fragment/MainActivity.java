@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,6 +23,8 @@ import android.widget.TextView;
 
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks,ItemFragment.OnFragmentInteractionListener{
+
+    static final String TAG = "MainActivity";
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -51,6 +54,9 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
+
+
+        Log.d(TAG, "onNavigationDrawerItemSelected");
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
@@ -147,7 +153,7 @@ public class MainActivity extends ActionBarActivity
             int position = getArguments().getInt(ARG_SECTION_NUMBER);
 
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-            if(position == 3){
+            if(position == 1){
                 fragmentManager.beginTransaction()
                         .replace(R.id.main_container,ImageFragment.newInstance(R.drawable.hanabatake))
                         .commit();
@@ -157,7 +163,7 @@ public class MainActivity extends ActionBarActivity
                         .replace(R.id.main_container, TextFragment.newInstance())
                         .commit();
             }
-            else if(position == 1){
+            else if(position == 3){
                 fragmentManager.beginTransaction()
                         .replace(R.id.main_container, ItemFragment.newInstance())
                         .commit();

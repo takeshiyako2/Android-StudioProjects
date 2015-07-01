@@ -2,22 +2,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="0px"
-    android:paddingRight="0px"
-    android:paddingTop="0px"
-    android:paddingBottom="0px"
     tools:context="com.example.yako.mockupv1.Fragment1"
     >
 
-    <!-- TODO: Update blank fragment layout -->
-<!--    <TextView android:layout_width="match_parent" android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment1" /> -->
-
-
-        <WebView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/webView1"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            />
+    <WebView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/webView1"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        />
 
 </FrameLayout>

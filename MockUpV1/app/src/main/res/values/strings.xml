@@ -1,43 +1,25 @@
 <resources>
     <string name="app_name">9ポスト MockUpV1</string>
 
-    <string name="title_section1">人気</string>
-    <string name="title_section2">すごい</string>
-    <string name="title_section3">ワロタ</string>
-    <string name="title_section4">泣いた</string>
-    <string name="title_section5">動物</string>
-    <string name="title_section6">スポーツ</string>
-    <string name="title_section7">社会問題</string>
-    <string name="title_section8">音楽</string>
-    <string name="title_section9">設定</string>
+    <!-- tab -->
+    <string name="title_section1">新着</string>
+    <string name="title_section2">人気</string>
+    <string name="title_section3">すごい</string>
+    <string name="title_section4">ワロタ</string>
+    <string name="title_section5">泣いた</string>
+    <string name="title_section6">動物</string>
+    <string name="title_section7">スポーツ</string>
+    <string name="title_section8">社会問題</string>
+    <string name="title_section9">音楽</string>
+    <string name="title_section10">設定</string>
 
-        <string name="hello_world">Hello world!</string>
-
+    <!-- menu -->
     <string name="action_home">Home</string>
     <string name="action_settings">Settings</string>
 
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment1">Hello blank fragment1</string>
-    <string name="hello_blank_fragment2">Hello blank fragment2</string>
-    <string name="hello_blank_fragment3">Hello blank fragment3</string>
-    <string name="hello_blank_fragment4">Hello blank fragment4</string>
-    <string name="hello_blank_fragment5">Hello blank fragment5</string>
-    <string name="hello_blank_fragment6">Hello blank fragment6</string>
-    <string name="hello_blank_fragment7">Hello blank fragment7</string>
-    <string name="hello_blank_fragment8">Hello blank fragment8</string>
-    <string name="hello_blank_fragment9">Hello blank fragment9</string>
-
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
-    <!-- menu used -->
-    <string name="opt_menu_01">My設定</string>
-    <string name="opt_menu_02">ヘルプ</string>
-
-    <!-- SettingsActivity used -->
+    <!-- SettingsActivity -->
     <string name="title_activity_settings">9ポスト 設定</string>
     <string name="toggle">通知</string>
-    <string name="toggle_description">プッシュ通知をせっていします。</string>
-
+    <string name="toggle_description">プッシュ通知を設定します。</string>
 
 </resources>
