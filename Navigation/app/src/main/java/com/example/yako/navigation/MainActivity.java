@@ -2,6 +2,7 @@ package com.example.yako.navigation;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.v4.app.ShareCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
@@ -115,19 +116,22 @@ public class MainActivity extends ActionBarActivity
         return super.onCreateOptionsMenu(menu);
     }
 
+    // メニュー Settingsを押したとき
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        Log.d(TAG, "onOptionsItemSelected 1");
+
+
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                startActivity(new Intent(this, SettingsActivity.class));
+                return true;
+            case R.id.action_home:
+                startActivity(new Intent(this, MainActivity.class));
+                return true;
         }
-
-        return super.onOptionsItemSelected(item);
+        return false;
     }
 
 
@@ -137,6 +141,7 @@ public class MainActivity extends ActionBarActivity
         Log.d(TAG, "onBackPressed 1");
         Log.d(TAG, String.valueOf(THIS_POSITION));
 
+        // 各Fragmentを起動
         Integer position = THIS_POSITION;
         FragmentManager fragmentManager = getSupportFragmentManager();
 
@@ -153,13 +158,14 @@ public class MainActivity extends ActionBarActivity
                     .replace(R.id.container, Web3Fragment.newInstance(position + 1))
                     .commit();
         } else {
-            // トップへ移動
+            // トップを起動
             finish();
             Intent i = new Intent(MainActivity.this, MainActivity.class);
             startActivity(i);
         }
 
     }
+
 
 
 }

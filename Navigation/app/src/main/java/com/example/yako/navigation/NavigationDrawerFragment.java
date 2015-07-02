@@ -1,5 +1,6 @@
 package com.example.yako.navigation;
 
+import android.support.v4.app.ShareCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
 import android.support.v7.app.ActionBar;
@@ -247,10 +248,13 @@ public class NavigationDrawerFragment extends Fragment {
             return true;
         }
 
+        /*
+        // シェアするボタンを押す
         if (item.getItemId() == R.id.action_example) {
             Toast.makeText(getActivity(), "Example action.", Toast.LENGTH_SHORT).show();
             return true;
         }
+        */
 
         return super.onOptionsItemSelected(item);
     }

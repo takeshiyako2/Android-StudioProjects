@@ -1,6 +1,7 @@
 package com.example.yako.navigation;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
+import android.widget.Toast;
 
 
 public class Web3Fragment extends Fragment {
@@ -53,9 +56,55 @@ public class Web3Fragment extends Fragment {
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.getSettings().setUseWideViewPort(true);
         mWebView.setScrollBarStyle(WebView.SCROLLBARS_INSIDE_OVERLAY);
-        mWebView.loadUrl("https://www.facebook.com/");
+        // ユーザーエージェントの設定
+        String ua = mWebView.getSettings().getUserAgentString();
+        ua = ua + " 9post-android";
+        mWebView.getSettings().setUserAgentString(ua);
+        mWebView.loadUrl("http://9post.jp/category/nsfw");
         return v;
 
+    }
+
+    // ボタン
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // Facebook
+        Button button = (Button)getActivity().findViewById(R.id.button1);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url = mWebView.getUrl();
+                share("com.facebook.katana", url);
+            }
+        });
+
+        // Twitter
+        Button button2 = (Button)getActivity().findViewById(R.id.button2);
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String url = mWebView.getUrl();
+                String title = mWebView.getTitle();
+                share("com.twitter.android", title + " " + url);
+            }
+        });
+    }
+
+    // シェア用
+    private void share(String packageName, String text) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT, text);
+        intent.setPackage(packageName);   // パッケージをそのまま指定
+        try {
+            startActivity(intent);
+        } catch (android.content.ActivityNotFoundException e) {
+            // 指定パッケージのアプリがインストールされていないか
+            // ACTION_SENDに対応していないか
+            Toast.makeText(getActivity(), "not installed", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -82,7 +131,7 @@ public class Web3Fragment extends Fragment {
     public void onPause() {
         super.onPause();
         Log.d(TAG, "onPause");
-        mWebView.destroy();
+        mWebView.onPause();
     }
 
     /***
@@ -92,7 +141,7 @@ public class Web3Fragment extends Fragment {
     public void onStop() {
         super.onStop();
         Log.d(TAG, "onStop");
-        mWebView.destroy();
+        mWebView.onPause();
     }
 
     /***
