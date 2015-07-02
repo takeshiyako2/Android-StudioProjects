@@ -1,6 +1,8 @@
 package com.example.yako.navigation;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -8,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -24,6 +27,9 @@ import android.widget.TextView;
 
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+
+    private static String TAG = "MainActivity";
+    private static Integer THIS_POSITION = 0;
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -52,11 +58,26 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
+        // 戻るボタンのためポジションをとっておく
+        THIS_POSITION = position;
+
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
-                .commit();
+        if(position == 0){
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, Web1Fragment.newInstance(position + 1))
+                    .commit();
+        }
+        else if(position == 1){
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, Web2Fragment.newInstance(position + 1))
+                    .commit();
+        }
+        else if(position == 2){
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, Web3Fragment.newInstance(position + 1))
+                    .commit();
+        }
     }
 
     public void onSectionAttached(int number) {
@@ -109,60 +130,36 @@ public class MainActivity extends ActionBarActivity
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
 
-        private WebView mWebView;
+    // 戻るボタン
+    @Override
+    public void onBackPressed() {
+        Log.d(TAG, "onBackPressed 1");
+        Log.d(TAG, String.valueOf(THIS_POSITION));
 
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
+        Integer position = THIS_POSITION;
+        FragmentManager fragmentManager = getSupportFragmentManager();
 
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
+        if (position == 0) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, Web1Fragment.newInstance(position + 1))
+                    .commit();
+        } else if (position == 1) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, Web2Fragment.newInstance(position + 1))
+                    .commit();
+        } else if (position == 2) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, Web3Fragment.newInstance(position + 1))
+                    .commit();
+        } else {
+            // トップへ移動
+            finish();
+            Intent i = new Intent(MainActivity.this, MainActivity.class);
+            startActivity(i);
         }
 
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            //View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            //return rootView;
-
-            Integer number = getArguments().getInt(ARG_SECTION_NUMBER);
-            
-
-            View v = inflater.inflate(R.layout.fragment_main, container, false);
-            mWebView = (WebView)v.findViewById(R.id.webView1);
-            mWebView.setWebViewClient(new WebViewClient());
-            mWebView.getSettings().setJavaScriptEnabled(true);
-            mWebView.getSettings().setUseWideViewPort(true);
-            mWebView.setScrollBarStyle(WebView.SCROLLBARS_INSIDE_OVERLAY);
-            mWebView.loadUrl("http://www.google.com/");
-            return v;
-
-        }
-
-        @Override
-        public void onAttach(Activity activity) {
-            super.onAttach(activity);
-            ((MainActivity) activity).onSectionAttached(
-                    getArguments().getInt(ARG_SECTION_NUMBER));
-        }
     }
+
 
 }

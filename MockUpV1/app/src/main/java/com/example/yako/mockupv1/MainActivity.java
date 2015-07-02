@@ -72,6 +72,7 @@ public class MainActivity extends ActionBarActivity implements ActionBar.TabList
         // tab. We can also use ActionBar.Tab#select() to do this if we have
         // a reference to the Tab.
         // スワイプしたときにもActionbarのタブ（NavigationItem）を常に表示させる処理
+
         mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
