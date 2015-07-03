@@ -63,8 +63,8 @@ public class Web1Fragment extends Fragment {
         ua = ua + " 9post-android";
         mWebView.getSettings().setUserAgentString(ua);
         mWebView.loadUrl("http://9post.jp/");
+//        mWebView.loadUrl("https://www.google.co.jp/");
         return v;
-
     }
 
     // ボタン
@@ -126,7 +126,7 @@ public class Web1Fragment extends Fragment {
     public void onResume() {
         super.onResume();
         Log.d(TAG, "onResume");
-//        mWebView.destroy();
+        mWebView.onResume();
     }
 
     /***

@@ -121,7 +121,7 @@ public class Web2Fragment extends Fragment {
     public void onResume() {
         super.onResume();
         Log.d(TAG, "onResume");
-//        mWebView.destroy();
+        mWebView.onResume();
     }
 
     /***
@@ -151,7 +151,6 @@ public class Web2Fragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         Log.d(TAG, "onDestroyView");
-        mWebView.destroy();
     }
 
     /***

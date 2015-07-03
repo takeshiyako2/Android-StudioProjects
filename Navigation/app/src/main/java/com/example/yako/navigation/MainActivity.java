@@ -116,18 +116,20 @@ public class MainActivity extends ActionBarActivity
         return super.onCreateOptionsMenu(menu);
     }
 
-    // メニュー Settingsを押したとき
+    // アクションバーを押したとき
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         Log.d(TAG, "onOptionsItemSelected 1");
-
 
         switch (item.getItemId()) {
             case R.id.action_settings:
                 startActivity(new Intent(this, SettingsActivity.class));
                 return true;
             case R.id.action_home:
+                startActivity(new Intent(this, MainActivity.class));
+                return true;
+            case R.id.action_rotate:
                 startActivity(new Intent(this, MainActivity.class));
                 return true;
         }
