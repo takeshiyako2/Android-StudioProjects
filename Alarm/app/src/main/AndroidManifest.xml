@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.yako.navigation" >
-
-    <uses-permission android:name="android.permission.INTERNET" />
+    package="com.example.yako.alarm" >
 
     <application
         android:allowBackup="true"
@@ -18,14 +16,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings" >
-        </activity>
 
         <receiver android:name=".AlarmReceiver" android:process=":remote" />
 
     </application>
-
 
 </manifest>

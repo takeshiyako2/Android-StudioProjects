@@ -85,7 +85,7 @@ public class MainActivity extends Activity {
                             1 * 1000 * 60,
                             alarmIntent
                     );
-                    Toast.makeText(MainActivity.this, "通知セット完了!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "通知セット完了!" + hour + " " + minute, Toast.LENGTH_SHORT).show();
                     textView.setText("通知セット");
                     notificationId++;
 

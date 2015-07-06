@@ -1,7 +1,9 @@
 package com.example.yako.navigation;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -23,6 +25,8 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.Toast;
+
+import java.util.Calendar;
 
 
 public class Web1Fragment extends Fragment {
@@ -239,7 +243,7 @@ public class Web1Fragment extends Fragment {
                 // ダイアログの表示位置　上部に表示
                 WindowManager.LayoutParams wmlp=waitDialog.getWindow().getAttributes();
                 wmlp.gravity = Gravity.TOP;
-                wmlp.y = 180;
+                wmlp.y = 380;
                 waitDialog.getWindow().setAttributes(wmlp);
                 // 画面を暗くしないように
                 waitDialog.getWindow().setFlags( 0 , WindowManager.LayoutParams.FLAG_DIM_BEHIND);
