@@ -1,16 +1,24 @@
 package com.example.yako.navigation;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Picture;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
@@ -22,6 +30,12 @@ public class Web1Fragment extends Fragment {
     private static String TAG = "Web1Fragment";
 
     private WebView mWebView;
+
+    /** エラーページ */
+    private View mErrorPage;
+
+    /** ページ取得失敗判定 */
+    private boolean mIsFailure = false;
 
     /**
      * The fragment argument representing the section number for this
@@ -54,7 +68,7 @@ public class Web1Fragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_main, container, false);
         mWebView = (WebView)v.findViewById(R.id.webView1);
-        mWebView.setWebViewClient(new WebViewClient());
+        mWebView.setWebViewClient(new CustomWebViewClient());
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.getSettings().setUseWideViewPort(true);
         mWebView.setScrollBarStyle(WebView.SCROLLBARS_INSIDE_OVERLAY);
@@ -64,6 +78,10 @@ public class Web1Fragment extends Fragment {
         mWebView.getSettings().setUserAgentString(ua);
         mWebView.loadUrl("http://9post.jp/");
 //        mWebView.loadUrl("https://www.google.co.jp/");
+
+        // エラーページのレイアウト
+        mErrorPage = v.findViewById(R.id.webview_error_page);
+
         return v;
     }
 
@@ -177,6 +195,77 @@ public class Web1Fragment extends Fragment {
         Log.d(TAG, "onDetach");
         mWebView.destroy();
     }
+
+    /***
+     * ローディングをカスタマイズ
+     */
+    public class CustomProgressDialog extends Dialog
+    {
+        /**
+         * コンストラクタ
+         * @param context
+         */
+        public CustomProgressDialog(Context context)
+        {
+            super(context, R.style.Theme_CustomProgressDialog);
+
+            // レイアウトを決定
+            setContentView(R.layout.custom_progress_dialog);
+        }
+    }
+
+    /***
+     * WebViewClientをカスタマイズ
+     */
+    private class CustomWebViewClient extends WebViewClient{
+        private Dialog waitDialog;
+
+        public CustomWebViewClient() {
+            super();
+        }
+
+        // エラーだったらフラグをtrueにします。
+        @Override
+        public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+            mIsFailure = true;
+        }
+
+        // ページ読み込み開始
+        @Override
+        public void onPageStarted (WebView view, String url, Bitmap favicon){
+            //Loading....
+            if (waitDialog == null) {
+                waitDialog = new CustomProgressDialog(view.getContext());
+                // ダイアログの表示位置　上部に表示
+                WindowManager.LayoutParams wmlp=waitDialog.getWindow().getAttributes();
+                wmlp.gravity = Gravity.TOP;
+                wmlp.y = 180;
+                waitDialog.getWindow().setAttributes(wmlp);
+                // 画面を暗くしないように
+                waitDialog.getWindow().setFlags( 0 , WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+                waitDialog.show();
+            }
+
+        }
+
+        // ページ読み込み完了
+        @Override
+        public void onPageFinished (WebView view, String url){
+
+            // 読み込みエラー処理
+            if (mIsFailure) {
+                // エラー表示
+                mErrorPage.setVisibility(View.VISIBLE);
+            } else {
+                // エラー非表示
+                mErrorPage.setVisibility(View.GONE);
+            }
+
+            waitDialog.dismiss();
+            waitDialog = null;
+        }
+    }
+
 
 
 }
