@@ -25,7 +25,6 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.Toast;
-
 import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -249,10 +248,12 @@ public class Web1Fragment extends Fragment {
             if (waitDialog == null && m1.find()) {
                 waitDialog = new CustomProgressDialog(view.getContext());
                 // ダイアログの表示位置　上部に表示
-                WindowManager.LayoutParams wmlp=waitDialog.getWindow().getAttributes();
-                wmlp.gravity = Gravity.TOP;
-                wmlp.y = 380;
-                waitDialog.getWindow().setAttributes(wmlp);
+//                WindowManager.LayoutParams wmlp=waitDialog.getWindow().getAttributes();
+//                wmlp.gravity = Gravity.TOP;
+//                wmlp.y = 380;
+//                waitDialog.getWindow().setAttributes(wmlp);
+                // ダイアログの表示位置　センター
+                waitDialog.getWindow();
                 // 画面を暗くしないように
                 waitDialog.getWindow().setFlags( 0 , WindowManager.LayoutParams.FLAG_DIM_BEHIND);
                 waitDialog.show();

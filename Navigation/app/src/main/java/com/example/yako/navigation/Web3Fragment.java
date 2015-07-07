@@ -1,25 +1,47 @@
 package com.example.yako.navigation;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.Dialog;
+import android.app.PendingIntent;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.Picture;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.Toast;
-
+import java.util.Calendar;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Web3Fragment extends Fragment {
 
     private static String TAG = "Web3Fragment";
+    private static String top_url = "http://9post.jp/category/nsfw";
+//    private static String top_url = "https://www.google.co.jp/";
 
     private WebView mWebView;
+
+    /** エラーページ */
+    private View mErrorPage;
+
+    /** ページ取得失敗判定 */
+    private boolean mIsFailure = false;
 
     /**
      * The fragment argument representing the section number for this
@@ -52,7 +74,7 @@ public class Web3Fragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_main, container, false);
         mWebView = (WebView)v.findViewById(R.id.webView1);
-        mWebView.setWebViewClient(new WebViewClient());
+        mWebView.setWebViewClient(new CustomWebViewClient());
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.getSettings().setUseWideViewPort(true);
         mWebView.setScrollBarStyle(WebView.SCROLLBARS_INSIDE_OVERLAY);
@@ -60,9 +82,12 @@ public class Web3Fragment extends Fragment {
         String ua = mWebView.getSettings().getUserAgentString();
         ua = ua + " 9post-android";
         mWebView.getSettings().setUserAgentString(ua);
-        mWebView.loadUrl("http://9post.jp/category/nsfw");
-        return v;
+        mWebView.loadUrl(top_url);
 
+        // エラーページのレイアウト
+        mErrorPage = v.findViewById(R.id.webview_error_page);
+
+        return v;
     }
 
     // ボタン
@@ -107,6 +132,9 @@ public class Web3Fragment extends Fragment {
         }
     }
 
+    /***
+     * Activityに関連付けされた際に一度だけ呼び出される
+     */
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -172,5 +200,84 @@ public class Web3Fragment extends Fragment {
         Log.d(TAG, "onDetach");
         mWebView.destroy();
     }
+
+    /***
+     * ローディングをカスタマイズ
+     */
+    public class CustomProgressDialog extends Dialog
+    {
+        /**
+         * コンストラクタ
+         * @param context
+         */
+        public CustomProgressDialog(Context context)
+        {
+            super(context, R.style.Theme_CustomProgressDialog);
+
+            // レイアウトを決定
+            setContentView(R.layout.custom_progress_dialog);
+        }
+    }
+
+    /***
+     * WebViewClientをカスタマイズ
+     */
+    private class CustomWebViewClient extends WebViewClient{
+        private Dialog waitDialog;
+
+        public CustomWebViewClient() {
+            super();
+        }
+
+        // エラーだったらフラグをtrueにします。
+        @Override
+        public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+            mIsFailure = true;
+        }
+
+        // ページ読み込み開始
+        @Override
+        public void onPageStarted (WebView view, String url, Bitmap favicon){
+
+            // topページのみローディング
+            Pattern p = Pattern.compile(top_url);
+            Matcher m1 = p.matcher(url);
+
+            //Loading....
+            if (waitDialog == null && m1.find()) {
+                waitDialog = new CustomProgressDialog(view.getContext());
+                // ダイアログの表示位置　上部に表示
+//                WindowManager.LayoutParams wmlp=waitDialog.getWindow().getAttributes();
+//                wmlp.gravity = Gravity.TOP;
+//                wmlp.y = 380;
+//                waitDialog.getWindow().setAttributes(wmlp);
+                // ダイアログの表示位置　センター
+                waitDialog.getWindow();
+                // 画面を暗くしないように
+                waitDialog.getWindow().setFlags( 0 , WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+                waitDialog.show();
+            }
+
+        }
+
+        // ページ読み込み完了
+        @Override
+        public void onPageFinished (WebView view, String url){
+
+            // 読み込みエラー処理
+            if (mIsFailure) {
+                // エラー表示
+                mErrorPage.setVisibility(View.VISIBLE);
+            } else {
+                // エラー非表示
+                mErrorPage.setVisibility(View.GONE);
+            }
+
+            waitDialog.dismiss();
+            waitDialog = null;
+        }
+    }
+
+
 
 }

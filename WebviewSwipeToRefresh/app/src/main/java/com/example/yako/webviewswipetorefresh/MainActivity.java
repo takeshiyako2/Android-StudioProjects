@@ -22,6 +22,7 @@ public class MainActivity extends Activity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         final SwipeRefreshLayout swipeView = (SwipeRefreshLayout)findViewById(R.id.swipe);
         browser = (WebView)findViewById(R.id.webView1);
         browser.setWebViewClient(new MyBrowser());
@@ -45,6 +46,7 @@ public class MainActivity extends Activity
             }
         });
     }
+
     private class MyBrowser extends WebViewClient  //If you click on any link inside the webpage of the WebView , that page will not be loaded inside your WebView. In order to do that you need to extend your class from WebViewClient by using the below function.
     {
         @Override

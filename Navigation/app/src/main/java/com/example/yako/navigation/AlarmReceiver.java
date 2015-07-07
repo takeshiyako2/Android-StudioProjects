@@ -11,9 +11,18 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.webkit.WebView;
 import android.widget.RemoteViews;
 import android.widget.TextView;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
+
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.List;
 
 /**
@@ -27,15 +36,24 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent receivedIntent) {
+
+
+
+
         // Settingsを確認 ONだったら通知
         Log.d("onReceive", newData(context));
         if (newData(context).equals("true")) {
             Log.d("onReceive", "start notification");
+
+            String message = "test!";
+
             alarmReceiverContext = context;
             notificationProvisionalId = receivedIntent.getIntExtra("notificationId", 0);
             NotificationManager myNotification = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-            Notification notification = prepareNotification();
+            Notification notification = prepareNotification(message);
             myNotification.notify(notificationProvisionalId, notification);
+
+
         }
 
     }
@@ -68,10 +86,10 @@ public class AlarmReceiver extends BroadcastReceiver {
         return return_text;
     }
 
-    private Notification prepareNotification(){
+
+    private Notification prepareNotification(String message){
 
 
-        // タイトルを取得
 
 
 
@@ -84,8 +102,8 @@ public class AlarmReceiver extends BroadcastReceiver {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(
                 alarmReceiverContext);
         builder.setSmallIcon(android.R.drawable.ic_dialog_info)
-                .setTicker("9ポスト ウェーイ!")
-                .setContentTitle("ウェーイ!!")
+                .setTicker(message)
+                .setContentTitle(message)
                 .setWhen(System.currentTimeMillis())
                 .setAutoCancel(true)
                 .setDefaults(Notification.DEFAULT_SOUND)
