@@ -45,10 +45,10 @@ public class SettingsActivity extends ActionBarActivity {
         dao = new MemoDao(db);
 
         // データ出力Viewグループの取得
-        showData = (LinearLayout)findViewById(R.id.showData);
+//        showData = (LinearLayout)findViewById(R.id.showData);
 
         // 表示データの更新
-        changeData();
+//        changeData();
 
         // 最新データの表示
         newData();
@@ -74,7 +74,7 @@ public class SettingsActivity extends ActionBarActivity {
         else {
             // Listの最後の要素を取得
             MyDBEntity e = entityList.get(entityList.size() - 1);
-            if (e.getValue().equals("isChecked : true")) {
+            if (e.getValue().equals("true")) {
                 toggle.setChecked(true);
             }
         }
@@ -84,13 +84,13 @@ public class SettingsActivity extends ActionBarActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 // 状態が変更された
-                Toast.makeText(SettingsActivity.this, "isChecked : " + isChecked, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(SettingsActivity.this, "" + isChecked, Toast.LENGTH_SHORT).show();
 
                 // データの追加
-                dao.insert("isChecked : " + isChecked);
+                dao.insert("" + isChecked);
 
                 // 表示データの更新
-                changeData();
+//                changeData();
             }
         });
     }
@@ -133,7 +133,7 @@ public class SettingsActivity extends ActionBarActivity {
 
         // DBが空の場合
         if (entityList.isEmpty() == true) {
-            return_text = "デフォルトはオン";
+            return_text = "true";
         }
         else {
             // Listの最後の要素を取得
@@ -141,9 +141,8 @@ public class SettingsActivity extends ActionBarActivity {
             return_text = e.getValue();
         }
 
-        TextView textView = (TextView)findViewById(R.id.txtView);
-        textView.setText(return_text);
-
+//        TextView textView = (TextView)findViewById(R.id.txtView);
+//        textView.setText(return_text);
     }
 
     // ソフトキーボードの「確定」が押された時にソフトキーボードを消す

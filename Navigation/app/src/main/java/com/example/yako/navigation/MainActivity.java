@@ -60,9 +60,14 @@ public class MainActivity extends ActionBarActivity
         setContentView(R.layout.activity_main);
 
         // ナビゲーション
-        mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
+        mNavigationDrawerFragment = (NavigationDrawerFragment)
+                getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
-        mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
+
+        // Set up the drawer.
+        mNavigationDrawerFragment.setUp(
+                R.id.navigation_drawer,
+                (DrawerLayout) findViewById(R.id.drawer_layout));
 
         // アラームの時間設定
         int hour = 0;
@@ -90,7 +95,7 @@ public class MainActivity extends ActionBarActivity
                 1 * 1000 * 60,
                 alarmIntent
         );
-        Toast.makeText(MainActivity.this, "通知セット完了!", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(MainActivity.this, "通知セット完了!", Toast.LENGTH_SHORT).show();
         notificationId++;
 
     }

@@ -27,11 +27,15 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import java.util.Calendar;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class Web1Fragment extends Fragment {
 
     private static String TAG = "Web1Fragment";
+    private static String top_url = "http://9post.jp/";
+//    private static String top_url = "https://www.google.co.jp/";
 
     private WebView mWebView;
 
@@ -80,8 +84,7 @@ public class Web1Fragment extends Fragment {
         String ua = mWebView.getSettings().getUserAgentString();
         ua = ua + " 9post-android";
         mWebView.getSettings().setUserAgentString(ua);
-        mWebView.loadUrl("http://9post.jp/");
-//        mWebView.loadUrl("https://www.google.co.jp/");
+        mWebView.loadUrl(top_url);
 
         // エラーページのレイアウト
         mErrorPage = v.findViewById(R.id.webview_error_page);
@@ -237,8 +240,13 @@ public class Web1Fragment extends Fragment {
         // ページ読み込み開始
         @Override
         public void onPageStarted (WebView view, String url, Bitmap favicon){
+
+            // topページのみローディング
+            Pattern p = Pattern.compile(top_url);
+            Matcher m1 = p.matcher(url);
+
             //Loading....
-            if (waitDialog == null) {
+            if (waitDialog == null && m1.find()) {
                 waitDialog = new CustomProgressDialog(view.getContext());
                 // ダイアログの表示位置　上部に表示
                 WindowManager.LayoutParams wmlp=waitDialog.getWindow().getAttributes();

@@ -6,10 +6,15 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.widget.RemoteViews;
+import android.widget.TextView;
+
+import java.util.List;
 
 /**
  * Created by yako on 7/6/15.
@@ -18,17 +23,49 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     private Context alarmReceiverContext;
     private int notificationProvisionalId;
+    private MemoDao dao;
 
     @Override
     public void onReceive(Context context, Intent receivedIntent) {
+        // Settingsを確認 ONだったら通知
+        Log.d("onReceive", newData(context));
+        if (newData(context).equals("true")) {
+            Log.d("onReceive", "start notification");
+            alarmReceiverContext = context;
+            notificationProvisionalId = receivedIntent.getIntExtra("notificationId", 0);
+            NotificationManager myNotification = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            Notification notification = prepareNotification();
+            myNotification.notify(notificationProvisionalId, notification);
+        }
 
-        alarmReceiverContext = context;
+    }
 
-        notificationProvisionalId = receivedIntent.getIntExtra("notificationId", 0);
-        NotificationManager myNotification = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        Notification notification = prepareNotification();
-        myNotification.notify(notificationProvisionalId, notification);
+    /**
+     * SQLiteの最新データを返す true/false
+     */
+    private String newData(Context context) {
 
+        String return_text;
+
+        // SQLiteの準備
+        MyDBHelper helper = new MyDBHelper(context.getApplicationContext(), null, 1);
+        SQLiteDatabase db = helper.getReadableDatabase();
+        dao = new MemoDao(db);
+
+        // DBからすべてのデータを取得する。
+        List<MyDBEntity> entityList = dao.findAll();
+
+        // DBが空の場合
+        if (entityList.isEmpty() == true) {
+            return_text = "true";
+        }
+        else {
+            // Listの最後の要素を取得
+            MyDBEntity e = entityList.get(entityList.size() - 1);
+            return_text = e.getValue();
+        }
+
+        return return_text;
     }
 
     private Notification prepareNotification(){
@@ -47,8 +84,8 @@ public class AlarmReceiver extends BroadcastReceiver {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(
                 alarmReceiverContext);
         builder.setSmallIcon(android.R.drawable.ic_dialog_info)
-                .setTicker("ウェーイ!" + System.currentTimeMillis())
-                .setContentTitle("ウェーイ!" + System.currentTimeMillis())
+                .setTicker("9ポスト ウェーイ!")
+                .setContentTitle("ウェーイ!!")
                 .setWhen(System.currentTimeMillis())
                 .setAutoCancel(true)
                 .setDefaults(Notification.DEFAULT_SOUND)
