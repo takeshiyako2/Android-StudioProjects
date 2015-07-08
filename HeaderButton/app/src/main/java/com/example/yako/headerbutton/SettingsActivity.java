@@ -24,7 +24,7 @@ import android.widget.Toast;
 
 public class SettingsActivity extends ActionBarActivity {
 
-        private MemoDao dao;
+    private MemoDao dao;
     private LinearLayout showData;
     private LinearLayout TextView;
 
@@ -92,7 +92,7 @@ public class SettingsActivity extends ActionBarActivity {
                     Toast.makeText(SettingsActivity.this, "ONにしました", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    Toast.makeText(SettingsActivity.this, "OFFFにしました", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SettingsActivity.this, "OFFにしました", Toast.LENGTH_SHORT).show();
                 }
 
                 // データの追加
