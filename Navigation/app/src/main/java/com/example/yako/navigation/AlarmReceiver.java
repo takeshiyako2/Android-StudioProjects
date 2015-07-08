@@ -17,6 +17,7 @@ import android.widget.RemoteViews;
 import android.widget.TextView;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -57,10 +58,14 @@ public class AlarmReceiver extends BroadcastReceiver {
                         HttpClient httpClient = new DefaultHttpClient();
                         HttpGet httpGet = new HttpGet("http://9post.jp/new-post");
                         HttpResponse httpResponse = httpClient.execute(httpGet);
-                        String str = EntityUtils.toString(httpResponse.getEntity(), "UTF-8");
-                        // 通知
-                        Notification notification = prepareNotification(str);
-                        myNotification.notify(notificationProvisionalId, notification);
+                        int status = httpResponse.getStatusLine().getStatusCode();
+                        // HTTPステータスOKなら通知する
+                        if (status == HttpStatus.SC_OK) {
+                            String str = EntityUtils.toString(httpResponse.getEntity(), "UTF-8");
+                            // 通知
+                            Notification notification = prepareNotification(str);
+                            myNotification.notify(notificationProvisionalId, notification);
+                        }
                     } catch (Exception ex) {
                         System.out.println(ex);
                     }
