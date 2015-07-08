@@ -33,8 +33,8 @@ import java.util.regex.Pattern;
 public class Web1Fragment extends Fragment {
 
     private static String TAG = "Web1Fragment";
-//    private static String top_url = "http://9post.jp/";
-    private static String top_url = "https://www.google.co.jp/";
+    private static String top_url = "http://9post.jp/";
+//    private static String top_url = "https://www.google.co.jp/";
 
     private WebView mWebView;
 

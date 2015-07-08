@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">HeaderButton</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">設定</string>
+    <string name="title_activity_ninki">NinkiActivity</string>
+
+    <!-- SettingsActivity -->
+    <string name="title_activity_settings">9ポスト 設定</string>
+    <string name="toggle">通知</string>
+    <string name="toggle_description">プッシュ通知を設定します。</string>
+
+</resources>
