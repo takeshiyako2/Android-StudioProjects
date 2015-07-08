@@ -6,10 +6,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-
 import java.util.Collections;
 import java.util.List;
-
 import android.app.Activity;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -26,7 +24,7 @@ import android.widget.Toast;
 
 public class SettingsActivity extends ActionBarActivity {
 
-    private MemoDao dao;
+        private MemoDao dao;
     private LinearLayout showData;
     private LinearLayout TextView;
 
@@ -88,8 +86,14 @@ public class SettingsActivity extends ActionBarActivity {
         toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
                 // 状態が変更された
-//                Toast.makeText(SettingsActivity.this, "" + isChecked, Toast.LENGTH_SHORT).show();
+                if (isChecked) {
+                    Toast.makeText(SettingsActivity.this, "ONにしました", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(SettingsActivity.this, "OFFFにしました", Toast.LENGTH_SHORT).show();
+                }
 
                 // データの追加
                 dao.insert("" + isChecked);

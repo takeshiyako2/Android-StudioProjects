@@ -29,9 +29,13 @@ public class AlarmReceiver extends BroadcastReceiver {
     private int notificationProvisionalId;
     private MemoDao dao;
     private NotificationManager myNotification;
+    private final static String TAG = "AlarmReceiver";
 
     @Override
     public void onReceive(Context context, Intent receivedIntent) {
+
+        Log.d(TAG, "onReceive");
+        Log.d(TAG, newData(context));
 
         // Settingsを確認 falseじゃなかったら通知
         if (newData(context).equals("false")) {
