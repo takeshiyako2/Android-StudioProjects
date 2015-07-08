@@ -1,6 +1,8 @@
 package com.example.yako.headerbutton;
 
+import android.app.AlarmManager;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -15,8 +17,11 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.util.Calendar;
+import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,6 +33,10 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 //    private static String top_url = "https://www.google.co.jp/";
     private Button button1;
     private Button button2;
+    TimePicker tPicker;
+    int notificationId;
+    private PendingIntent alarmIntent;
+    private String nextalarm;
 
     /** エラーページ */
     private View mErrorPage;
@@ -45,11 +54,10 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         getSupportActionBar().setTitle("");
         getSupportActionBar().setIcon(R.drawable.nine_post_icon_small);
 
-        // WebView
+        // WebViewの設定
         mWebView = (WebView) findViewById(R.id.webView1);
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
-        // ユーザーエージェントの設定
         String ua = mWebView.getSettings().getUserAgentString();
         ua = ua + " 9post-android";
         mWebView.getSettings().setUserAgentString(ua);
@@ -61,6 +69,61 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         button2 = (Button)findViewById(R.id.button2);
         button2.setOnClickListener(this);
 
+        // アラームの時間設定
+        int hour = 0;
+        int minute = 0;
+        long alarmStartTime = get_time_by_hour_minuite(hour, minute);
+        Log.d("IntentService", String.valueOf(alarmStartTime));
+
+        // アラームの時間設定 デバッグ用（本番時にはコメントアウトしておく）
+        Calendar startTime = Calendar.getInstance();
+        startTime.set(Calendar.HOUR_OF_DAY, hour);
+        startTime.set(Calendar.MINUTE, minute);
+        startTime.set(Calendar.SECOND, 0);
+        alarmStartTime = startTime.getTimeInMillis();
+
+        // アラームセット
+        Intent bootIntent = new Intent(MainActivity.this, AlarmReceiver.class);
+        bootIntent.putExtra("notificationId", notificationId);
+        alarmIntent = PendingIntent.getBroadcast(MainActivity.this, 101, bootIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager alarm = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+
+        // リピート
+        alarm.setRepeating(
+                AlarmManager.RTC_WAKEUP,
+                alarmStartTime,
+                1 * 1000 * 60,
+                alarmIntent
+        );
+//        Toast.makeText(MainActivity.this, "通知セット完了!", Toast.LENGTH_SHORT).show();
+        notificationId++;
+    }
+
+
+    // 次のアラームの時刻を取得
+    public long get_time_by_hour_minuite(int hour, int minuite) {
+        // 日本(+9)以外のタイムゾーンを使う時はここを変える
+        TimeZone tz = TimeZone.getTimeZone("Asia/Tokyo");
+        //今日の目標時刻のカレンダーインスタンス作成
+        Calendar cal_target = Calendar.getInstance();
+        cal_target.setTimeZone(tz);
+        cal_target.set(Calendar.HOUR_OF_DAY, hour);
+        cal_target.set(Calendar.MINUTE, minuite);
+        cal_target.set(Calendar.SECOND, 0);
+        //現在時刻のカレンダーインスタンス作成
+        Calendar cal_now = Calendar.getInstance();
+        cal_now.setTimeZone(tz);
+        //ミリ秒取得
+        long target_ms = cal_target.getTimeInMillis();
+        long now_ms = cal_now.getTimeInMillis();
+        //今日ならそのまま指定
+        if (target_ms >= now_ms) {
+            //過ぎていたら明日の同時刻を指定
+        } else {
+            cal_target.add(Calendar.DAY_OF_MONTH, 1);
+            target_ms = cal_target.getTimeInMillis();
+        }
+        return target_ms;
     }
 
     /***
@@ -108,17 +171,17 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.d(TAG, "onOptionsItemSelected");
-
         switch (item.getItemId()) {
-
             case R.id.menu1:
                 startActivity(new Intent(this, MainActivity.class));
                 return true;
             case R.id.menu2:
                 startActivity(new Intent(this, NinkiActivity.class));
                 return true;
+            case R.id.action_settings:
+                startActivity(new Intent(this, SettingsActivity.class));
+                return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 

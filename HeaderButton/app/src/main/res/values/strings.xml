@@ -2,8 +2,10 @@
     <string name="app_name">HeaderButton</string>
 
     <string name="hello_world">Hello world!</string>
-    <string name="action_settings">設定</string>
     <string name="title_activity_ninki">NinkiActivity</string>
+
+    <!-- menu -->
+    <string name="action_settings">Settings</string>
 
     <!-- SettingsActivity -->
     <string name="title_activity_settings">9ポスト 設定</string>

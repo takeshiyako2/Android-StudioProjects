@@ -33,7 +33,7 @@ public class NinkiActivity extends ActionBarActivity implements View.OnClickList
         getSupportActionBar().setTitle("");
         getSupportActionBar().setIcon(R.drawable.nine_post_icon_small);
 
-        // WebView
+        // WebViewの設定
         mWebView = (WebView) findViewById(R.id.webView1);
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
@@ -94,17 +94,17 @@ public class NinkiActivity extends ActionBarActivity implements View.OnClickList
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.d(TAG, "onOptionsItemSelected");
-
         switch (item.getItemId()) {
-
             case R.id.menu1:
                 startActivity(new Intent(this, MainActivity.class));
                 return true;
             case R.id.menu2:
                 startActivity(new Intent(this, NinkiActivity.class));
                 return true;
+            case R.id.action_settings:
+                startActivity(new Intent(this, SettingsActivity.class));
+                return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
