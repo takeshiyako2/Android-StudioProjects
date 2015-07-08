@@ -159,7 +159,7 @@ public class Web3Fragment extends Fragment {
     public void onPause() {
         super.onPause();
         Log.d(TAG, "onPause");
-        mWebView.onPause();
+        mWebView.pauseTimers();
     }
 
     /***
@@ -169,7 +169,7 @@ public class Web3Fragment extends Fragment {
     public void onStop() {
         super.onStop();
         Log.d(TAG, "onStop");
-        mWebView.onPause();
+        mWebView.pauseTimers();
     }
 
     /***

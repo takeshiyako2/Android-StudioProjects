@@ -85,7 +85,7 @@ public class MainActivity extends ActionBarActivity
         // アラームセット
         Intent bootIntent = new Intent(MainActivity.this, AlarmReceiver.class);
         bootIntent.putExtra("notificationId", notificationId);
-        alarmIntent = PendingIntent.getBroadcast(MainActivity.this, 0, bootIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        alarmIntent = PendingIntent.getBroadcast(MainActivity.this, 777, bootIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         AlarmManager alarm = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
 
         // リピート
