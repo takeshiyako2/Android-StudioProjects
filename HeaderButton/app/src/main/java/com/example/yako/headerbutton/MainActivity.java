@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,14 +29,19 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     private static String TAG = "MainActivity";
     private WebView mWebView;
-    private static String top_url = "http://9post.jp/";
-//    private static String top_url = "https://www.google.co.jp/";
+//    private static String top_url = "http://9post.jp/";
+//    private static String menu1_url = "http://9post.jp/";
+//    private static String menu2_url = "http://9post.jp/ranking";
+    private static String top_url = "https://www.google.co.jp/";
+    private static String menu1_url = "https://www.google.co.jp/";
+    private static String menu2_url = "https://www.facebook.com/";
+
+
     private Button button1;
     private Button button2;
     TimePicker tPicker;
     int notificationId;
     private PendingIntent alarmIntent;
-    private String nextalarm;
 
     /** エラーページ */
     private View mErrorPage;
@@ -45,8 +51,19 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // 通知から開いたときの処理 top_urlをmenu1_urlにする
+        String keyword = getIntent().getStringExtra("Notification");
+        if (!TextUtils.isEmpty(keyword)) {
+            // keyword がある場合の処理
+            Log.d(TAG, keyword);
+            top_url = menu1_url;
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+        }
 
         // アイコン
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -55,6 +72,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         // WebViewの設定
         mWebView = (WebView) findViewById(R.id.webView1);
+        mWebView.setWebViewClient(new CustomWebViewClient());
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         String ua = mWebView.getSettings().getUserAgentString();
@@ -84,7 +102,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         // アラームセット
         Intent bootIntent = new Intent(MainActivity.this, AlarmReceiver.class);
         bootIntent.putExtra("notificationId", notificationId);
-        alarmIntent = PendingIntent.getBroadcast(MainActivity.this, 101, bootIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        alarmIntent = PendingIntent.getBroadcast(MainActivity.this, 102, bootIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         AlarmManager alarm = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
 
         // リピート
@@ -98,6 +116,54 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         notificationId++;
     }
 
+    /***
+     * ローディングをカスタマイズ
+     */
+    public class CustomProgressDialog extends Dialog
+    {
+        public CustomProgressDialog(Context context)
+        {
+            super(context, R.style.Theme_CustomProgressDialog);
+            setContentView(R.layout.custom_progress_dialog);
+        }
+    }
+
+    /***
+     * WebViewClientをカスタマイズ
+     */
+    private class CustomWebViewClient extends WebViewClient{
+
+        private Dialog waitDialog;
+
+        public CustomWebViewClient() {
+            super();
+        }
+
+        // ページ読み込み開始
+        @Override
+        public void onPageStarted (WebView view, String url, Bitmap favicon){
+            // topページのみローディング
+            Pattern p = Pattern.compile(top_url);
+            Matcher m1 = p.matcher(url);
+            //Loading....
+            if (waitDialog == null && m1.find()) {
+                waitDialog = new CustomProgressDialog(view.getContext());
+                // ダイアログの表示位置　センター
+                waitDialog.getWindow();
+                // 画面を暗くしないように
+                waitDialog.getWindow().setFlags(0, WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+                waitDialog.show();
+            }
+
+        }
+
+        // ページ読み込み完了
+        @Override
+        public void onPageFinished (WebView view, String url){
+            waitDialog.dismiss();
+            waitDialog = null;
+        }
+    }
 
     // 次のアラームの時刻を取得
     public long get_time_by_hour_minuite(int hour, int minuite) {
@@ -170,12 +236,16 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.d(TAG, "onOptionsItemSelected");
+        // アクティビティ終了
+        finish();
         switch (item.getItemId()) {
             case R.id.menu1:
+                top_url = menu1_url;
                 startActivity(new Intent(this, MainActivity.class));
                 return true;
             case R.id.menu2:
-                startActivity(new Intent(this, NinkiActivity.class));
+                top_url = menu2_url;
+                startActivity(new Intent(this, MainActivity.class));
                 return true;
             case R.id.action_settings:
                 startActivity(new Intent(this, SettingsActivity.class));
@@ -187,6 +257,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     /***
      * 戻るボタン
      */
+    /*
     @Override
     public void onBackPressed() {
         Log.d(TAG, "onBackPressed");
@@ -199,6 +270,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             mWebView.goBack();
         }
     }
+    */
 
     /***
      * Activityの「onResume」に基づき開始される

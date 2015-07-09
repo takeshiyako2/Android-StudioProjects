@@ -105,9 +105,9 @@ public class AlarmReceiver extends BroadcastReceiver {
     private Notification prepareNotification(String message){
         // 細かい通知設定
         Intent bootIntent = new Intent(alarmReceiverContext, MainActivity.class);
-        PendingIntent contentIntent = PendingIntent.getActivity(alarmReceiverContext, 0, bootIntent, 0);
+        bootIntent.putExtra("Notification", "done!!!"); // MainActivityへ値を渡す
+        PendingIntent contentIntent = PendingIntent.getActivity(alarmReceiverContext, 0, bootIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(alarmReceiverContext);
-//        builder.setSmallIcon(android.R.drawable.ic_dialog_info)
         builder.setSmallIcon(R.drawable.ic_stat_9)
                 .setTicker(message)
                 .setContentTitle("9ポスト")
@@ -116,10 +116,6 @@ public class AlarmReceiver extends BroadcastReceiver {
                 .setAutoCancel(true)
                 .setDefaults(Notification.DEFAULT_SOUND)
                 .setContentIntent(contentIntent);
-
-//        NotificationCompat.BigPictureStyle pictureStyle = new NotificationCompat.BigPictureStyle(builder);
-//        pictureStyle.bigPicture(BitmapFactory.decodeResource(alarmReceiverContext.getResources(), R.drawable.nine_post_icon));
-//        return pictureStyle.build();
 
         return builder.build();
 
