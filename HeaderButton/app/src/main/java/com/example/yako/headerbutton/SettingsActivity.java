@@ -24,12 +24,12 @@ import android.widget.Toast;
 
 public class SettingsActivity extends ActionBarActivity {
 
-    //    private static String top_url = "http://9post.jp/";
-//    private static String menu1_url = "http://9post.jp/";
-//    private static String menu2_url = "http://9post.jp/ranking";
-    private static String top_url = "https://www.google.co.jp/";
-    private static String menu1_url = "https://www.google.co.jp/";
-    private static String menu2_url = "https://www.facebook.com/";
+    private static String top_url = "http://9post.jp/";
+    private static String menu1_url = "http://9post.jp/";
+    private static String menu2_url = "http://9post.jp/ranking";
+    //    private static String top_url = "https://www.google.co.jp/";
+//    private static String menu1_url = "https://www.google.co.jp/";
+//    private static String menu2_url = "https://www.facebook.com/";
     private MemoDao dao;
     private LinearLayout showData;
     private LinearLayout TextView;
@@ -197,7 +197,6 @@ public class SettingsActivity extends ActionBarActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.d(TAG, "onOptionsItemSelected");
-        // アクティビティ終了
         finish();
         switch (item.getItemId()) {
             case R.id.menu1:
@@ -213,6 +212,15 @@ public class SettingsActivity extends ActionBarActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /***
+     * 戻るボタン
+     */
+    @Override
+    public void onBackPressed() {
+        Log.d(TAG, "onBackPressed");
+        finish();
     }
 
 }

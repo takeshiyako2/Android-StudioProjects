@@ -106,6 +106,9 @@ public class AlarmReceiver extends BroadcastReceiver {
         // 細かい通知設定
         Intent bootIntent = new Intent(alarmReceiverContext, MainActivity.class);
         bootIntent.putExtra("Notification", "done!!!"); // MainActivityへ値を渡す
+
+        bootIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); // タスクに積まれているアクティビティを削除
+
         PendingIntent contentIntent = PendingIntent.getActivity(alarmReceiverContext, 0, bootIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(alarmReceiverContext);
         builder.setSmallIcon(R.drawable.ic_stat_9)

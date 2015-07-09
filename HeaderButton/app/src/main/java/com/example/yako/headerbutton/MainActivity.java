@@ -29,12 +29,12 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     private static String TAG = "MainActivity";
     private WebView mWebView;
-//    private static String top_url = "http://9post.jp/";
-//    private static String menu1_url = "http://9post.jp/";
-//    private static String menu2_url = "http://9post.jp/ranking";
-    private static String top_url = "https://www.google.co.jp/";
-    private static String menu1_url = "https://www.google.co.jp/";
-    private static String menu2_url = "https://www.facebook.com/";
+    private static String top_url = "http://9post.jp/";
+    private static String menu1_url = "http://9post.jp/";
+    private static String menu2_url = "http://9post.jp/ranking";
+//    private static String top_url = "https://www.google.co.jp/";
+//    private static String menu1_url = "https://www.google.co.jp/";
+//    private static String menu2_url = "https://www.facebook.com/";
 
 
     private Button button1;
@@ -61,8 +61,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             // keyword がある場合の処理
             Log.d(TAG, keyword);
             top_url = menu1_url;
-            startActivity(new Intent(this, MainActivity.class));
-            finish();
         }
 
         // アイコン
@@ -72,12 +70,14 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         // WebViewの設定
         mWebView = (WebView) findViewById(R.id.webView1);
-        mWebView.setWebViewClient(new CustomWebViewClient());
+        mWebView.setWebViewClient(new WebViewClient());
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         String ua = mWebView.getSettings().getUserAgentString();
         ua = ua + " 9post-android";
         mWebView.getSettings().setUserAgentString(ua);
+        mWebView.clearCache(true);
+        mWebView.clearHistory();
         mWebView.loadUrl(top_url);
 
         // シェアボタンのリスナー設定
@@ -90,7 +90,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         int hour = 0;
         int minute = 0;
         long alarmStartTime = get_time_by_hour_minuite(hour, minute);
-        Log.d("IntentService", String.valueOf(alarmStartTime));
+        Log.d(TAG, "IntentService" + " " + String.valueOf(alarmStartTime));
 
         // アラームの時間設定 デバッグ用（本番時にはコメントアウトしておく）
         Calendar startTime = Calendar.getInstance();
@@ -114,55 +114,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         );
 //        Toast.makeText(MainActivity.this, "通知セット完了!", Toast.LENGTH_SHORT).show();
         notificationId++;
-    }
-
-    /***
-     * ローディングをカスタマイズ
-     */
-    public class CustomProgressDialog extends Dialog
-    {
-        public CustomProgressDialog(Context context)
-        {
-            super(context, R.style.Theme_CustomProgressDialog);
-            setContentView(R.layout.custom_progress_dialog);
-        }
-    }
-
-    /***
-     * WebViewClientをカスタマイズ
-     */
-    private class CustomWebViewClient extends WebViewClient{
-
-        private Dialog waitDialog;
-
-        public CustomWebViewClient() {
-            super();
-        }
-
-        // ページ読み込み開始
-        @Override
-        public void onPageStarted (WebView view, String url, Bitmap favicon){
-            // topページのみローディング
-            Pattern p = Pattern.compile(top_url);
-            Matcher m1 = p.matcher(url);
-            //Loading....
-            if (waitDialog == null && m1.find()) {
-                waitDialog = new CustomProgressDialog(view.getContext());
-                // ダイアログの表示位置　センター
-                waitDialog.getWindow();
-                // 画面を暗くしないように
-                waitDialog.getWindow().setFlags(0, WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-                waitDialog.show();
-            }
-
-        }
-
-        // ページ読み込み完了
-        @Override
-        public void onPageFinished (WebView view, String url){
-            waitDialog.dismiss();
-            waitDialog = null;
-        }
     }
 
     // 次のアラームの時刻を取得
@@ -236,8 +187,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.d(TAG, "onOptionsItemSelected");
-        // アクティビティ終了
-        finish();
+        finish(); // アクティビティスタックを破棄
         switch (item.getItemId()) {
             case R.id.menu1:
                 top_url = menu1_url;
@@ -257,20 +207,11 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     /***
      * 戻るボタン
      */
-    /*
     @Override
     public void onBackPressed() {
         Log.d(TAG, "onBackPressed");
-        String url = mWebView.getUrl();
-        if (url.equals(top_url)){
-            // アクティビティを閉じる
-            finish();
-        }else{
-            // WebViewで戻る
-            mWebView.goBack();
-        }
+        finish();
     }
-    */
 
     /***
      * Activityの「onResume」に基づき開始される
