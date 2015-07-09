@@ -210,7 +210,21 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     @Override
     public void onBackPressed() {
         Log.d(TAG, "onBackPressed");
-        finish();
+        finish(); // アクティビティスタックを破棄
+        String url = mWebView.getUrl();
+        if (url.equals(top_url)){
+            // Top層の場合 そのままfinish
+        }else{
+            // 下層の場合 finishしてstartActivity
+            if (top_url.equals(menu1_url)){
+                top_url = menu1_url;
+                startActivity(new Intent(this, MainActivity.class));
+            }
+            if (top_url.equals(menu2_url)){
+                top_url = menu2_url;
+                startActivity(new Intent(this, MainActivity.class));
+            }
+        }
     }
 
     /***
