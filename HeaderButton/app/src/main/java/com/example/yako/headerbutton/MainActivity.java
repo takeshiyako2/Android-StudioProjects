@@ -94,7 +94,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         button2.setOnClickListener(this);
 
         // アラームの時間設定
-        int hour = 0;
+        int hour = 12;
         int minute = 0;
         long alarmStartTime = get_time_by_hour_minuite(hour, minute);
         Log.d(TAG, "IntentService" + " " + String.valueOf(alarmStartTime));
