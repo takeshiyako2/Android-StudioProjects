@@ -70,7 +70,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         // WebViewの設定
         mWebView = (WebView) findViewById(R.id.webView1);
-        mWebView.setWebViewClient(new WebViewClient());
+        mWebView.setWebViewClient(new MyWebViewClient());
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         String ua = mWebView.getSettings().getUserAgentString();
@@ -78,12 +78,19 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         mWebView.getSettings().setUserAgentString(ua);
         mWebView.clearCache(true);
         mWebView.clearHistory();
+        mErrorPage= findViewById(R.id.webview_error_page);
         mWebView.loadUrl(top_url);
 
-        // シェアボタンのリスナー設定
+        // シェアボタン
         button1 = (Button)findViewById(R.id.button1);
-        button1.setOnClickListener(this);
         button2 = (Button)findViewById(R.id.button2);
+
+        // シェアボタン最初は非表示 TOPで表示/下層で非表示
+        button1.setVisibility(View.GONE);
+        button2.setVisibility(View.GONE);
+
+        // シェアボタンのリスナー設定
+        button1.setOnClickListener(this);
         button2.setOnClickListener(this);
 
         // アラームの時間設定
@@ -114,6 +121,43 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         );
 //        Toast.makeText(MainActivity.this, "通知セット完了!", Toast.LENGTH_SHORT).show();
         notificationId++;
+    }
+
+    /***
+     * WebViewClientをオーバーライド
+     */
+    public class MyWebViewClient extends WebViewClient {
+        // ページの読み込み前に呼ばれる
+        @Override
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            // シェアボタン　TOPで表示/下層で非表示
+            button1 = (Button)findViewById(R.id.button1);
+            button2 = (Button)findViewById(R.id.button2);
+            if (url.equals(top_url)) {
+                button1.setVisibility(View.GONE);
+                button2.setVisibility(View.GONE);
+            }else
+            {
+                button1.setVisibility(View.VISIBLE);
+                button2.setVisibility(View.VISIBLE);
+            }
+        }
+        // ページ読み込み完了時に呼ばれる
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            super.onPageFinished(view, url);
+            if (mIsFailure) {
+                mErrorPage.setVisibility(View.VISIBLE);
+            } else {
+                mErrorPage.setVisibility(View.GONE);
+            }
+            mWebView.setVisibility(View.VISIBLE);
+        }
+        // エラーが発生した場合
+        @Override
+        public void onReceivedError(WebView webview, int errorCode, String description, String failingUrl) {
+            mIsFailure = true;
+        }
     }
 
     // 次のアラームの時刻を取得

@@ -12,6 +12,16 @@
         android:layout_height="fill_parent"
         android:background="@android:color/black" />
 
+    <TextView
+        android:id="@+id/webview_error_page"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:text="通信ができないみたいです。。"
+        android:textColor="@android:color/black"
+        android:textSize="20dp"
+        android:visibility="gone" />
+
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="fill_parent"
