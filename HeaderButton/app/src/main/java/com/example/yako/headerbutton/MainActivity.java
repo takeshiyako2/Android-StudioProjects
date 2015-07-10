@@ -100,11 +100,13 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         Log.d(TAG, "IntentService" + " " + String.valueOf(alarmStartTime));
 
         // アラームの時間設定 デバッグ用（本番時にはコメントアウトしておく）
+        /*
         Calendar startTime = Calendar.getInstance();
         startTime.set(Calendar.HOUR_OF_DAY, hour);
         startTime.set(Calendar.MINUTE, minute);
         startTime.set(Calendar.SECOND, 0);
         alarmStartTime = startTime.getTimeInMillis();
+        */
 
         // アラームセット
         Intent bootIntent = new Intent(MainActivity.this, AlarmReceiver.class);
