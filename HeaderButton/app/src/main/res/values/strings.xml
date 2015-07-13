@@ -12,4 +12,7 @@
     <string name="toggle">通知</string>
     <string name="toggle_description">プッシュ通知を設定します。</string>
 
+    <!-- YouTube -->
+    <string name="error_player">YouTubePlayerの起動ができませんでした。 (%1$s)</string>
+
 </resources>

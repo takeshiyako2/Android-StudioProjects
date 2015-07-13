@@ -1,7 +1,6 @@
 package com.example.yako.headerbutton;
 
 import android.app.AlarmManager;
-import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -13,7 +12,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -22,12 +20,29 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 import java.util.Calendar;
 import java.util.TimeZone;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import com.google.android.youtube.player.YouTubeBaseActivity;
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubePlayer;
+import com.google.android.youtube.player.YouTubePlayerView;
+import com.google.android.youtube.player.YouTubePlayer.PlayerStyle;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class MainActivity extends ActionBarActivity implements View.OnClickListener {
+
+public class MainActivity extends ActionBarActivity  {
 
     private static String TAG = "MainActivity";
+
+    // WebView
     private WebView mWebView;
     private static String top_url = "http://9post.jp/";
     private static String menu1_url = "http://9post.jp/";
@@ -36,18 +51,27 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 //    private static String menu1_url = "https://www.google.co.jp/";
 //    private static String menu2_url = "https://www.facebook.com/";
 
+    /** エラーページ */
+    private View mErrorPage;
+    /** ページ取得失敗判定 */
+    private boolean mIsFailure = false;
 
+    // シェアボタン
     private Button button1;
     private Button button2;
+
+    // 通知
     TimePicker tPicker;
     int notificationId;
     private PendingIntent alarmIntent;
 
-    /** エラーページ */
-    private View mErrorPage;
-
-    /** ページ取得失敗判定 */
-    private boolean mIsFailure = false;
+    // YoutubeAPI
+    //API key
+    private static final String DEVELOPER_KEY = "AIzaSyAmG880XF_VyLirMrqCYroGIvfDTQMMZHQ";
+    //Youtube のビデオID
+    private static String videoId = "EGy39OMyHzw";
+    // リカバリー·リクエストの値を設定
+    private static final int RECOVERY_DIALOG_REQUEST = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,16 +106,14 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         mWebView.loadUrl(top_url);
 
         // シェアボタン
-        button1 = (Button)findViewById(R.id.button1);
-        button2 = (Button)findViewById(R.id.button2);
-
+        Button button1 = (Button) findViewById(R.id.button1);
+        Button button2 = (Button) findViewById(R.id.button2);
+        // シェアボタンのリスナー設定
+        button1.setOnClickListener(new ButtonAction());
+        button2.setOnClickListener(new ButtonAction());
         // シェアボタン最初は非表示 TOPで表示/下層で非表示
         button1.setVisibility(View.GONE);
         button2.setVisibility(View.GONE);
-
-        // シェアボタンのリスナー設定
-        button1.setOnClickListener(this);
-        button2.setOnClickListener(this);
 
         // アラームの時間設定
         int hour = 12;
@@ -125,14 +147,13 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         notificationId++;
     }
 
-    /***
-     * WebViewClientをオーバーライド
-     */
+
+    // WebViewClientをオーバーライド
     public class MyWebViewClient extends WebViewClient {
         // ページの読み込み前に呼ばれる
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
-            // シェアボタン　TOPで表示/下層で非表示
+            //TOPアボタン　TOPで表示/下層で非表示
             button1 = (Button)findViewById(R.id.button1);
             button2 = (Button)findViewById(R.id.button2);
             if (url.equals(top_url)) {
@@ -188,20 +209,22 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         return target_ms;
     }
 
-    /***
-     * シェアボタンを押したとき
-     */
-    public void onClick(View view){
-        Log.d(TAG, "onClick");
-        String url = mWebView.getUrl();
-        switch (view.getId()) {
-            case R.id.button1:
-                share("com.facebook.katana", url);
-                break;
-            case R.id.button2:
-                String title = mWebView.getTitle();
-                share("com.twitter.android", title + " " + url);
-                break;
+    // シェアボタンのリスナー
+    public class ButtonAction implements View.OnClickListener {
+        // シェアボタンを押したとき
+        @Override
+        public void onClick(View view){
+            Log.d(TAG, "onClick");
+            String url = mWebView.getUrl();
+            switch (view.getId()) {
+                case R.id.button1:
+                    share("com.facebook.katana", url);
+                    break;
+                case R.id.button2:
+                    String title = mWebView.getTitle();
+                    share("com.twitter.android", title + " " + url);
+                    break;
+            }
         }
     }
 
