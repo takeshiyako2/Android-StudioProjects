@@ -17,6 +17,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import com.google.android.youtube.player.YouTubeBaseActivity;
+import com.google.android.youtube.player.YouTubePlayerFragment;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
@@ -25,7 +26,7 @@ import com.google.android.youtube.player.YouTubePlayer.PlayerStyle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
+public class MainActivity extends ActionBarActivity implements YouTubePlayer.OnInitializedListener {
 
 
     private RequestQueue mQueue;
@@ -44,10 +45,18 @@ public class MainActivity extends YouTubeBaseActivity implements YouTubePlayer.O
 
     // プレーヤーを初期化する処理をまとめる
     private void initYouTubeView() {
+        /*
         // インスタンスを取得
         YouTubePlayerView youTubeView = (YouTubePlayerView) findViewById(R.id.youtube_view);
         // プレーヤーを初期化する
         youTubeView.initialize(DEVELOPER_KEY, this);
+*/
+        // フラグメントインスタンスを取得
+        YouTubePlayerFragment youTubePlayerFragment =
+                (YouTubePlayerFragment) getFragmentManager().findFragmentById(R.id.youtube_view);
+
+        // フラグメントのプレーヤーを初期化する
+        youTubePlayerFragment.initialize(DEVELOPER_KEY, this);
     }
 
     @Override
