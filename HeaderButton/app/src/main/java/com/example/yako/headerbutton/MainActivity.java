@@ -1,7 +1,9 @@
 package com.example.yako.headerbutton;
 
 import android.app.AlarmManager;
+import android.app.Dialog;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -9,9 +11,12 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -75,6 +80,9 @@ public class MainActivity extends ActionBarActivity implements YouTubePlayer.OnI
     private static String videoId = "EGy39OMyHzw";
     private static final int RECOVERY_DIALOG_REQUEST = 1;
 
+    // ローディングダイアログ
+    private Dialog waitDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "onCreate");
@@ -96,7 +104,7 @@ public class MainActivity extends ActionBarActivity implements YouTubePlayer.OnI
 
         // WebViewの設定
         mWebView = (WebView) findViewById(R.id.webView1);
-        mWebView.setWebViewClient(new MyWebViewClient());
+        mWebView.setWebViewClient(new MyWebViewClient(this));
         WebSettings webSettings = mWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         String ua = mWebView.getSettings().getUserAgentString();
@@ -105,6 +113,7 @@ public class MainActivity extends ActionBarActivity implements YouTubePlayer.OnI
         mWebView.clearCache(true);
         mWebView.clearHistory();
         mErrorPage= findViewById(R.id.webview_error_page);
+        mWebView.setBackgroundColor(0);
         mWebView.loadUrl(top_url);
 
         // シェアボタン
@@ -151,10 +160,8 @@ public class MainActivity extends ActionBarActivity implements YouTubePlayer.OnI
     private void requestVolley(String url) {
         // Volley でリクエスト
         final TextView mTextView = (TextView) findViewById(R.id.volley_error_page);
-
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
-
         // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
@@ -172,6 +179,9 @@ public class MainActivity extends ActionBarActivity implements YouTubePlayer.OnI
 
                             // YouTube初期化
                             initYouTubeView();
+                        }else{
+                            // YouTubeじゃない場合
+                            mErrorPage.setVisibility(View.VISIBLE);
                         }
                     }
                 },
@@ -183,11 +193,19 @@ public class MainActivity extends ActionBarActivity implements YouTubePlayer.OnI
                 });
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
-
     }
 
     // WebViewClientを継承
     public class MyWebViewClient extends WebViewClient {
+
+        // ローディングダイアログ
+//        private Dialog waitDialog;
+        public MyWebViewClient(Context c) {
+            waitDialog = new Dialog(c, R.style.Theme_CustomProgressDialog);
+            waitDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            waitDialog.setContentView(R.layout.custom_progress_dialog);
+            waitDialog.getWindow().setFlags(0, WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        }
 
         // エラーが発生した場合
         @Override
@@ -198,19 +216,52 @@ public class MainActivity extends ActionBarActivity implements YouTubePlayer.OnI
         // ページの読み込み前に呼ばれる
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
+
+            // 下層ページ
+            String str = url;
+            Pattern p = Pattern.compile("http://9post.jp/[0-9]*$");
+            Matcher a = p.matcher(str);
+
             if (url.equals(top_url)) {
-                // トップ
+                // トップページ
+
+                // 非表示
                 button1.setVisibility(View.GONE);
                 button2.setVisibility(View.GONE);
-            }else {
-                // /下層
+
+                // ローディングダイアログをスタート
+                waitDialog.show();
+            } else if(a.find()) {
+                // 下層ページ
+
+                // Volleyスタート
+                requestVolley(url);
+
+                // 表示
                 button1.setVisibility(View.VISIBLE);
                 button2.setVisibility(View.VISIBLE);
                 findViewById(R.id.linearLayout_youtube).setVisibility(View.VISIBLE);
-                // Volleyスタート
-                requestVolley(url);
+
+                // ローディングダイアログの表示位置　下部に表示
+                WindowManager.LayoutParams wmlp=waitDialog.getWindow().getAttributes();
+                wmlp.gravity = Gravity.BOTTOM;
+                wmlp.y = 450;
+                waitDialog.getWindow().setAttributes(wmlp);
+
+                // ローディングダイアログをスタート
+                try{
+                    waitDialog.show();
+                    // 実際に行いたい処理は、プログレスダイアログの裏側で行うため、別スレッドにて実行する
+                    (new Thread(runnable)).start();
+                }catch(Exception ex){
+                }finally{
+                }
+            } else {
+                // その他のページ
+                findViewById(R.id.linearLayout_youtube).setVisibility(View.GONE);
             }
         }
+
         // ページ読み込み完了時に呼ばれる
         @Override
         public void onPageFinished(WebView view, String url) {
@@ -221,8 +272,26 @@ public class MainActivity extends ActionBarActivity implements YouTubePlayer.OnI
             } else {
                 mErrorPage.setVisibility(View.GONE);
             }
+            // ローディングダイアログを終了
+            waitDialog.dismiss();
+
         }
     }
+
+    // 下層ローディングダイアログを終了するスレッド
+    private Runnable runnable = new Runnable(){
+        public void run() {
+            // ここではダミーでスリープを行う
+            // 実際にはここに処理を書く
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                Log.e("Runnable", "InterruptedException");
+            }
+            // 処理が完了したら、ローディングダイアログを消すためにdismiss()を実行する
+            waitDialog.dismiss();
+        }
+    };
 
     // YouTubeプレーヤーを初期化する処理をまとめる
     private void initYouTubeView() {
@@ -258,7 +327,9 @@ public class MainActivity extends ActionBarActivity implements YouTubePlayer.OnI
             // プレーヤーを再生
             player.loadVideo(videoId);
             // プレーヤーの設定 時間バーと再生/一時停止コントロールのみを表示
-            player.setPlayerStyle(PlayerStyle.MINIMAL);
+//            player.setPlayerStyle(PlayerStyle.MINIMAL);
+            // インタラクティブなプレーヤー コントロールを表示しないスタイル
+            player.setPlayerStyle(PlayerStyle.CHROMELESS);
         }
     }
 
