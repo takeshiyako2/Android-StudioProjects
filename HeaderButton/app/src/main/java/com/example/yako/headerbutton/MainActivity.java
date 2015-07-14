@@ -45,6 +45,7 @@ import com.google.android.youtube.player.YouTubePlayer.PlayerStyle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import android.os.Handler;
 
 public class MainActivity extends ActionBarActivity implements YouTubePlayer.OnInitializedListener {
 
@@ -157,8 +158,9 @@ public class MainActivity extends ActionBarActivity implements YouTubePlayer.OnI
         notificationId++;
     }
 
+    // Volley でリクエスト
     private void requestVolley(String url) {
-        // Volley でリクエスト
+        // エラー用
         final TextView mTextView = (TextView) findViewById(R.id.volley_error_page);
         // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -217,7 +219,7 @@ public class MainActivity extends ActionBarActivity implements YouTubePlayer.OnI
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
 
-            // 下層ページ
+            // 下層ページ判定
             String str = url;
             Pattern p = Pattern.compile("http://9post.jp/[0-9]*$");
             Matcher a = p.matcher(str);
@@ -229,26 +231,13 @@ public class MainActivity extends ActionBarActivity implements YouTubePlayer.OnI
                 button1.setVisibility(View.GONE);
                 button2.setVisibility(View.GONE);
 
-                // ローディングダイアログをスタート
-                waitDialog.show();
-            } else if(a.find()) {
-                // 下層ページ
-
-                // Volleyスタート
-                requestVolley(url);
-
                 // 表示
-                button1.setVisibility(View.VISIBLE);
-                button2.setVisibility(View.VISIBLE);
-                findViewById(R.id.linearLayout_youtube).setVisibility(View.VISIBLE);
-
-                // ローディングダイアログの表示位置　下部に表示
-                WindowManager.LayoutParams wmlp=waitDialog.getWindow().getAttributes();
-                wmlp.gravity = Gravity.BOTTOM;
-                wmlp.y = 450;
-                waitDialog.getWindow().setAttributes(wmlp);
+                findViewById(R.id.linearLayout_webview).setVisibility(View.VISIBLE);
 
                 // ローディングダイアログをスタート
+//                waitDialog.show();
+
+                // ローディングダイアログをスタート　秒数指定
                 try{
                     waitDialog.show();
                     // 実際に行いたい処理は、プログレスダイアログの裏側で行うため、別スレッドにて実行する
@@ -256,9 +245,43 @@ public class MainActivity extends ActionBarActivity implements YouTubePlayer.OnI
                 }catch(Exception ex){
                 }finally{
                 }
+
+            } else if(a.find()) {
+                // 下層ページ
+
+                // Volleyスタート
+                requestVolley(url);
+
+                // 非表示
+                findViewById(R.id.linearLayout_webview).setVisibility(View.GONE);
+
+                // 表示
+                button1.setVisibility(View.VISIBLE);
+                button2.setVisibility(View.VISIBLE);
+                findViewById(R.id.linearLayout_youtube).setVisibility(View.VISIBLE);
+                findViewById(R.id.linearLayout_webview).setVisibility(View.VISIBLE);
+
+                // ローディングダイアログの表示位置　下部に表示
+                WindowManager.LayoutParams wmlp=waitDialog.getWindow().getAttributes();
+                wmlp.gravity = Gravity.BOTTOM;
+                wmlp.y = 450;
+                waitDialog.getWindow().setAttributes(wmlp);
+
+                // ローディングダイアログをスタート　秒数指定
+                try{
+                    waitDialog.show();
+                    // 実際に行いたい処理は、プログレスダイアログの裏側で行うため、別スレッドにて実行する
+                    (new Thread(runnable)).start();
+                }catch(Exception ex){
+                }finally{
+                }
+
             } else {
                 // その他のページ
+
+                // 表示
                 findViewById(R.id.linearLayout_youtube).setVisibility(View.GONE);
+                findViewById(R.id.linearLayout_webview).setVisibility(View.VISIBLE);
             }
         }
 
@@ -274,7 +297,6 @@ public class MainActivity extends ActionBarActivity implements YouTubePlayer.OnI
             }
             // ローディングダイアログを終了
             waitDialog.dismiss();
-
         }
     }
 
@@ -284,7 +306,7 @@ public class MainActivity extends ActionBarActivity implements YouTubePlayer.OnI
             // ここではダミーでスリープを行う
             // 実際にはここに処理を書く
             try {
-                Thread.sleep(2000);
+                Thread.sleep(1200);
             } catch (InterruptedException e) {
                 Log.e("Runnable", "InterruptedException");
             }
@@ -327,7 +349,10 @@ public class MainActivity extends ActionBarActivity implements YouTubePlayer.OnI
             // プレーヤーを再生
             player.loadVideo(videoId);
             // プレーヤーの設定 時間バーと再生/一時停止コントロールのみを表示　バックグラウンドから返ってきた時に再生ボタンが必要。
-            player.setPlayerStyle(PlayerStyle.MINIMAL);
+//            player.setPlayerStyle(PlayerStyle.MINIMAL);
+            // プレーヤーの設定 すべてのインタラクティブなコントロールを表示
+            player.setPlayerStyle(PlayerStyle.DEFAULT);
+            player.setShowFullscreenButton(false);
         }
     }
 
