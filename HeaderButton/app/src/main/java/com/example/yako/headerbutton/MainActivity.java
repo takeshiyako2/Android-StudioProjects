@@ -16,6 +16,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 import java.util.Calendar;
@@ -28,9 +29,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import android.widget.Toast;
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
+import com.google.android.youtube.player.YouTubePlayerFragment;
 import com.google.android.youtube.player.YouTubePlayerView;
 import com.google.android.youtube.player.YouTubePlayer.PlayerStyle;
 
@@ -38,7 +41,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class MainActivity extends ActionBarActivity  {
+public class MainActivity extends ActionBarActivity implements YouTubePlayer.OnInitializedListener {
 
     private static String TAG = "MainActivity";
 
@@ -51,9 +54,10 @@ public class MainActivity extends ActionBarActivity  {
 //    private static String menu1_url = "https://www.google.co.jp/";
 //    private static String menu2_url = "https://www.facebook.com/";
 
-    /** エラーページ */
+    // エラーページ
     private View mErrorPage;
-    /** ページ取得失敗判定 */
+
+    // ページ取得失敗判定
     private boolean mIsFailure = false;
 
     // シェアボタン
@@ -65,12 +69,10 @@ public class MainActivity extends ActionBarActivity  {
     int notificationId;
     private PendingIntent alarmIntent;
 
-    // YoutubeAPI
-    //API key
+    // YouTube
+    private YouTubePlayerFragment youTubePlayerFragment;
     private static final String DEVELOPER_KEY = "AIzaSyAmG880XF_VyLirMrqCYroGIvfDTQMMZHQ";
-    //Youtube のビデオID
     private static String videoId = "EGy39OMyHzw";
-    // リカバリー·リクエストの値を設定
     private static final int RECOVERY_DIALOG_REQUEST = 1;
 
     @Override
@@ -87,7 +89,7 @@ public class MainActivity extends ActionBarActivity  {
             top_url = menu1_url;
         }
 
-        // アイコン
+        // アイコン設定
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setTitle("");
         getSupportActionBar().setIcon(R.drawable.nine_post_icon_small);
@@ -106,8 +108,8 @@ public class MainActivity extends ActionBarActivity  {
         mWebView.loadUrl(top_url);
 
         // シェアボタン
-        Button button1 = (Button) findViewById(R.id.button1);
-        Button button2 = (Button) findViewById(R.id.button2);
+        button1 = (Button) findViewById(R.id.button1);
+        button2 = (Button) findViewById(R.id.button2);
         // シェアボタンのリスナー設定
         button1.setOnClickListener(new ButtonAction());
         button2.setOnClickListener(new ButtonAction());
@@ -143,43 +145,120 @@ public class MainActivity extends ActionBarActivity  {
                 1 * 1000 * 60,
                 alarmIntent
         );
-//        Toast.makeText(MainActivity.this, "通知セット完了!", Toast.LENGTH_SHORT).show();
         notificationId++;
     }
 
+    private void requestVolley(String url) {
+        // Volley でリクエスト
+        final TextView mTextView = (TextView) findViewById(R.id.volley_error_page);
 
-    // WebViewClientをオーバーライド
+        // Instantiate the RequestQueue.
+        RequestQueue queue = Volley.newRequestQueue(this);
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // YouTube ID切り出し
+                        String str = response;
+                        String regex = "https://www.youtube.com/embed/(.*)\\?";
+                        Pattern p = Pattern.compile(regex);
+                        Matcher m = p.matcher(str);
+                        if (m.find()){
+                            String matchstr = m.group(1);
+                            videoId = matchstr;
+                            Log.d(TAG, videoId);
+
+                            // YouTube初期化
+                            initYouTubeView();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        mTextView.setText("That didn't work!" + error.getMessage());
+                    }
+                });
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
+
+    }
+
+    // WebViewClientを継承
     public class MyWebViewClient extends WebViewClient {
+
+        // エラーが発生した場合
+        @Override
+        public void onReceivedError(WebView webview, int errorCode, String description, String failingUrl) {
+            mIsFailure = true;
+        }
+
         // ページの読み込み前に呼ばれる
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
-            //TOPアボタン　TOPで表示/下層で非表示
-            button1 = (Button)findViewById(R.id.button1);
-            button2 = (Button)findViewById(R.id.button2);
             if (url.equals(top_url)) {
+                // トップ
                 button1.setVisibility(View.GONE);
                 button2.setVisibility(View.GONE);
-            }else
-            {
+            }else {
+                // /下層
                 button1.setVisibility(View.VISIBLE);
                 button2.setVisibility(View.VISIBLE);
+                findViewById(R.id.linearLayout_youtube).setVisibility(View.VISIBLE);
+                // Volleyスタート
+                requestVolley(url);
             }
         }
         // ページ読み込み完了時に呼ばれる
         @Override
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
+            // エラー表示
             if (mIsFailure) {
                 mErrorPage.setVisibility(View.VISIBLE);
             } else {
                 mErrorPage.setVisibility(View.GONE);
             }
-            mWebView.setVisibility(View.VISIBLE);
         }
-        // エラーが発生した場合
-        @Override
-        public void onReceivedError(WebView webview, int errorCode, String description, String failingUrl) {
-            mIsFailure = true;
+    }
+
+    // YouTubeプレーヤーを初期化する処理をまとめる
+    private void initYouTubeView() {
+        // フラグメントインスタンスを取得
+        YouTubePlayerFragment youTubePlayerFragment = (YouTubePlayerFragment) getFragmentManager().findFragmentById(R.id.youtube_view);
+        // フラグメントのプレーヤーを初期化する
+        youTubePlayerFragment.initialize(DEVELOPER_KEY, this);
+    }
+
+    // ユーザーがリカバリー·アクションを実行した場合、再度YouTubeプレーヤーを初期化
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == RECOVERY_DIALOG_REQUEST) {
+            initYouTubeView();
+        }
+    }
+
+    // YouTubeプレーヤーの初期化失敗
+    @Override
+    public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult errorReason) {
+        if (errorReason.isUserRecoverableError()) {
+            errorReason.getErrorDialog(this, RECOVERY_DIALOG_REQUEST).show();
+        } else {
+            String errorMessage = String.format(getString(R.string.error_player), errorReason.toString());
+            Toast.makeText(this, errorMessage, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    // YouTubeプレーヤーの初期化成功
+    @Override
+    public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer player, boolean wasRestored) {
+        if (!wasRestored) {
+            // プレーヤーを再生
+            player.loadVideo(videoId);
+            // プレーヤーの設定 時間バーと再生/一時停止コントロールのみを表示
+            player.setPlayerStyle(PlayerStyle.MINIMAL);
         }
     }
 
@@ -211,6 +290,7 @@ public class MainActivity extends ActionBarActivity  {
 
     // シェアボタンのリスナー
     public class ButtonAction implements View.OnClickListener {
+
         // シェアボタンを押したとき
         @Override
         public void onClick(View view){
@@ -243,6 +323,7 @@ public class MainActivity extends ActionBarActivity  {
         }
     }
 
+    // メニュー作成
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -250,9 +331,7 @@ public class MainActivity extends ActionBarActivity  {
         return true;
     }
 
-    /***
-     * アクションバーを押したとき
-     */
+    // アクションバーを押したとき
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         Log.d(TAG, "onOptionsItemSelected");
@@ -273,9 +352,7 @@ public class MainActivity extends ActionBarActivity  {
         return super.onOptionsItemSelected(item);
     }
 
-    /***
-     * 戻るボタン
-     */
+    // 戻るボタン
     @Override
     public void onBackPressed() {
         Log.d(TAG, "onBackPressed");
@@ -296,9 +373,7 @@ public class MainActivity extends ActionBarActivity  {
         }
     }
 
-    /***
-     * Activityの「onResume」に基づき開始される
-     */
+    // Activityの「onResume」に基づき開始される
     @Override
     public void onResume() {
         super.onResume();
@@ -306,9 +381,7 @@ public class MainActivity extends ActionBarActivity  {
         mWebView.onResume();
     }
 
-    /***
-     * Activityが「onPause」になった場合や、Fragmentが変更更新されて操作を受け付けなくなった場合に呼び出される
-     */
+    // Activityが「onPause」になった場合や、Fragmentが変更更新されて操作を受け付けなくなった場合に呼び出される
     @Override
     public void onPause() {
         super.onPause();
@@ -316,9 +389,7 @@ public class MainActivity extends ActionBarActivity  {
         mWebView.onPause();
     }
 
-    /***
-     * フォアグラウンドでなくなった場合に呼び出される
-     */
+    // フォアグラウンドでなくなった場合に呼び出される
     @Override
     public void onStop() {
         super.onStop();
@@ -326,16 +397,12 @@ public class MainActivity extends ActionBarActivity  {
         mWebView.onPause();
     }
 
-    /***
-     * Activityが破棄される時、最後に呼び出される
-     */
+    // Activityが破棄される時、最後に呼び出される
     @Override
     public void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "onDestroy");
         mWebView.destroy();
     }
-
-
 
 }
