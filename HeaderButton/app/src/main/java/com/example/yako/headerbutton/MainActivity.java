@@ -326,10 +326,8 @@ public class MainActivity extends ActionBarActivity implements YouTubePlayer.OnI
         if (!wasRestored) {
             // プレーヤーを再生
             player.loadVideo(videoId);
-            // プレーヤーの設定 時間バーと再生/一時停止コントロールのみを表示
-//            player.setPlayerStyle(PlayerStyle.MINIMAL);
-            // インタラクティブなプレーヤー コントロールを表示しないスタイル
-            player.setPlayerStyle(PlayerStyle.CHROMELESS);
+            // プレーヤーの設定 時間バーと再生/一時停止コントロールのみを表示　バックグラウンドから返ってきた時に再生ボタンが必要。
+            player.setPlayerStyle(PlayerStyle.MINIMAL);
         }
     }
 
