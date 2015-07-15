@@ -83,6 +83,7 @@ public class MainActivity extends ActionBarActivity implements YouTubePlayer.OnI
 
     // ローディングダイアログ
     private Dialog waitDialog;
+    private Integer sleep_time;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,6 +159,154 @@ public class MainActivity extends ActionBarActivity implements YouTubePlayer.OnI
         notificationId++;
     }
 
+    // WebViewClientを継承
+    public class MyWebViewClient extends WebViewClient {
+
+        // ローディングダイアログ
+//        private Dialog waitDialog;
+        public MyWebViewClient(Context c) {
+            waitDialog = new Dialog(c, R.style.Theme_CustomProgressDialog);
+            waitDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            waitDialog.setContentView(R.layout.custom_progress_dialog);
+            waitDialog.getWindow().setFlags(0, WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        }
+
+        // エラーが発生した場合
+        @Override
+        public void onReceivedError(WebView webview, int errorCode, String description, String failingUrl) {
+            mIsFailure = true;
+        }
+
+        // ページの読み込み前に呼ばれる
+        @Override
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+
+            if (is_top(url)) {
+                // トップページ
+
+                // 非表示
+                button1.setVisibility(View.GONE);
+                button2.setVisibility(View.GONE);
+
+                // 表示
+                findViewById(R.id.linearLayout_webview).setVisibility(View.VISIBLE);
+
+                // ローディングダイアログをスタート
+//                waitDialog.show();
+
+                // スレッドのローディングダイアログをスタート
+                sleep_time = 1300;
+                try{
+                    waitDialog.show();
+                    // 実際に行いたい処理は、プログレスダイアログの裏側で行うため、別スレッドにて実行する
+                    (new Thread(runnable)).start();
+                }catch(Exception ex){
+                }finally{
+                }
+
+            } else if(is_sub(url)) {
+                // 下層ページ
+
+                // Volleyスタート
+                requestVolley(url);
+
+                // 非表示
+                findViewById(R.id.linearLayout_webview).setVisibility(View.GONE);
+
+                // 表示
+                button1.setVisibility(View.VISIBLE);
+                button2.setVisibility(View.VISIBLE);
+                findViewById(R.id.linearLayout_youtube).setVisibility(View.VISIBLE);
+
+                // JavaScriptが重いのでオフ
+                WebSettings webSettings = mWebView.getSettings();
+                webSettings.setJavaScriptEnabled(false);
+
+                // ローディングダイアログの表示位置　下部に表示
+                WindowManager.LayoutParams wmlp=waitDialog.getWindow().getAttributes();
+                wmlp.gravity = Gravity.BOTTOM;
+                wmlp.y = 450;
+                waitDialog.getWindow().setAttributes(wmlp);
+
+                /*
+                // スレッドのローディングダイアログをスタート
+                sleep_time = 800;
+                try{
+                    waitDialog.show();
+                    // 実際に行いたい処理は、プログレスダイアログの裏側で行うため、別スレッドにて実行する
+                    (new Thread(runnable)).start();
+                }catch(Exception ex){
+                }finally{
+                }
+                */
+            } else {
+                // その他のページ
+
+                // 表示
+                findViewById(R.id.linearLayout_youtube).setVisibility(View.GONE);
+                findViewById(R.id.linearLayout_webview).setVisibility(View.VISIBLE);
+            }
+        }
+
+        // ページ読み込み完了時に呼ばれる
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            super.onPageFinished(view, url);
+
+            // エラー表示
+            if (mIsFailure) {
+                mErrorPage.setVisibility(View.VISIBLE);
+            } else {
+                mErrorPage.setVisibility(View.GONE);
+            }
+
+            // 下層ページ
+            if(is_sub(url)) {
+                // 読み込み完了時にwebviewを表示
+                findViewById(R.id.linearLayout_webview).setVisibility(View.VISIBLE);
+            }
+
+            // ローディングダイアログを終了
+//            waitDialog.dismiss();
+        }
+    }
+
+    // トップページ判定
+    public boolean is_top(String url) {
+        if (url.equals(top_url)) {
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    // 下層ページ判定
+    public boolean is_sub(String url) {
+        String str = url;
+        Pattern p = Pattern.compile("http://9post.jp/[0-9]*$");
+        Matcher a = p.matcher(str);
+        if (a.find()) {
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    // スレッドのローディングダイアログを終了
+    private Runnable runnable = new Runnable(){
+        public void run() {
+            // ここではダミーでスリープを行う
+            // 実際にはここに処理を書く
+            try {
+                Thread.sleep(sleep_time);
+            } catch (InterruptedException e) {
+                Log.e("Runnable", "InterruptedException");
+            }
+            // 処理が完了したら、ローディングダイアログを消すためにdismiss()を実行する
+            waitDialog.dismiss();
+        }
+    };
+
     // Volley でリクエスト
     private void requestVolley(String url) {
         // エラー用
@@ -196,124 +345,6 @@ public class MainActivity extends ActionBarActivity implements YouTubePlayer.OnI
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
     }
-
-    // WebViewClientを継承
-    public class MyWebViewClient extends WebViewClient {
-
-        // ローディングダイアログ
-//        private Dialog waitDialog;
-        public MyWebViewClient(Context c) {
-            waitDialog = new Dialog(c, R.style.Theme_CustomProgressDialog);
-            waitDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            waitDialog.setContentView(R.layout.custom_progress_dialog);
-            waitDialog.getWindow().setFlags(0, WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-        }
-
-        // エラーが発生した場合
-        @Override
-        public void onReceivedError(WebView webview, int errorCode, String description, String failingUrl) {
-            mIsFailure = true;
-        }
-
-        // ページの読み込み前に呼ばれる
-        @Override
-        public void onPageStarted(WebView view, String url, Bitmap favicon) {
-
-            // 下層ページ判定
-            String str = url;
-            Pattern p = Pattern.compile("http://9post.jp/[0-9]*$");
-            Matcher a = p.matcher(str);
-
-            if (url.equals(top_url)) {
-                // トップページ
-
-                // 非表示
-                button1.setVisibility(View.GONE);
-                button2.setVisibility(View.GONE);
-
-                // 表示
-                findViewById(R.id.linearLayout_webview).setVisibility(View.VISIBLE);
-
-                // ローディングダイアログをスタート
-//                waitDialog.show();
-
-                // ローディングダイアログをスタート　秒数指定
-                try{
-                    waitDialog.show();
-                    // 実際に行いたい処理は、プログレスダイアログの裏側で行うため、別スレッドにて実行する
-                    (new Thread(runnable)).start();
-                }catch(Exception ex){
-                }finally{
-                }
-
-            } else if(a.find()) {
-                // 下層ページ
-
-                // Volleyスタート
-                requestVolley(url);
-
-                // 非表示
-                findViewById(R.id.linearLayout_webview).setVisibility(View.GONE);
-
-                // 表示
-                button1.setVisibility(View.VISIBLE);
-                button2.setVisibility(View.VISIBLE);
-                findViewById(R.id.linearLayout_youtube).setVisibility(View.VISIBLE);
-                findViewById(R.id.linearLayout_webview).setVisibility(View.VISIBLE);
-
-                // ローディングダイアログの表示位置　下部に表示
-                WindowManager.LayoutParams wmlp=waitDialog.getWindow().getAttributes();
-                wmlp.gravity = Gravity.BOTTOM;
-                wmlp.y = 450;
-                waitDialog.getWindow().setAttributes(wmlp);
-
-                // ローディングダイアログをスタート　秒数指定
-                try{
-                    waitDialog.show();
-                    // 実際に行いたい処理は、プログレスダイアログの裏側で行うため、別スレッドにて実行する
-                    (new Thread(runnable)).start();
-                }catch(Exception ex){
-                }finally{
-                }
-
-            } else {
-                // その他のページ
-
-                // 表示
-                findViewById(R.id.linearLayout_youtube).setVisibility(View.GONE);
-                findViewById(R.id.linearLayout_webview).setVisibility(View.VISIBLE);
-            }
-        }
-
-        // ページ読み込み完了時に呼ばれる
-        @Override
-        public void onPageFinished(WebView view, String url) {
-            super.onPageFinished(view, url);
-            // エラー表示
-            if (mIsFailure) {
-                mErrorPage.setVisibility(View.VISIBLE);
-            } else {
-                mErrorPage.setVisibility(View.GONE);
-            }
-            // ローディングダイアログを終了
-            waitDialog.dismiss();
-        }
-    }
-
-    // 下層ローディングダイアログを終了するスレッド
-    private Runnable runnable = new Runnable(){
-        public void run() {
-            // ここではダミーでスリープを行う
-            // 実際にはここに処理を書く
-            try {
-                Thread.sleep(1200);
-            } catch (InterruptedException e) {
-                Log.e("Runnable", "InterruptedException");
-            }
-            // 処理が完了したら、ローディングダイアログを消すためにdismiss()を実行する
-            waitDialog.dismiss();
-        }
-    };
 
     // YouTubeプレーヤーを初期化する処理をまとめる
     private void initYouTubeView() {
@@ -384,7 +415,6 @@ public class MainActivity extends ActionBarActivity implements YouTubePlayer.OnI
 
     // シェアボタンのリスナー
     public class ButtonAction implements View.OnClickListener {
-
         // シェアボタンを押したとき
         @Override
         public void onClick(View view){
