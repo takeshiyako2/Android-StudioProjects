@@ -46,6 +46,9 @@ public class MainActivity extends ActionBarActivity {
     // ログ出力用のタグ
     private static final String TAG = MainActivity.class.getSimpleName();
 
+    // Volleyへ渡すタグ
+    String tag_json_obj = "json_obj_req";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,9 +72,6 @@ public class MainActivity extends ActionBarActivity {
 
     // リクエスト処理
     private void request() {
-        String tag_json_obj = "json_obj_req";
-        String url = "http://api.androidhive.info/volley/person_object.json";
-
         // ロードダイアログ表示
         final ProgressDialog pDialog = new ProgressDialog(this);
         pDialog.setMessage("Loading...");
