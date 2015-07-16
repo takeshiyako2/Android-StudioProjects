@@ -36,6 +36,9 @@ public class MainActivity extends ActionBarActivity {
     /** 地区名用テキストビュー */
     TextView txtArea;
 
+    /** 地区名用テキストビュー */
+    TextView txtAreaDescription;
+
     /** 予報表示用リストビューのアダプター */
     ArrayAdapter<String> adapter;
 
@@ -46,6 +49,8 @@ public class MainActivity extends ActionBarActivity {
 
         // 地区名用のテキストビュー
         txtArea = (TextView) findViewById(R.id.txtArea);
+        // 天気概況文用のテキストビュー
+        txtAreaDescription = (TextView) findViewById(R.id.txtAreaDescription);
         // 予報表示用のリストビュー
         ListView listForecast = (ListView) findViewById(R.id.listForecast);
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
@@ -68,6 +73,11 @@ public class MainActivity extends ActionBarActivity {
                     // 地区名を取得し、設定
                     String title = response.getString("title");
                     txtArea.setText(title);
+
+                    // 天気概況文を取得し、設定
+                    JSONObject description = response.getJSONObject("description");
+                    String description_text = description.getString("text");
+                    txtAreaDescription.setText(description_text);
 
                     // 予報情報の一覧を取得
                     JSONArray forecasts = response.getJSONArray("forecasts");
@@ -97,5 +107,27 @@ public class MainActivity extends ActionBarActivity {
                 }
             }
         }));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
