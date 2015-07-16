@@ -27,86 +27,123 @@ import com.android.volley.toolbox.Volley;
 
 public class MainActivity extends ActionBarActivity {
 
-    /** JSONデータ取得URL */
+    // JSONデータ取得URL
     private final String URL_API = "http://weather.livedoor.com/forecast/webservice/json/v1?city=130010";
 
-    /** HTTPリクエスト管理Queue */
-    private RequestQueue mQueue;
+    // HTTPリクエスト管理キュー
+    private RequestQueue queue;
 
-    /** 地区名用テキストビュー */
-    TextView txtArea;
+    //  Volleyでリクエスト時に設定するタグ名、キャンセル時に利用 クラス名をタグ指定
+    private static final Object TAG_REQUEST_QUEUE = MainActivity.class.getName();
 
-    /** 地区名用テキストビュー */
-    TextView txtAreaDescription;
+    // 地区名用テキストビュー
+    TextView textview_title;
 
-    /** 予報表示用リストビューのアダプター */
+    // 地区名用テキストビュー
+    TextView textview_description;
+
+    // 予報表示用リストビューのアダプター
     ArrayAdapter<String> adapter;
+
+    // ログ出力用のタグ
+    private String TAG = "JSONGetter";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.e(TAG, "onCreate");
 
-        // 地区名用のテキストビュー
-        txtArea = (TextView) findViewById(R.id.txtArea);
-        // 天気概況文用のテキストビュー
-        txtAreaDescription = (TextView) findViewById(R.id.txtAreaDescription);
-        // 予報表示用のリストビュー
-        ListView listForecast = (ListView) findViewById(R.id.listForecast);
+        // ビューを設定
+        // 地区名
+        textview_title = (TextView) findViewById(R.id.textview_title);
+        // 予報
+        ListView listview_forecasts = (ListView) findViewById(R.id.listview_forecasts);
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
-        listForecast.setAdapter(adapter);
+        listview_forecasts.setAdapter(adapter);
+        // 天気概況
+        textview_description = (TextView) findViewById(R.id.textview_description);
 
-        // HTTPリクエスト管理Queueを生成
-        mQueue = Volley.newRequestQueue(this);
+        // VolleyでHTTPリクエスト管理キューを生成
+        queue = Volley.newRequestQueue(this);
+    }
 
-        // リクエスト実行
-        mQueue.add(new JsonObjectRequest(Method.GET, URL_API, null, new Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                // --------------------------------------------
-                // JSONObjectのパース、List、Viewへの追加等
-                // --------------------------------------------
-                // ログ出力
-                Log.d("temakishiki", "response : " + response.toString());
+    private void requestJsonObject(){
 
-                try {
-                    // 地区名を取得し、設定
-                    String title = response.getString("title");
-                    txtArea.setText(title);
+        JsonObjectRequest jsonRequest = new JsonObjectRequest(Method.GET, URL_API, null,
+            new Listener<JSONObject>() {
+                // レスポンス受信のリスナー
+                @Override
+                public void onResponse(JSONObject response) {
+                    // ログ出力
+                    Log.d(TAG, "onResponse: " + response.toString());
 
-                    // 天気概況文を取得し、設定
-                    JSONObject description = response.getJSONObject("description");
-                    String description_text = description.getString("text");
-                    txtAreaDescription.setText(description_text);
+                    try {
+                        // 地区名を取得、テキストビューに登録
+                        String title = response.getString("title");
+                        textview_title.setText(title);
 
-                    // 予報情報の一覧を取得
-                    JSONArray forecasts = response.getJSONArray("forecasts");
-                    for (int i = 0; i < forecasts.length(); i++) {
-                        // 予報情報を取得
-                        JSONObject forecast = forecasts.getJSONObject(i);
-                        // 日付
-                        String date = forecast.getString("date");
-                        // 予報
-                        String telop = forecast.getString("telop");
+                        // 天気概況文を取得、テキストビューに登録
+                        JSONObject description = response.getJSONObject("description");
+                        String description_text = description.getString("text");
+                        textview_description.setText(description_text);
 
-                        // リストビューに設定
-                        adapter.add(date + ":" + telop);
+                        // リストビューをクリア、publicで宣言しているので、そのままだと、バックグラウンドから戻った時にどんどん追加されてしまうため
+                        adapter.clear();
+
+                        // 天気予報の予報日毎の配列を取得
+                        JSONArray forecasts = response.getJSONArray("forecasts");
+                        for (int i = 0; i < forecasts.length(); i++) {
+                            JSONObject forecast = forecasts.getJSONObject(i);
+                            // 日付を取得
+                            String date = forecast.getString("date");
+                            // 予報を取得
+                            String telop = forecast.getString("telop");
+                            // リストビューに登録
+                            adapter.add(date + ":" + telop);
+                        }
+                    } catch (JSONException e) {
+                        Log.e(TAG, e.getMessage());
                     }
-                } catch (JSONException e) {
-                    Log.e("temakishiki", e.getMessage());
                 }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                // --------------------------------------------
-                // エラー処理 error.networkResponseで確認
-                // --------------------------------------------
-                if (error.networkResponse != null) {
-                    Log.e("temakishiki", "エラー : " + error.networkResponse.toString());
+
+            },
+            new Response.ErrorListener() {
+                // リクエストエラーのリスナー
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    // エラー処理
+                    Log.e(TAG, "onErrorResponse : " + error.getMessage());
                 }
+
             }
-        }));
+        );
+
+        // タグを設定する
+        jsonRequest.setTag(TAG_REQUEST_QUEUE);
+
+        // リクエスト＆レスポンス情報の設定をキューに追加
+        queue.add(jsonRequest);
+
+        // キュー処理をスタート、暗黙的にリクエストキューは発行されるが、見た目的にわかりやすくなるので書いた
+        queue.start();
+
+    }
+
+    // onCreateの後に呼び出される
+    @Override
+    public void onStart(){
+        super.onStart();
+        Log.e(TAG, "onStart");
+        requestJsonObject();
+    }
+
+    // onStopのときにキューをキャンセル
+    @Override
+    public void onStop(){
+        super.onStop();
+        Log.e(TAG, "onStop");
+        queue.cancelAll(TAG_REQUEST_QUEUE);
     }
 
     @Override

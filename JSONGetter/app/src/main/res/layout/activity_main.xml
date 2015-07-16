@@ -11,14 +11,14 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/txtArea"
+            android:id="@+id/textview_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/abc_text_size_large_material"
             android:textColor="@android:color/black" />
 
         <ListView
-            android:id="@+id/listForecast"
+            android:id="@+id/listview_forecasts"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"/>
 
@@ -27,7 +27,7 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/txtAreaDescription"
+                android:id="@+id/textview_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
