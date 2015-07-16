@@ -4,18 +4,15 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import com.android.volley.Request.Method;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -77,7 +74,6 @@ public class MainActivity extends ActionBarActivity {
                 public void onResponse(JSONObject response) {
                     // ログ出力
                     Log.d(TAG, "onResponse: " + response.toString());
-
                     try {
                         // 地区名を取得、テキストビューに登録
                         String title = response.getString("title");
@@ -106,7 +102,6 @@ public class MainActivity extends ActionBarActivity {
                         Log.e(TAG, e.getMessage());
                     }
                 }
-
             },
             new Response.ErrorListener() {
                 // リクエストエラーのリスナー

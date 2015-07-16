@@ -112,6 +112,8 @@ public class MainActivity extends ActionBarActivity implements YouTubePlayer.OnI
         String ua = mWebView.getSettings().getUserAgentString();
         ua = ua + " 9post-android";
         mWebView.getSettings().setUserAgentString(ua);
+        mWebView.getSettings().setLoadWithOverviewMode(true);
+        mWebView.getSettings().setUseWideViewPort(true);
         mWebView.clearCache(true);
         mWebView.clearHistory();
         mErrorPage= findViewById(R.id.webview_error_page);
