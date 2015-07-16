@@ -7,3 +7,6 @@
 [submodule "JSONGetter/modules/volley"]
 	path = JSONGetter/modules/volley
 	url = https://android.googlesource.com/platform/frameworks/volley
+[submodule "VolleyInstallTest/modules/volley"]
+	path = VolleyInstallTest/modules/volley
+	url = https://android.googlesource.com/platform/frameworks/volley
