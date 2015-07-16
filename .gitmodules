@@ -4,3 +4,6 @@
 [submodule "HeaderButton/modules/volley"]
 	path = HeaderButton/modules/volley
 	url = https://android.googlesource.com/platform/frameworks/volley
+[submodule "JSONGetter/modules/volley"]
+	path = JSONGetter/modules/volley
+	url = https://android.googlesource.com/platform/frameworks/volley
