@@ -10,3 +10,6 @@
 [submodule "VolleyInstallTest/modules/volley"]
 	path = VolleyInstallTest/modules/volley
 	url = https://android.googlesource.com/platform/frameworks/volley
+[submodule "Monst/modules/volley"]
+	path = Monst/modules/volley
+	url = https://android.googlesource.com/platform/frameworks/volley

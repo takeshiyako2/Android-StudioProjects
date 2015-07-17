@@ -27,7 +27,7 @@ public class MainActivity extends Activity
         browser = (WebView)findViewById(R.id.webView1);
         browser.setWebViewClient(new MyBrowser());
         browser.loadUrl("http://www.yahoo.co.jp/");
-        swipeView.setColorScheme(android.R.color.holo_blue_dark,android.R.color.holo_blue_light, android.R.color.holo_green_light, android.R.color.holo_green_dark);
+        swipeView.setColorSchemeResources(android.R.color.holo_blue_dark,android.R.color.holo_blue_light, android.R.color.holo_green_light, android.R.color.holo_green_dark);
         swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener()
         {
             @Override
