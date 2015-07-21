@@ -72,7 +72,7 @@ public class MainActivity extends ActionBarActivity implements YouTubePlayer.OnI
 
     // 通知
     TimePicker tPicker;
-    int notificationId;
+    int notificationId = 100;
     private PendingIntent alarmIntent;
 
     // YouTube
@@ -132,18 +132,9 @@ public class MainActivity extends ActionBarActivity implements YouTubePlayer.OnI
 
         // アラームの時間設定
         int hour = 12;
-        int minute = 0;
+        int minute = 00;
         long alarmStartTime = get_time_by_hour_minuite(hour, minute);
         Log.d(TAG, "IntentService" + " " + String.valueOf(alarmStartTime));
-
-        // アラームの時間設定 デバッグ用（本番時にはコメントアウトしておく）
-        /*
-        Calendar startTime = Calendar.getInstance();
-        startTime.set(Calendar.HOUR_OF_DAY, hour);
-        startTime.set(Calendar.MINUTE, minute);
-        startTime.set(Calendar.SECOND, 0);
-        alarmStartTime = startTime.getTimeInMillis();
-        */
 
         // アラームセット
         Intent bootIntent = new Intent(MainActivity.this, AlarmReceiver.class);
@@ -155,10 +146,11 @@ public class MainActivity extends ActionBarActivity implements YouTubePlayer.OnI
         alarm.setRepeating(
                 AlarmManager.RTC_WAKEUP,
                 alarmStartTime,
-                1 * 1000 * 60,
+//                1 * 1000 * 60, // １分毎
+                AlarmManager.INTERVAL_DAY, // 1日毎
                 alarmIntent
         );
-        notificationId++;
+//        notificationId++; // 何回も同じ通知をしないように。notificationIdは固定にする。
     }
 
     // WebViewClientを継承
