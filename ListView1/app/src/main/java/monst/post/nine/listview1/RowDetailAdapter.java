@@ -27,7 +27,7 @@ public class RowDetailAdapter extends ArrayAdapter<RowDetail> {
         // 指定行のデータを取得
         RowDetail detail = (RowDetail)getItem(position);
 
-        // nullの場合のみ再作成
+        // レイアウトが初めて作成される場合のみ作成
         if(null == convertView){
             convertView = layoutinflater.inflate(R.layout.row, null);
         }

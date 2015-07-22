@@ -5,11 +5,11 @@ android {
     buildToolsVersion "22.0.1"
 
     defaultConfig {
-        applicationId "nine.post.headerbutton"
+        applicationId "monst.post.nine.fragmenttest"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 5
-        versionName "1.5"
+        versionCode 1
+        versionName "1.0"
     }
     buildTypes {
         release {
@@ -22,7 +22,4 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22.2.0'
-    compile 'com.github.castorflex.smoothprogressbar:library-circular:+'
-    compile project(':modules:volley')
-    compile files('libs/YouTubeAndroidPlayerApi.jar')
 }

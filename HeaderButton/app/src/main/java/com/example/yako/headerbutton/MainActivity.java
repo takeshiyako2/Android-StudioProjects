@@ -146,7 +146,7 @@ public class MainActivity extends ActionBarActivity implements YouTubePlayer.OnI
         alarm.setRepeating(
                 AlarmManager.RTC_WAKEUP,
                 alarmStartTime,
-//                1 * 1000 * 60, // １分毎
+//                1 * 1000 * 30, // 30秒毎
                 AlarmManager.INTERVAL_DAY, // 1日毎
                 alarmIntent
         );

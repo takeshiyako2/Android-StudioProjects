@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,7 +46,7 @@ public class MainActivity extends ActionBarActivity {
         // リストビューへ紐付け
         listview = (ListView)findViewById(R.id.listView);
 
-        // ArrayAdapterへ設定
+        // ArrayAdapterを設定
         RowDetailAdapter rowAdapater = new RowDetailAdapter(this, 0, objects);
 
         // リストビューへリストを登録
@@ -77,7 +76,7 @@ public class MainActivity extends ActionBarActivity {
 
                 // リストビューの項目を取得
                 ListView listview = (ListView) parent;
-                RowDetail item = (RowDetail)listview.getItemAtPosition(position);
+                RowDetail item = (RowDetail) listview.getItemAtPosition(position);
                 String text = "長押ししました:" + item.getTitle() + ":" + item.getDetail();
 
                 // トースト表示
@@ -90,25 +89,4 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 }
