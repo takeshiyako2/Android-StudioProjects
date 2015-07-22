@@ -89,7 +89,7 @@ public class MainActivity extends ActionBarActivity {
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             if (fragmentTransaction != null) {
                 fragmentTransaction.remove(fragmentManager.findFragmentById(R.id.fragment));
-                fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
                 fragmentTransaction.commit();
             }
 

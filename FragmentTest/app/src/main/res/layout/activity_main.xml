@@ -9,7 +9,7 @@ tools:context="monst.post.nine.fragmenttest.MainActivity" >
         android:id="@+id/text1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="TEST" />
+        android:text="TESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTEST" />
 
 
 </FrameLayout>
