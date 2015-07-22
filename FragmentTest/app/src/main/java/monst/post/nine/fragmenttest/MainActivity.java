@@ -38,8 +38,8 @@ public class MainActivity extends ActionBarActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
 
-            // MainActivity非表示
-            findViewById(R.id.text1).setVisibility(View.GONE);
+            // MainActivity LinearLayout非表示
+            findViewById(R.id.liner_layout_1).setVisibility(View.GONE);
 
             // Fragmentに受け渡す値
             Bundle args = new Bundle();
@@ -50,7 +50,7 @@ public class MainActivity extends ActionBarActivity {
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             BlankFragment frag1 = new BlankFragment();
             frag1.setArguments(args);
-            fragmentTransaction.replace(R.id.fragment, frag1);
+            fragmentTransaction.replace(R.id.framelayout1, frag1);
             fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             fragmentTransaction.commit();
 
@@ -88,13 +88,13 @@ public class MainActivity extends ActionBarActivity {
             FragmentManager fragmentManager = getFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             if (fragmentTransaction != null) {
-                fragmentTransaction.remove(fragmentManager.findFragmentById(R.id.fragment));
+                fragmentTransaction.remove(fragmentManager.findFragmentById(R.id.framelayout1));
                 fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
                 fragmentTransaction.commit();
             }
 
-            // MainActivity表示
-            findViewById(R.id.text1).setVisibility(View.VISIBLE);
+            // MainActivity LinearLayout表示
+            findViewById(R.id.liner_layout_1).setVisibility(View.VISIBLE);
 
             // フラグをfalse
             ThisIsFlagment = false;

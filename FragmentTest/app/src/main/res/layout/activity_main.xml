@@ -1,18 +1,26 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
-android:id="@+id/fragment"
-tools:context="monst.post.nine.fragmenttest.MainActivity" >
+android:id="@+id/framelayout1"
+tools:context=".MainActivity" >
 
-    <TextView
-        android:id="@+id/text1"
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/liner_layout_1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="TESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTEST" />
+        android:orientation="vertical">
 
+        <TextView
+            android:id="@+id/text1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="TESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTESTTEST" />
 
-</FrameLayout>
+    </LinearLayout>
+
+</RelativeLayout>
 
 
 
