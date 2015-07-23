@@ -455,16 +455,24 @@ public class MainActivity extends ActionBarActivity implements YouTubePlayer.OnI
         Log.d(TAG, "onOptionsItemSelected");
         finish(); // アクティビティスタックを破棄
         switch (item.getItemId()) {
+            // 新着
             case R.id.menu1:
                 top_url = menu1_url;
+                // アクティビティ開始
                 startActivity(new Intent(this, MainActivity.class));
+                // アクティビティ移行時のアニメーションを無効化
+                overridePendingTransition(0, 0);
                 return true;
+            // 人気
             case R.id.menu2:
                 top_url = menu2_url;
                 startActivity(new Intent(this, MainActivity.class));
+                overridePendingTransition(0, 0);
                 return true;
+            // 設定
             case R.id.action_settings:
                 startActivity(new Intent(this, SettingsActivity.class));
+                overridePendingTransition(0, 0);
                 return true;
         }
         return super.onOptionsItemSelected(item);

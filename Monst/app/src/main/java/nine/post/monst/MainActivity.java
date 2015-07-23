@@ -2,6 +2,8 @@ package nine.post.monst;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
+import android.support.v4.app.ShareCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -10,10 +12,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
@@ -30,13 +30,17 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
 public class MainActivity extends ActionBarActivity {
 
     // JSONデータ取得URL
     private String BASE_URL_API = "http://api.monst.hitokoto.co/feed.json";
     private String URL_API;
+
+    // アプリタイトル
+    String app_titile = "モンストニュース";
+
+    // Play URL (短縮URL)
+    String play_url = "";
 
     //  Volleyでリクエスト時に設定するタグ名、キャンセル時に利用 クラス名をタグ指定
     private static final Object TAG_REQUEST_QUEUE = MainActivity.class.getName();
@@ -53,8 +57,14 @@ public class MainActivity extends ActionBarActivity {
     // リストビュー
     ListView listview;
 
+    // リストビューのアイテム
+    RowDetail item;
+
     // 予報表示用リストビューのアダプター
     RowDetailAdapter rowAdapater;
+
+    // いまはFlagmentかどうか
+    private Boolean ThisIsFlagment = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +86,6 @@ public class MainActivity extends ActionBarActivity {
         // リストビューへリストを登録
         listview.setAdapter(rowAdapater);
 
-
         // リストビューがクリックされたときのコールバックリスナーを登録
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -86,40 +95,35 @@ public class MainActivity extends ActionBarActivity {
 
                 Log.e(TAG, "onItemClick");
 
-                // get item
-                ListView listview = (ListView) parent;
-                RowDetail item = (RowDetail) listview.getItemAtPosition(position);
-
-                //
-
-                findViewById(R.id.layout_list).setVisibility(View.GONE);
-
-                // Fragment
-
-                FragmentManager fragmentManager = getFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                WebviewFragment fragment = new WebviewFragment();
-
-//                Bundle bundle = new Bundle();
-//                bundle.putString("url", item.getUrl());
-//                WebviewFragment.setArguments(bundle);
-
-                fragmentTransaction.add(R.id.layout_fragment_1, fragment, "tag");
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-
-
-                /*
                 // リストビューの項目を取得
                 ListView listview = (ListView) parent;
-                RowDetail item = (RowDetail) listview.getItemAtPosition(position);
-                String text = "クリックしました:" + item.getTitle() + ":" + item.getUrl();
+                item = (RowDetail) listview.getItemAtPosition(position);
 
-                // トースト表示
-                Toast.makeText(getApplicationContext(), text, Toast.LENGTH_SHORT).show();
-                */
+                // MainActivity LinearLayout非表示
+                findViewById(R.id.layout_list).setVisibility(View.GONE);
 
+                // Fragmentに受け渡す値
+                Bundle args = new Bundle();
+                args.putString("url", item.getUrl());
 
+                // Fragment表示
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                WebviewFragment frag1 = new WebviewFragment();
+                frag1.setArguments(args);
+                fragmentTransaction.replace(R.id.framelayout1, frag1);
+                fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                fragmentTransaction.commit();
+
+                // フラグをtrue
+                ThisIsFlagment = true;
+
+                // アクションバーに戻る(<-)を表示
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+                // アクションバーに選んだタイトルを表示
+                getSupportActionBar().setTitle(item.getTitle());
+                getSupportActionBar().setSubtitle(item.getSiteTitle());
             }
         });
 
@@ -164,7 +168,6 @@ public class MainActivity extends ActionBarActivity {
             public void onScrollStateChanged(AbsListView arg0, int arg1) {
             }
         });
-
     }
 
     // クルクル
@@ -178,13 +181,7 @@ public class MainActivity extends ActionBarActivity {
 
     // リクエスト処理
     private void request() {
-        // ロードダイアログ表示
-//        final ProgressDialog pDialog = new ProgressDialog(this);
-//        pDialog.setMessage("Loading...");
-//        pDialog.show();
-
         Log.d(TAG, "request URL_API: " + URL_API);
-
         JsonArrayRequest jsonObjReq = new JsonArrayRequest(Request.Method.GET, URL_API, null,
                 new Response.Listener<JSONArray>() {
                     // レスポンス受信のリスナー
@@ -192,9 +189,6 @@ public class MainActivity extends ActionBarActivity {
                     public void onResponse(JSONArray response) {
                         // ログ出力
                         Log.d(TAG, "request onResponse: " + response.toString());
-
-                        // ロードダイアログ終了
-//                        pDialog.hide();
 
                         try {
 
@@ -230,9 +224,6 @@ public class MainActivity extends ActionBarActivity {
                     // リクエストエラーのリスナー
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        // ロードダイアログ終了
-//                        pDialog.hide();
-
                         // エラー処理
                         Log.d(TAG, "request Error: " + error.getMessage());
 
@@ -259,6 +250,7 @@ public class MainActivity extends ActionBarActivity {
         return true;
     }
 
+    // アクションバーのアクションを受け取る
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -267,10 +259,105 @@ public class MainActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+        switch (id) {
+            /*
+            // Settingsを押したときの処理
+            case R.id.action_settings:
+                return true;
+                break;
+            */
+            // シェアを押したときの処理
+            case R.id.action_shere:
+                makeShere();
+                break;
 
+            // 更新を押したときの処理
+            case R.id.action_reload:
+                // アクティビティスタックを破棄
+                finish();
+                // アクティビティ開始
+                startActivity(new Intent(this, MainActivity.class));
+                // アクティビティ移行時のアニメーションを無効化
+                overridePendingTransition(0, 0);
+                break;
+
+            // 戻る（<-）を押したときの処理
+            case android.R.id.home:
+                makeBackFromFragment();
+                break;
+        }
         return super.onOptionsItemSelected(item);
     }
+
+    // シェアの挙動
+    public void makeShere() {
+        String articleTitle;
+        String articleURL;
+        // リストをクリックしたあと
+        if (item != null) {
+            articleTitle = item.getTitle();
+            articleURL = item.getUrl();
+        }
+        // リストページ
+        else {
+            articleTitle = app_titile;
+            articleURL = play_url;
+        }
+        // 文字結合
+        String sharedText = articleTitle + " " + articleURL;
+        // builderの生成　ShareCompat.IntentBuilder.from(Context context);
+        ShareCompat.IntentBuilder builder = ShareCompat.IntentBuilder.from(this);
+        // アプリ一覧が表示されるDialogのタイトルの設定
+        builder.setChooserTitle("シェアする？");
+        // シェアするタイトル
+        builder.setSubject(articleTitle);
+        // シェアするテキスト
+        builder.setText(sharedText);
+        // シェアするタイプ（他にもいっぱいあるよ）
+        builder.setType("text/plain");
+        // Shareアプリ一覧のDialogの表示
+        builder.startChooser();
+    }
+
+    // 戻るボタンを押した時
+    @Override
+    public void onBackPressed() {
+        makeBackFromFragment();
+    }
+
+    // 戻る処理
+    public void makeBackFromFragment() {
+        int backStackCnt = getSupportFragmentManager().getBackStackEntryCount();
+
+        // Fragmentから戻る処理
+        if (ThisIsFlagment) {
+
+            // Fragment終了
+            FragmentManager fragmentManager = getFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            if (fragmentTransaction != null) {
+                fragmentTransaction.remove(fragmentManager.findFragmentById(R.id.framelayout1));
+                fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+                fragmentTransaction.commit();
+            }
+
+            // MainActivity LinearLayout表示
+            findViewById(R.id.layout_list).setVisibility(View.VISIBLE);
+
+            // フラグをfalse
+            ThisIsFlagment = false;
+
+            // アクションバーの戻る(<-)を消す
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+
+            // アクションバーのタイトルを戻す
+            getSupportActionBar().setTitle(R.string.app_name);
+            getSupportActionBar().setSubtitle(null);
+        }
+        // アクティビティ終了
+        else{
+            finish();
+        }
+    }
+
 }

@@ -202,13 +202,16 @@ public class SettingsActivity extends ActionBarActivity {
             case R.id.menu1:
                 top_url = menu1_url;
                 startActivity(new Intent(this, MainActivity.class));
+                overridePendingTransition(0, 0);
                 return true;
             case R.id.menu2:
                 top_url = menu2_url;
                 startActivity(new Intent(this, MainActivity.class));
+                overridePendingTransition(0, 0);
                 return true;
             case R.id.action_settings:
                 startActivity(new Intent(this, SettingsActivity.class));
+                overridePendingTransition(0, 0);
                 return true;
         }
         return super.onOptionsItemSelected(item);
