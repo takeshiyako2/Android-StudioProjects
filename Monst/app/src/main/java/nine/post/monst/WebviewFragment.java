@@ -7,8 +7,11 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Handler;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -122,7 +125,6 @@ public class WebviewFragment extends Fragment {
     public class MyWebViewClient extends WebViewClient {
 
         // ローディングダイアログ
-//        private Dialog waitDialog;
         public MyWebViewClient(Context c) {
             waitDialog = new Dialog(c, R.style.Theme_CustomProgressDialog);
             waitDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);

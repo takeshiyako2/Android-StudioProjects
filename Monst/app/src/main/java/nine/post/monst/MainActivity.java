@@ -3,7 +3,9 @@ package nine.post.monst;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v4.app.ShareCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -30,7 +32,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements SwipeRefreshLayout.OnRefreshListener {
 
     // JSONデータ取得URL
     private String BASE_URL_API = "http://api.monst.hitokoto.co/feed.json";
@@ -65,6 +67,9 @@ public class MainActivity extends ActionBarActivity {
 
     // いまはFlagmentかどうか
     private Boolean ThisIsFlagment = false;
+
+    // リフレッシュ
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,6 +155,7 @@ public class MainActivity extends ActionBarActivity {
         // スクロール処理
         listview.setOnScrollListener(new AbsListView.OnScrollListener() {
             private int mark = 0;
+
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 
@@ -168,13 +174,31 @@ public class MainActivity extends ActionBarActivity {
             public void onScrollStateChanged(AbsListView arg0, int arg1) {
             }
         });
+
+        // スワイプで更新
+        createSwipeRefreshLayout();
     }
 
-    // クルクル
+    // スワイプのレイアウト
+    public void createSwipeRefreshLayout(){
+        mSwipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.refresh);
+        mSwipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_dark, android.R.color.holo_blue_light, android.R.color.holo_green_light, android.R.color.holo_green_dark);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+    }
+
+    // スワイプ引っ張ったタイミング
+    @Override
+    public void onRefresh() {
+        // アクティビティ開始
+        startActivity(new Intent(this, MainActivity.class));
+        // アクティビティ移行時のアニメーションを無効化
+        overridePendingTransition(0, 0);
+    }
+
+    // フッターのクルクル
     private View getFooter() {
         if (mFooter == null) {
-            mFooter = getLayoutInflater().inflate(R.layout.listview_footer,
-                    null);
+            mFooter = getLayoutInflater().inflate(R.layout.listview_footer, null);
         }
         return mFooter;
     }
