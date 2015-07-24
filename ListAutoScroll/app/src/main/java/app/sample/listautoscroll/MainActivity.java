@@ -46,6 +46,7 @@ public class MainActivity extends ActionBarActivity {
         // スクロールのリスナー
         listview.setOnScrollListener(new AbsListView.OnScrollListener() {
 
+            // スクロール中の処理
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 
@@ -62,6 +63,7 @@ public class MainActivity extends ActionBarActivity {
                 }
             }
 
+            // ListViewがスクロール中かどうか状態を返すメソッドです
             @Override
             public void onScrollStateChanged(AbsListView arg0, int arg1) {
             }
