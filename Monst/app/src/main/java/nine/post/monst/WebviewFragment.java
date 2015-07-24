@@ -106,7 +106,8 @@ public class WebviewFragment extends Fragment {
         mWebView = (WebView) v.findViewById(R.id.webView1);
         mWebView.setWebViewClient(new MyWebViewClient(getActivity()));
         WebSettings webSettings = mWebView.getSettings();
-        webSettings.setJavaScriptEnabled(true);
+        // JavaScriptをオフ
+//        webSettings.setJavaScriptEnabled(true);
         String ua = mWebView.getSettings().getUserAgentString();
         ua = ua + " 9post-android";
         mWebView.getSettings().setUserAgentString(ua);
