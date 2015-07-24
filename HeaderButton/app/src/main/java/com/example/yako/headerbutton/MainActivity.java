@@ -123,9 +123,11 @@ public class MainActivity extends ActionBarActivity implements YouTubePlayer.OnI
         // シェアボタン
         button1 = (Button) findViewById(R.id.button1);
         button2 = (Button) findViewById(R.id.button2);
+
         // シェアボタンのリスナー設定
         button1.setOnClickListener(new ButtonAction());
         button2.setOnClickListener(new ButtonAction());
+
         // シェアボタン最初は非表示 TOPで表示/下層で非表示
         button1.setVisibility(View.GONE);
         button2.setVisibility(View.GONE);
@@ -157,7 +159,6 @@ public class MainActivity extends ActionBarActivity implements YouTubePlayer.OnI
     public class MyWebViewClient extends WebViewClient {
 
         // ローディングダイアログ
-//        private Dialog waitDialog;
         public MyWebViewClient(Context c) {
             waitDialog = new Dialog(c, R.style.Theme_CustomProgressDialog);
             waitDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -175,8 +176,8 @@ public class MainActivity extends ActionBarActivity implements YouTubePlayer.OnI
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
 
+            // トップページ
             if (is_top(url)) {
-                // トップページ
 
                 // 非表示
                 button1.setVisibility(View.GONE);
@@ -184,9 +185,6 @@ public class MainActivity extends ActionBarActivity implements YouTubePlayer.OnI
 
                 // 表示
                 findViewById(R.id.linearLayout_webview).setVisibility(View.VISIBLE);
-
-                // ローディングダイアログをスタート
-//                waitDialog.show();
 
                 // スレッドのローディングダイアログをスタート
                 sleep_time = 1300;
@@ -198,8 +196,11 @@ public class MainActivity extends ActionBarActivity implements YouTubePlayer.OnI
                 }finally{
                 }
 
+                // アクションバーの戻る(<-)を消す
+                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+
+            // 下層ページ
             } else if(is_sub(url)) {
-                // 下層ページ
 
                 // Volleyスタート
                 requestVolley(url);
@@ -222,23 +223,19 @@ public class MainActivity extends ActionBarActivity implements YouTubePlayer.OnI
                 wmlp.y = 450;
                 waitDialog.getWindow().setAttributes(wmlp);
 
-                /*
-                // スレッドのローディングダイアログをスタート
-                sleep_time = 800;
-                try{
-                    waitDialog.show();
-                    // 実際に行いたい処理は、プログレスダイアログの裏側で行うため、別スレッドにて実行する
-                    (new Thread(runnable)).start();
-                }catch(Exception ex){
-                }finally{
-                }
-                */
+                // アクションバーに戻る(<-)を表示
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+            // その他のページ
             } else {
-                // その他のページ
 
                 // 表示
                 findViewById(R.id.linearLayout_youtube).setVisibility(View.GONE);
                 findViewById(R.id.linearLayout_webview).setVisibility(View.VISIBLE);
+
+                // アクションバーに戻る(<-)を表示
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
             }
         }
 
@@ -259,9 +256,6 @@ public class MainActivity extends ActionBarActivity implements YouTubePlayer.OnI
                 // 読み込み完了時にwebviewを表示
                 findViewById(R.id.linearLayout_webview).setVisibility(View.VISIBLE);
             }
-
-            // ローディングダイアログを終了
-//            waitDialog.dismiss();
         }
     }
 
@@ -373,8 +367,6 @@ public class MainActivity extends ActionBarActivity implements YouTubePlayer.OnI
         if (!wasRestored) {
             // プレーヤーを再生
             player.loadVideo(videoId);
-            // プレーヤーの設定 時間バーと再生/一時停止コントロールのみを表示　バックグラウンドから返ってきた時に再生ボタンが必要。
-//            player.setPlayerStyle(PlayerStyle.MINIMAL);
             // プレーヤーの設定 すべてのインタラクティブなコントロールを表示
             player.setPlayerStyle(PlayerStyle.DEFAULT);
             player.setShowFullscreenButton(false);
@@ -474,6 +466,10 @@ public class MainActivity extends ActionBarActivity implements YouTubePlayer.OnI
                 startActivity(new Intent(this, SettingsActivity.class));
                 overridePendingTransition(0, 0);
                 return true;
+            // 下層ページで、戻る（<-）を押したときの処理
+            case android.R.id.home:
+                makeBack();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -482,19 +478,34 @@ public class MainActivity extends ActionBarActivity implements YouTubePlayer.OnI
     @Override
     public void onBackPressed() {
         Log.d(TAG, "onBackPressed");
-        finish(); // アクティビティスタックを破棄
+        makeBack();
+    }
+
+    // 下層ページから戻る処理
+    public void makeBack() {
+
         String url = mWebView.getUrl();
+
+        // Top層の場合
         if (url.equals(top_url)){
-            // Top層の場合 そのままfinish
-        }else{
-            // 下層の場合 finishしてstartActivity
+            // アプリ終了
+            finish();
+        }
+        // 下層の場合　ティビティを起動
+        else{
+            // アクティビティスタックを破棄
+            finish();
+            // トップ
             if (top_url.equals(menu1_url)){
                 top_url = menu1_url;
                 startActivity(new Intent(this, MainActivity.class));
+                overridePendingTransition(0, 0);
             }
+            // ランキング
             if (top_url.equals(menu2_url)){
                 top_url = menu2_url;
                 startActivity(new Intent(this, MainActivity.class));
+                overridePendingTransition(0, 0);
             }
         }
     }
