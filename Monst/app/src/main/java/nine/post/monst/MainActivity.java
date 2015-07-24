@@ -110,6 +110,7 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
                 // Fragmentに受け渡す値
                 Bundle args = new Bundle();
                 args.putString("url", item.getUrl());
+                args.putInt("site_js_flag", item.getSiteJsFlag());
 
                 // Fragment表示
                 FragmentManager fragmentManager = getFragmentManager();
@@ -225,6 +226,7 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
                                 String id = forecast.getString("id");
                                 String title = forecast.getString("title");
                                 String site_title = forecast.getString("site_title");
+                                Integer site_js_flag = forecast.getInt("site_js_flag");
                                 String url = forecast.getString("url");
                                 String ts = forecast.getString("ts");
 
@@ -233,6 +235,7 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
                                 item.setId(id);
                                 item.setTitle(title);
                                 item.setSiteTitle(site_title);
+                                item.setSiteJsFlag(site_js_flag);
                                 item.setUrl(url);
                                 item.setTS(ts);
 

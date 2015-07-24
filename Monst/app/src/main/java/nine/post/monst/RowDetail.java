@@ -6,6 +6,7 @@ public class RowDetail {
     private String url;
     private String title;
     private String site_title;
+    private Integer site_js_flag;
     private String ts;
 
     // id
@@ -42,6 +43,15 @@ public class RowDetail {
 
     public String getSiteTitle(){
         return this.site_title;
+    }
+
+    // js_flag
+    public void setSiteJsFlag(Integer site_js_flag){
+        this.site_js_flag = site_js_flag;
+    }
+
+    public Integer getSiteJsFlag(){
+        return this.site_js_flag;
     }
 
     // ts

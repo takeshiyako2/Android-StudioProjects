@@ -99,15 +99,19 @@ public class WebviewFragment extends Fragment {
 
         // ここで値を受け取ってる
         String url = getArguments().getString("url");
+        Integer site_js_flag = getArguments().getInt("site_js_flag");
         Log.d("BlankFragment onCreateView", "url:" + url);
+        Log.d("BlankFragment onCreateView", "site_js_flag:" + site_js_flag);
 
         // WebViewの設定
         View v = inflater.inflate(R.layout.fragment_webview, container, false);
         mWebView = (WebView) v.findViewById(R.id.webView1);
         mWebView.setWebViewClient(new MyWebViewClient(getActivity()));
         WebSettings webSettings = mWebView.getSettings();
-        // JavaScriptをオフ
-//        webSettings.setJavaScriptEnabled(true);
+        // site_js_flagフラグが1なら、JavaScriptをオン
+        if (site_js_flag == 1) {
+            webSettings.setJavaScriptEnabled(true);
+        }
         String ua = mWebView.getSettings().getUserAgentString();
         ua = ua + " 9post-android";
         mWebView.getSettings().setUserAgentString(ua);
