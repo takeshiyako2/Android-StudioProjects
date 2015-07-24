@@ -8,8 +8,8 @@ android {
         applicationId "com.monst.news"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "1.3"
     }
     buildTypes {
         release {

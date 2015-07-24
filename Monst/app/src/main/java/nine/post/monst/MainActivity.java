@@ -189,6 +189,8 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
     // スワイプ引っ張ったタイミング
     @Override
     public void onRefresh() {
+        // アクティビティ終了
+        finish();
         // アクティビティ開始
         startActivity(new Intent(this, MainActivity.class));
         // アクティビティ移行時のアニメーションを無効化
