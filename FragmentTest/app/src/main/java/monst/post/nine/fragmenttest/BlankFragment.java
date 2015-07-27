@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -29,6 +28,7 @@ public class BlankFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
 
     /**
      * Use this factory method to create a new instance of
@@ -66,6 +66,7 @@ public class BlankFragment extends Fragment {
                              Bundle savedInstanceState) {
 
 
+
         // ここで値を受け取ってる
         String test = getArguments().getString("test");
         Log.d("BlankFragment onCreateView", "test:" + test);
@@ -73,6 +74,7 @@ public class BlankFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_blank, container, false);
     }
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {

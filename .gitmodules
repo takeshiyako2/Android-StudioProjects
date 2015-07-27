@@ -16,3 +16,6 @@
 [submodule "TABTest/modules/volley"]
 	path = TABTest/modules/volley
 	url = https://android.googlesource.com/platform/frameworks/volley
+[submodule "NinePostFragment/modules/volley"]
+	path = NinePostFragment/modules/volley
+	url = https://android.googlesource.com/platform/frameworks/volley
