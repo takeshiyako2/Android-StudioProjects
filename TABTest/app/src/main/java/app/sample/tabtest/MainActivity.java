@@ -1,4 +1,4 @@
-package com.example.yako.fragment;
+package app.sample.tabtest;
 
 import java.util.Locale;
 
@@ -10,7 +10,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,7 +21,9 @@ import android.widget.FrameLayout;
 import android.content.Intent;
 import android.widget.RelativeLayout;
 
-public class TabActivity extends ActionBarActivity implements ActionBar.TabListener,ItemFragment.OnFragmentInteractionListener {
+
+public class MainActivity extends ActionBarActivity implements ActionBar.TabListener {
+
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -39,13 +40,10 @@ public class TabActivity extends ActionBarActivity implements ActionBar.TabListe
      */
     ViewPager mViewPager;
 
-
-    static final String TAG = "TabActivity";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tab);
+        setContentView(R.layout.activity_main);
 
         // Set up the action bar.
         final ActionBar actionBar = getSupportActionBar();
@@ -86,7 +84,7 @@ public class TabActivity extends ActionBarActivity implements ActionBar.TabListe
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_tab, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -120,12 +118,12 @@ public class TabActivity extends ActionBarActivity implements ActionBar.TabListe
     @Override
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
     }
-
+/*
     @Override
     public void onFragmentInteraction(String id) {
 
     }
-
+*/
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
@@ -194,18 +192,15 @@ public class TabActivity extends ActionBarActivity implements ActionBar.TabListe
                                  Bundle savedInstanceState) {
             int position = getArguments().getInt(ARG_SECTION_NUMBER);
 
-            RelativeLayout rootView = (RelativeLayout)inflater.inflate(R.layout.fragment_tab, container, false);
+            RelativeLayout rootView = (RelativeLayout)inflater.inflate(R.layout.fragment_main, container, false);
             FrameLayout layout = (FrameLayout)rootView.getChildAt(0);
 
             layout.setId(ViewUtil.generateViewId());
 
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-
-            Log.d(TAG, "position: " + position);
-
             if(position == 3){
                 fragmentManager.beginTransaction()
-                        .replace(layout.getId(), ImageFragment.newInstance(R.drawable.hanabatake))
+                        .replace(layout.getId(), TextFragment.newInstance())
                         .commit();
             }
             else if(position == 2){
@@ -215,7 +210,7 @@ public class TabActivity extends ActionBarActivity implements ActionBar.TabListe
             }
             else if(position == 1){
                 fragmentManager.beginTransaction()
-                        .replace(layout.getId(), ItemFragment.newInstance())
+                        .replace(layout.getId(), TextFragment.newInstance())
                         .commit();
             }
             return rootView;
