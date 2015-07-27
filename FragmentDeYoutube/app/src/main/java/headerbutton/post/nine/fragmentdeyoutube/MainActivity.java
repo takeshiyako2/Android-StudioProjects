@@ -1,5 +1,6 @@
 package headerbutton.post.nine.fragmentdeyoutube;
 
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -30,6 +31,14 @@ public class MainActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+
+            YoutubeFragment fragment = new YoutubeFragment();
+            FragmentManager manager = getSupportFragmentManager();
+            manager.beginTransaction()
+                    .replace(R.id.main, fragment)
+                    .addToBackStack(null)
+                    .commit();
+
             return true;
         }
 

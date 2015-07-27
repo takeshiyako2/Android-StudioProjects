@@ -1,9 +1,7 @@
 package headerbutton.post.nine.fragmentdeyoutube;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,46 +14,43 @@ import com.google.android.youtube.player.YouTubePlayer.OnInitializedListener;
 import com.google.android.youtube.player.YouTubePlayer.Provider;
 import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 
+
 public class YoutubeFragment extends Fragment {
-    private FragmentActivity myContext;
+    // API キー
+    private static final String API_KEY = "AIzaSyAmG880XF_VyLirMrqCYroGIvfDTQMMZHQ";
 
-    private YouTubePlayer Player;
-    private static final String DEVELOPER_KEY = "AIzaSyAmG880XF_VyLirMrqCYroGIvfDTQMMZHQ";
+    // YouTubeのビデオID
     private static String VIDEO_ID = "EGy39OMyHzw";
-    private static final int RECOVERY_DIALOG_REQUEST = 1;
-
-    @Override
-    public void onAttach(Activity activity) {
-        if (activity instanceof FragmentActivity) {
-            myContext = (FragmentActivity) activity;
-        }
-        super.onAttach(activity);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.activity_you_tube_api, container, false);
 
+        // YouTubeフラグメントインスタンスを取得
         YouTubePlayerSupportFragment youTubePlayerFragment = YouTubePlayerSupportFragment.newInstance();
-        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        transaction.add(R.id.youtube_fragment, youTubePlayerFragment).commit();
-        youTubePlayerFragment.initialize(DEVELOPER_KEY, new OnInitializedListener() {
 
+        // レイアウトにYouTubeフラグメントを追加
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.add(R.id.youtube_layout, youTubePlayerFragment).commit();
+
+        // YouTubeフラグメントのプレーヤーを初期化する
+        youTubePlayerFragment.initialize(API_KEY, new OnInitializedListener() {
+
+            // YouTubeプレーヤーの初期化成功
             @Override
-            public void onInitializationSuccess(Provider arg0, YouTubePlayer youTubePlayer, boolean b) {
-                if (!b) {
-                    Player = youTubePlayer;
-//                    Player.setFullscreen(true);
-                    Player.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT);
-                    Player.loadVideo(VIDEO_ID);
-                    Player.play();
+            public void onInitializationSuccess(Provider provider, YouTubePlayer player, boolean wasRestored) {
+                if (!wasRestored) {
+                    player.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT);
+                    player.loadVideo(VIDEO_ID);
+                    player.play();
                 }
             }
 
+            // YouTubeプレーヤーの初期化失敗
             @Override
-            public void onInitializationFailure(Provider arg0, YouTubeInitializationResult arg1) {
+            public void onInitializationFailure(Provider provider, YouTubeInitializationResult error) {
                 // YouTube error
-                String errorMessage = arg1.toString();
+                String errorMessage = error.toString();
                 Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
                 Log.d("errorMessage:", errorMessage);
             }
