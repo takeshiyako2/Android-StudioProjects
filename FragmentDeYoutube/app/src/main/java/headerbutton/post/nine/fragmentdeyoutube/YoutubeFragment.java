@@ -17,7 +17,7 @@ import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 
 public class YoutubeFragment extends Fragment {
     // API キー
-    private static final String API_KEY = "AIzaSyAmG880XF_VyLirMrqCYroGIvfDTQMMZHQ";
+    private static final String API_KEY = "AIzaSyBxZMfC8t_XhZ2tvlbUWvtr3_NAMF7umf0";
 
     // YouTubeのビデオID
     private static String VIDEO_ID = "EGy39OMyHzw";

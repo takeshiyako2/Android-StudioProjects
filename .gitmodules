@@ -19,3 +19,9 @@
 [submodule "NinePostFragment/modules/volley"]
 	path = NinePostFragment/modules/volley
 	url = https://android.googlesource.com/platform/frameworks/volley
+[submodule "GetJsonToList/modules/volley"]
+	path = GetJsonToList/modules/volley
+	url = https://android.googlesource.com/platform/frameworks/volley
+[submodule "VolleySample2/modules/volley"]
+	path = VolleySample2/modules/volley
+	url = https://android.googlesource.com/platform/frameworks/volley
