@@ -25,9 +25,7 @@
                 android:id="@+id/listview_forecasts"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="#ff4b4b4b"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp" />
+                android:background="#ff4b4b4b" />
 
         </android.support.v4.widget.SwipeRefreshLayout>
 

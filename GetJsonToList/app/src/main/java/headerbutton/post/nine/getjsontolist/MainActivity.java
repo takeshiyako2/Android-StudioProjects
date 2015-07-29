@@ -111,20 +111,22 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
 
                 // Fragmentに受け渡す値
                 Bundle args = new Bundle();
+                args.putString("id", item.getId());
                 args.putString("url", item.getUrl());
+                args.putString("youtube_id", item.getYouTubeID());
 
-                /*
-                args.putInt("site_js_flag", item.getSiteJsFlag());
-
-                // Fragment表示
-                FragmentManager fragmentManager = getFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                WebviewFragment frag1 = new WebviewFragment();
-                frag1.setArguments(args);
-                fragmentTransaction.replace(R.id.framelayout1, frag1);
-                fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-                fragmentTransaction.commit();
-*/
+                // 下層ページ YouTube
+                int youtube_flag = item.getYouTubeFlag();
+                if (youtube_flag == 1) {
+                    // Fragment表示
+                    FragmentManager fragmentManager = getFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    SubFragment frag1 = new SubFragment();
+                    frag1.setArguments(args);
+                    fragmentTransaction.replace(R.id.framelayout1, frag1);
+                    fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                    fragmentTransaction.commit();
+                }
 
                 // フラグをtrue
                 ThisIsFlagment = true;
@@ -156,7 +158,7 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
 
                     if (page >= 2) {
                         URL_API = BASE_URL_API + "/page/" + page + "?index=top";
-                    } else{
+                    } else {
                         URL_API = BASE_URL_API + "?index=top";
                     }
                     // リクエスト処理
@@ -217,16 +219,22 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
                                 JSONObject forecast = response.getJSONObject(i);
 
                                 // JSONから取得
+                                String id = forecast.getString("id");
                                 String title = forecast.getString("title");
                                 String url = forecast.getString("url");
                                 String image = forecast.getString("image");
+                                String youtube_id = forecast.getString("youtube_id");
+                                int youtube_flag = forecast.getInt("youtube_flag");
 
                                 // リストにアイテムを追加
                                 RowDetail item = new RowDetail();
 
+                                item.setId(id);
                                 item.setTitle(title);
                                 item.setUrl(url);
                                 item.setImage(image);
+                                item.setYouTubeID(youtube_id);
+                                item.setYouTubeFlag(youtube_flag);
 
                                 // ArrayAdapterへ設定
                                 rowAdapater.add(item);
@@ -261,8 +269,6 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
         AppController.getInstance().addToRequestQueue(jsonObjReq, tag_json_obj);
     }
 
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -270,18 +276,76 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
         return true;
     }
 
+    // アクションバーのアクションを受け取る
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id) {
+            /*
+            // Settingsを押したときの処理
+            case R.id.action_settings:
+                return true;
+                break;
+            // シェアを押したときの処理
+            case R.id.action_shere:
+                makeShere();
+                break;
+            // 更新を押したときの処理
+            case R.id.action_reload:
+                // アクティビティスタックを破棄
+                finish();
+                // アクティビティ開始
+                startActivity(new Intent(this, MainActivity.class));
+                // アクティビティ移行時のアニメーションを無効化
+                overridePendingTransition(0, 0);
+                break;
+            */
+            // 戻る（<-）を押したときの処理
+            case android.R.id.home:
+                makeBackFromFragment();
+                break;
         }
-
         return super.onOptionsItemSelected(item);
+    }
+
+    // 戻るボタンを押した時
+    @Override
+    public void onBackPressed() {
+        makeBackFromFragment();
+    }
+
+    // 戻る処理
+    public void makeBackFromFragment() {
+        int backStackCnt = getSupportFragmentManager().getBackStackEntryCount();
+
+        // Fragmentから戻る処理
+        if (ThisIsFlagment) {
+
+            // Fragment終了
+            FragmentManager fragmentManager = getFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            if (fragmentTransaction != null) {
+                fragmentTransaction.remove(fragmentManager.findFragmentById(R.id.framelayout1));
+                fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+                fragmentTransaction.commit();
+            }
+
+            // MainActivity LinearLayout表示
+            findViewById(R.id.layout_list).setVisibility(View.VISIBLE);
+
+            // フラグをfalse
+            ThisIsFlagment = false;
+
+            // アクションバーの戻る(<-)を消す
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+
+            // アクションバーのタイトルを戻す
+            getSupportActionBar().setTitle(R.string.app_name);
+            getSupportActionBar().setSubtitle(null);
+        }
+        // アクティビティ終了
+        else{
+            finish();
+        }
     }
 }

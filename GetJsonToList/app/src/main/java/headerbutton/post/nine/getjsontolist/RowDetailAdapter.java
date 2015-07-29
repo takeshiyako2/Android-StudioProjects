@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import java.util.List;
 import android.graphics.Typeface;
@@ -30,10 +31,10 @@ public class RowDetailAdapter extends ArrayAdapter<RowDetail> {
         // xmlで定義したレイアウトを取得
         layoutinflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        // キャッシュ
+        // Volleyのキュー
         mQueue = Volley.newRequestQueue(getContext());
 
-        // イメージローダー
+        // イメージローダーにキューとキャッシュ設定を渡す
         mImageLoader = new ImageLoader(mQueue, new BitmapCache());
     }
 
@@ -56,11 +57,9 @@ public class RowDetailAdapter extends ArrayAdapter<RowDetail> {
         text1.setText(detail.getTitle());
 
         // 画像取得処理
-
         imageView = (ImageView) convertView.findViewById(R.id.image);
-        ImageLoader.ImageListener listener = ImageLoader.getImageListener(imageView, android.R.drawable.ic_menu_rotate, android.R.drawable.ic_delete);
+        ImageLoader.ImageListener listener = ImageLoader.getImageListener(imageView, R.drawable.image_load , android.R.drawable.ic_delete);
         mImageLoader.get(detail.getImage(), listener);
-
         Log.d("getView", "image: " + detail.getImage());
 
         // 返却
