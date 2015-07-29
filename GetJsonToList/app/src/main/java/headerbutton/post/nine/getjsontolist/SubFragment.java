@@ -1,32 +1,46 @@
 package headerbutton.post.nine.getjsontolist;
 
 import android.app.Activity;
-import android.app.Dialog;
-import android.content.Context;
-import android.graphics.Bitmap;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
-import android.os.Handler;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
+import android.widget.Toast;
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubePlayer;
+import com.google.android.youtube.player.YouTubePlayer.OnInitializedListener;
+import com.google.android.youtube.player.YouTubePlayer.Provider;
+import com.google.android.youtube.player.YouTubePlayerSupportFragment;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class SubFragment extends Fragment {
 
+    // リスナー？
+    private OnFragmentInteractionListener mListener;
+
     // ログ出力用のタグ
     private static final String TAG = SubFragment.class.getSimpleName();
 
-    private OnFragmentInteractionListener mListener;
+    // API キー
+    private static final String API_KEY = "AIzaSyAmG880XF_VyLirMrqCYroGIvfDTQMMZHQ";
+
+    // YouTubeのビデオID
+    private static String VIDEO_ID = "EGy39OMyHzw";
+
+    // WebView
+    private WebView MyWebView;
+
 
     // TODO: Rename and change types and number of parameters
     public static SubFragment newInstance(String param1, String param2) {
@@ -57,9 +71,101 @@ public class SubFragment extends Fragment {
         Log.d("onCreateView", "url:" + url);
         Log.d("onCreateView", "youtube_id:" + youtube_id);
 
+        // VIDEO_ID をセット
+        VIDEO_ID = youtube_id;
+
         // レイアウトの設定
-        View v = inflater.inflate(R.layout.fragment_sub, container, false);
-        return v;
+        View rootView = inflater.inflate(R.layout.fragment_sub, container, false);
+
+        // WebView
+        MyWebView = (WebView)rootView.findViewById(R.id.webView1);
+        MyWebView.setWebViewClient(new WebViewClient() {
+            // タップしたURLが "9postじゃなかったら" デフォルトブラウザで開く
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                if (url != null && is_not_9post(url)) {
+                    view.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
+        MyWebView.getSettings().setUseWideViewPort(true);
+        String ua = MyWebView.getSettings().getUserAgentString();
+        ua = ua + " 9post-android";
+        MyWebView.getSettings().setUserAgentString(ua);
+        MyWebView.setBackgroundColor(0);
+        MyWebView.loadUrl(url);
+
+        // YouTubeフラグメントインスタンスを取得
+        YouTubePlayerSupportFragment youTubePlayerFragment = YouTubePlayerSupportFragment.newInstance();
+
+        // レイアウトにYouTubeフラグメントを追加
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.add(R.id.youtube_layout, youTubePlayerFragment).commit();
+
+        // YouTubeフラグメントのプレーヤーを初期化する
+        youTubePlayerFragment.initialize(API_KEY, new OnInitializedListener() {
+
+            // YouTubeプレーヤーの初期化成功
+            @Override
+            public void onInitializationSuccess(Provider provider, YouTubePlayer player, boolean wasRestored) {
+                if (!wasRestored) {
+                    player.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT);
+                    player.loadVideo(VIDEO_ID);
+                    player.play();
+                }
+            }
+
+            // YouTubeプレーヤーの初期化失敗
+            @Override
+            public void onInitializationFailure(Provider provider, YouTubeInitializationResult errorReason) {
+                // YouTube error
+                String errorMessage = String.format(getString(R.string.error_player), errorReason.toString());
+                Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_LONG).show();
+                Log.d("errorMessage:", errorMessage);
+            }
+        });
+
+        return rootView;
+    }
+
+    // 9post判定
+    public boolean is_not_9post(String url) {
+        String str = url;
+        Pattern p = Pattern.compile("http://9post.jp/.*");
+        Matcher a = p.matcher(str);
+        if (a.find()) {
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    // ボタンのリスナー
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // Facebook
+        Button button1 = (Button)getActivity().findViewById(R.id.button1);
+        button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "Hi!Facebook", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Twitter
+        Button button2 = (Button)getActivity().findViewById(R.id.button2);
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "Hi!Twitter", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event

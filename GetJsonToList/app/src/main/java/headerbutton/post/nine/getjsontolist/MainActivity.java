@@ -1,11 +1,12 @@
 package headerbutton.post.nine.getjsontolist;
 
-import android.app.FragmentManager;
+
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v4.app.ShareCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -115,17 +116,22 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
                 args.putString("url", item.getUrl());
                 args.putString("youtube_id", item.getYouTubeID());
 
-                // 下層ページ YouTube
+                // 下層ページ
+                // YouTube
                 int youtube_flag = item.getYouTubeFlag();
                 if (youtube_flag == 1) {
-                    // Fragment表示
-                    FragmentManager fragmentManager = getFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    SubFragment frag1 = new SubFragment();
-                    frag1.setArguments(args);
-                    fragmentTransaction.replace(R.id.framelayout1, frag1);
-                    fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-                    fragmentTransaction.commit();
+                    // YouTubeフラグメント起動 （v4の作法で）
+                    SubFragment fragment = new SubFragment();
+                    fragment.setArguments(args);
+                    FragmentManager manager = getSupportFragmentManager();
+                    manager.beginTransaction()
+                            .replace(R.id.framelayout1, fragment)
+                            .commit();
+                }
+                // その他
+                else {
+                    // TODO WebViewのフラグメントを起動
+
                 }
 
                 // フラグをtrue
@@ -134,11 +140,6 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
                 // アクションバーに戻る(<-)を表示
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-                // アクションバーに選んだタイトルを表示
-                /*
-                getSupportActionBar().setTitle(item.getTitle());
-                getSupportActionBar().setSubtitle(item.getSiteTitle());
-                */
             }
         });
 
@@ -322,13 +323,10 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
         if (ThisIsFlagment) {
 
             // Fragment終了
-            FragmentManager fragmentManager = getFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            if (fragmentTransaction != null) {
-                fragmentTransaction.remove(fragmentManager.findFragmentById(R.id.framelayout1));
-                fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
-                fragmentTransaction.commit();
-            }
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .remove(getSupportFragmentManager().findFragmentById(R.id.framelayout1))
+                    .commit();
 
             // MainActivity LinearLayout表示
             findViewById(R.id.layout_list).setVisibility(View.VISIBLE);
@@ -338,10 +336,6 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
 
             // アクションバーの戻る(<-)を消す
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-
-            // アクションバーのタイトルを戻す
-            getSupportActionBar().setTitle(R.string.app_name);
-            getSupportActionBar().setSubtitle(null);
         }
         // アクティビティ終了
         else{

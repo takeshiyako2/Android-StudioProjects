@@ -24,4 +24,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.2.0'
     compile 'com.github.castorflex.smoothprogressbar:library-circular:+'
     compile project(':modules:volley')
+    compile files('libs/YouTubeAndroidPlayerApi.jar')
 }

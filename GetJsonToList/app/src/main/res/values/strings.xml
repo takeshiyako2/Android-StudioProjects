@@ -1,6 +1,13 @@
 <resources>
-    <string name="app_name">GetJsonToList</string>
-
-    <string name="hello_world">Hello world!</string>
+    <string name="app_name">9ポスト</string>
     <string name="action_settings">Settings</string>
+
+    <!-- SettingsActivity -->
+    <string name="title_activity_settings">9ポスト 設定</string>
+    <string name="toggle">通知</string>
+    <string name="toggle_description">プッシュ通知を設定します。</string>
+
+    <!-- YouTube -->
+    <string name="error_player">YouTubePlayerの起動ができませんでした。 (%1$s)</string>
+
 </resources>
