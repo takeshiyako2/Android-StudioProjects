@@ -9,5 +9,8 @@
 
     <!-- YouTube -->
     <string name="error_player">YouTubePlayerの起動ができませんでした。 (%1$s)</string>
+    <string name="title_activity_ninki">NinkiActivity</string>
+
+    <string name="hello_world">Hello world!</string>
 
 </resources>

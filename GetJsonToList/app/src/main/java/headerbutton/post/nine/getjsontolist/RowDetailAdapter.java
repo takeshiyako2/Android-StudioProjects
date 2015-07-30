@@ -45,6 +45,8 @@ public class RowDetailAdapter extends ArrayAdapter<RowDetail> {
         // 指定行のデータを取得
         RowDetail detail = (RowDetail)getItem(position);
 
+        Log.d("getView", "convertView: " + convertView);
+
         // nullの場合のみ再作成
         if(null == convertView){
             convertView = layoutinflater.inflate(R.layout.row, null);

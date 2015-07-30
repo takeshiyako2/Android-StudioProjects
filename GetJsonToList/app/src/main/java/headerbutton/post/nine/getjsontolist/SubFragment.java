@@ -41,6 +41,11 @@ public class SubFragment extends Fragment {
     // WebView
     private WebView MyWebView;
 
+    // アクティビティから渡される値
+    String id;
+    String title;
+    String url;
+    String youtube_id;
 
     // TODO: Rename and change types and number of parameters
     public static SubFragment newInstance(String param1, String param2) {
@@ -64,9 +69,10 @@ public class SubFragment extends Fragment {
         Log.e(TAG, "onCreateView");
 
         // ここで値を受け取ってる
-        String id = getArguments().getString("id");
-        String url = getArguments().getString("url");
-        String youtube_id = getArguments().getString("youtube_id");
+        id = getArguments().getString("id");
+        title = getArguments().getString("title");
+        url = getArguments().getString("url");
+        youtube_id = getArguments().getString("youtube_id");
         Log.d("onCreateView", "id:" + id);
         Log.d("onCreateView", "url:" + url);
         Log.d("onCreateView", "youtube_id:" + youtube_id);
@@ -147,25 +153,38 @@ public class SubFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-
         // Facebook
         Button button1 = (Button)getActivity().findViewById(R.id.button1);
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "Hi!Facebook", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), "Hi!Facebook", Toast.LENGTH_SHORT).show();
+                share("com.facebook.katana", url);
             }
         });
-
         // Twitter
         Button button2 = (Button)getActivity().findViewById(R.id.button2);
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "Hi!Twitter", Toast.LENGTH_SHORT).show();
+                share("com.twitter.android", title + " " + url);
             }
         });
+    }
 
+    // シェア用
+    private void share(String packageName, String text) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT, text);
+        intent.setPackage(packageName);   // パッケージをそのまま指定
+        try {
+            startActivity(intent);
+        } catch (android.content.ActivityNotFoundException e) {
+            // 指定パッケージのアプリがインストールされていないか
+            // ACTION_SENDに対応していないか
+            Toast.makeText(getActivity(), "not installed", Toast.LENGTH_SHORT).show();
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -208,6 +227,7 @@ public class SubFragment extends Fragment {
     public void onResume() {
         super.onResume();
         Log.d(TAG, "onResume");
+        MyWebView.onResume();
     }
 
     /***
@@ -217,6 +237,7 @@ public class SubFragment extends Fragment {
     public void onPause() {
         super.onPause();
         Log.d(TAG, "onPause");
+        MyWebView.onPause();
     }
 
     /***
@@ -226,6 +247,7 @@ public class SubFragment extends Fragment {
     public void onStop() {
         super.onStop();
         Log.d(TAG, "onStop");
+        MyWebView.onPause();
     }
 
     /***
@@ -235,6 +257,7 @@ public class SubFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "onDestroy");
+        MyWebView.destroy();
     }
 
 }
