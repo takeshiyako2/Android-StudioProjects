@@ -1,15 +1,19 @@
 <resources>
     <string name="app_name">9ポスト</string>
-    <string name="action_settings">Settings</string>
+
+    <!-- menu -->
+    <string name="action_new">新着</string>
+    <string name="action_ninki">人気</string>
+    <string name="action_settings">設定</string>
+    <string name="action_facebook_page">Facebookページ</string>
 
     <!-- SettingsActivity -->
-    <string name="title_activity_settings">9ポスト 設定</string>
     <string name="toggle">通知</string>
     <string name="toggle_description">プッシュ通知を設定します。</string>
 
     <!-- YouTube -->
     <string name="error_player">YouTubePlayerの起動ができませんでした。 (%1$s)</string>
-    <string name="title_activity_ninki">NinkiActivity</string>
+
 
     <string name="hello_world">Hello world!</string>
 

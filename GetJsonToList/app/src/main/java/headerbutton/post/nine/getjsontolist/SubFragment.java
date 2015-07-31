@@ -69,8 +69,8 @@ public class SubFragment extends Fragment {
         Log.e(TAG, "onCreateView");
 
         // ここで値を受け取ってる
-        id = getArguments().getString("id");
-        title = getArguments().getString("title");
+        id = getArguments().getString("id"); // 不要
+        title = getArguments().getString("title"); // 不要
         url = getArguments().getString("url");
         youtube_id = getArguments().getString("youtube_id");
         Log.d("onCreateView", "id:" + id);

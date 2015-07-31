@@ -1,11 +1,12 @@
 package headerbutton.post.nine.getjsontolist;
 
 
-import android.app.FragmentTransaction;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Handler;
-import android.support.v4.app.ShareCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
@@ -17,7 +18,8 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.TimePicker;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
@@ -32,7 +34,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 
 
 public class MainActivity extends ActionBarActivity implements SwipeRefreshLayout.OnRefreshListener {
@@ -40,9 +44,6 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
     // JSONデータ取得URL
     private String BASE_URL_API = "http://9post.top.json.hitokoto.co/new-post";
     private String URL_API;
-
-    // アプリタイトル
-    String app_titile = "モンストニュース";
 
     // Play URL (短縮URL)
     String play_url = "";
@@ -74,11 +75,21 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
     // リフレッシュ
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
+    // 通知
+    TimePicker tPicker;
+    int notificationId = 100;
+    private PendingIntent alarmIntent;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // アイコン設定
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setTitle("");
+        getSupportActionBar().setIcon(R.drawable.nine_post_icon_small);
 
         // リストビューへ紐付け
         listview = (ListView) findViewById(R.id.listview_forecasts);
@@ -169,12 +180,60 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
 
         // スワイプで更新
         createSwipeRefreshLayout();
+
+        // アラームの時間設定
+        int hour = 12;
+        int minute = 00;
+        long alarmStartTime = get_time_by_hour_minuite(hour, minute);
+        Log.d(TAG, "IntentService" + " " + String.valueOf(alarmStartTime));
+
+        // アラームセット
+        Intent bootIntent = new Intent(MainActivity.this, AlarmReceiver.class);
+        bootIntent.putExtra("notificationId", notificationId);
+        alarmIntent = PendingIntent.getBroadcast(MainActivity.this, 102, bootIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        AlarmManager alarm = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+
+        // リピート
+        alarm.setRepeating(
+                AlarmManager.RTC_WAKEUP,
+                alarmStartTime,
+//                1 * 1000 * 30, // 30秒毎
+                AlarmManager.INTERVAL_DAY, // 1日毎
+                alarmIntent
+        );
+
+    }
+
+    // 次のアラームの時刻を取得
+    public long get_time_by_hour_minuite(int hour, int minuite) {
+        // 日本(+9)以外のタイムゾーンを使う時はここを変える
+        TimeZone tz = TimeZone.getTimeZone("Asia/Tokyo");
+        //今日の目標時刻のカレンダーインスタンス作成
+        Calendar cal_target = Calendar.getInstance();
+        cal_target.setTimeZone(tz);
+        cal_target.set(Calendar.HOUR_OF_DAY, hour);
+        cal_target.set(Calendar.MINUTE, minuite);
+        cal_target.set(Calendar.SECOND, 0);
+        //現在時刻のカレンダーインスタンス作成
+        Calendar cal_now = Calendar.getInstance();
+        cal_now.setTimeZone(tz);
+        //ミリ秒取得
+        long target_ms = cal_target.getTimeInMillis();
+        long now_ms = cal_now.getTimeInMillis();
+        //今日ならそのまま指定
+        if (target_ms >= now_ms) {
+            //過ぎていたら明日の同時刻を指定
+        } else {
+            cal_target.add(Calendar.DAY_OF_MONTH, 1);
+            target_ms = cal_target.getTimeInMillis();
+        }
+        return target_ms;
     }
 
     // スワイプのレイアウト
     public void createSwipeRefreshLayout(){
         mSwipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.refresh);
-        mSwipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_dark, android.R.color.holo_blue_light, android.R.color.holo_green_light, android.R.color.holo_green_dark);
+        mSwipeRefreshLayout.setColorSchemeResources(android.R.color.holo_red_dark, android.R.color.holo_red_light, android.R.color.holo_orange_dark, android.R.color.holo_orange_dark);
         mSwipeRefreshLayout.setOnRefreshListener(this);
     }
 
@@ -273,19 +332,29 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
         switch (id) {
             // 新着
             case R.id.menu1:
+                // MainActivity終了
                 finish();
-                // アクティビティ開始
+                // MainActivityアクティビティ開始
                 startActivity(new Intent(this, MainActivity.class));
                 // アクティビティ移行時のアニメーションを無効化
                 overridePendingTransition(0, 0);
                 return true;
             // 人気
             case R.id.menu2:
+                finish();
                 startActivity(new Intent(this, NinkiActivity.class));
                 overridePendingTransition(0, 0);
                 return true;
-            // Settingsを押したときの処理
+            // 設定
             case R.id.action_settings:
+                finish();
+                startActivity(new Intent(this, SettingsActivity.class));
+                overridePendingTransition(0, 0);
+                return true;
+            // Facebookページ
+            case R.id.action_facebook_page:
+                OpenFacebookPage openFacebookPage = new OpenFacebookPage(this);
+                openFacebookPage.makeIntent();
                 return true;
             // 戻る（<-）を押したときの処理
             case android.R.id.home:
@@ -308,24 +377,26 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
         // Fragmentから戻る処理
         if (ThisIsFlagment) {
 
+            // MainActivity LinearLayout表示
+            findViewById(R.id.layout_list).setVisibility(View.VISIBLE);
+
+            // アクションバーの戻る(<-)を消す
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+
+            // フラグをfalse
+            ThisIsFlagment = false;
+
             // Fragment終了
             getSupportFragmentManager()
                     .beginTransaction()
                     .remove(getSupportFragmentManager().findFragmentById(R.id.framelayout1))
                     .commit();
-
-            // MainActivity LinearLayout表示
-            findViewById(R.id.layout_list).setVisibility(View.VISIBLE);
-
-            // フラグをfalse
-            ThisIsFlagment = false;
-
-            // アクションバーの戻る(<-)を消す
-            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         }
         // アクティビティ終了
         else{
             finish();
         }
+
     }
+
 }

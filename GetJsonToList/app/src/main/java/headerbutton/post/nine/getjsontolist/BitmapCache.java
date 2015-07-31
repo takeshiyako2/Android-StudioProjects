@@ -10,8 +10,8 @@ public class BitmapCache implements ImageCache {
     private LruCache<String, Bitmap> mCache;
 
     public BitmapCache() {
-        // 50MB までキャッシュする設定
-        int maxSize = 50 * 1024 * 1024;
+        // 40MB までキャッシュする設定
+        int maxSize = 40 * 1024 * 1024;
         mCache = new LruCache<String, Bitmap>(maxSize) {
             @Override
             protected int sizeOf(String key, Bitmap value) {
