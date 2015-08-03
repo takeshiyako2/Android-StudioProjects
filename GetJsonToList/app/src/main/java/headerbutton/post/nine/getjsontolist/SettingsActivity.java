@@ -220,6 +220,10 @@ public class SettingsActivity extends ActionBarActivity {
                 OpenFacebookPage openFacebookPage = new OpenFacebookPage(this);
                 openFacebookPage.makeIntent();
                 return true;
+            case R.id.action_play_page:
+                OpenPlay OpenPlay = new OpenPlay(this);
+                OpenPlay.makeIntent();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }

@@ -216,28 +216,19 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
                     public void onResponse(JSONArray response) {
                         // ログ出力
                         Log.d(TAG, "request onResponse: " + response.toString());
-
                         try {
-
                             for (int i = 0; i < response.length(); i++) {
                                 JSONObject forecast = response.getJSONObject(i);
 
-                                // JSONから取得
-                                String id = forecast.getString("id");
-                                String title = forecast.getString("title");
-                                String site_title = forecast.getString("site_title");
-                                Integer site_js_flag = forecast.getInt("site_js_flag");
-                                String url = forecast.getString("url");
-                                String ts = forecast.getString("ts");
-
                                 // リストにアイテムを追加
                                 RowDetail item = new RowDetail();
-                                item.setId(id);
-                                item.setTitle(title);
-                                item.setSiteTitle(site_title);
-                                item.setSiteJsFlag(site_js_flag);
-                                item.setUrl(url);
-                                item.setTS(ts);
+                                item.setId(forecast.getString("id"));
+                                item.setTitle(forecast.getString("title"));
+                                item.setSiteTitle(forecast.getString("site_title"));
+                                item.setImage(forecast.getString("image"));
+                                item.setSiteJsFlag(forecast.getInt("site_js_flag"));
+                                item.setUrl(forecast.getString("url"));
+                                item.setTS(forecast.getString("ts"));
 
                                 // ArrayAdapterへ設定
                                 rowAdapater.add(item);

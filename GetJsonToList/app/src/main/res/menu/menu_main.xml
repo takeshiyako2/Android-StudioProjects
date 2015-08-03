@@ -3,9 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity">
 
+    <!-- 常に表示 -->
     <item android:id="@+id/menu1" app:showAsAction="ifRoom" android:title="@string/action_new"></item>
     <item android:id="@+id/menu2" app:showAsAction="ifRoom" android:title="@string/action_ninki"></item>
 
-    <item android:id="@+id/action_settings" android:title="@string/action_settings" android:orderInCategory="100" app:showAsAction="never" />
-    <item android:id="@+id/action_facebook_page" android:title="@string/action_facebook_page" android:orderInCategory="101" app:showAsAction="never" />
+    <!-- プルダウン -->
+    <item android:id="@+id/action_play_page" android:title="@string/action_play_page" android:orderInCategory="101" app:showAsAction="never" />
+    <item android:id="@+id/action_facebook_page" android:title="@string/action_facebook_page" android:orderInCategory="102" app:showAsAction="never" />
+    <item android:id="@+id/action_settings" android:title="@string/action_settings" android:orderInCategory="103" app:showAsAction="never" />
+
 </menu>

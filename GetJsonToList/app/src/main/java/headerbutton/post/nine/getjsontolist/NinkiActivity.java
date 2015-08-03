@@ -267,6 +267,10 @@ public class NinkiActivity extends ActionBarActivity {
                 OpenFacebookPage openFacebookPage = new OpenFacebookPage(this);
                 openFacebookPage.makeIntent();
                 return true;
+            case R.id.action_play_page:
+                OpenPlay OpenPlay = new OpenPlay(this);
+                OpenPlay.makeIntent();
+                return true;
             // 戻る（<-）を押したときの処理
             case android.R.id.home:
                 makeBackFromFragment();

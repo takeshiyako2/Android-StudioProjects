@@ -7,22 +7,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import java.util.List;
-import android.graphics.Typeface;
-
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.ImageLoader.ImageListener;
-import com.android.volley.toolbox.Volley;
-
+import com.bumptech.glide.Glide;
 
 public class RowDetailAdapter extends ArrayAdapter<RowDetail> {
 
     private LayoutInflater layoutinflater;
-    private RequestQueue mQueue;
-    private ImageLoader mImageLoader;
 
     // コンストラクタ
     public RowDetailAdapter(Context context, int textViewResourceId, List<RowDetail> objects){
@@ -30,17 +23,10 @@ public class RowDetailAdapter extends ArrayAdapter<RowDetail> {
 
         // xmlで定義したレイアウトを取得
         layoutinflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        // Volleyのキュー
-        mQueue = Volley.newRequestQueue(getContext());
-
-        // イメージローダーにキューとキャッシュ設定を渡す
-        mImageLoader = new ImageLoader(mQueue, new BitmapCache());
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ImageView imageView;
 
         // 指定行のデータを取得
         RowDetail detail = (RowDetail)getItem(position);
@@ -59,10 +45,16 @@ public class RowDetailAdapter extends ArrayAdapter<RowDetail> {
         text1.setText(detail.getTitle());
 
         // 画像取得処理
-        imageView = (ImageView) convertView.findViewById(R.id.image);
-        ImageLoader.ImageListener listener = ImageLoader.getImageListener(imageView, R.drawable.image_load , android.R.drawable.ic_delete);
-        mImageLoader.get(detail.getImage(), listener);
         Log.d("getView", "image: " + detail.getImage());
+
+        // Glideを設定
+        final ImageView myImageView;
+        myImageView = (ImageView) convertView.findViewById(R.id.image);
+        String url = detail.getImage();
+        Glide.with(getContext())
+                .load(url)
+                .override(1200, 1200)
+                .into(myImageView);
 
         // 返却
         return convertView;

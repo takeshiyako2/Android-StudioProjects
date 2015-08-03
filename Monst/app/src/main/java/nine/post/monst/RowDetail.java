@@ -5,6 +5,7 @@ public class RowDetail {
     private String id;
     private String url;
     private String title;
+    private String image;
     private String site_title;
     private Integer site_js_flag;
     private String ts;
@@ -42,6 +43,15 @@ public class RowDetail {
     }
 
     public String getSiteTitle(){
+        return this.site_title;
+    }
+
+    // image
+    public void setImage(String image){
+        this.image = image;
+    }
+
+    public String getImage(){
         return this.site_title;
     }
 

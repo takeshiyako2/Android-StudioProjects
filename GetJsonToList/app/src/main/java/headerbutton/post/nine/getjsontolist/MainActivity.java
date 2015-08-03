@@ -356,6 +356,11 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
                 OpenFacebookPage openFacebookPage = new OpenFacebookPage(this);
                 openFacebookPage.makeIntent();
                 return true;
+            // アプリを評価
+            case R.id.action_play_page:
+                OpenPlay OpenPlay = new OpenPlay(this);
+                OpenPlay.makeIntent();
+                return true;
             // 戻る（<-）を押したときの処理
             case android.R.id.home:
                 makeBackFromFragment();

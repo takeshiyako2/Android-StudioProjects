@@ -6,6 +6,7 @@
     <string name="action_ninki">人気</string>
     <string name="action_settings">設定</string>
     <string name="action_facebook_page">Facebookページ</string>
+    <string name="action_play_page">アプリを評価</string>
 
     <!-- SettingsActivity -->
     <string name="toggle">通知</string>
