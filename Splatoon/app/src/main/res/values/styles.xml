@@ -1,0 +1,33 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- 通知バーの色 -->
+        <item name="colorPrimaryDark">@android:color/holo_blue_dark</item>
+
+        <!-- アクションバーカスタマイズ -->
+        <item name="actionBarStyle">@style/AppTheme.ActionBarStyle</item>
+    </style>
+
+    <!-- アクションバーカスタマイズ -->
+    <style name="AppTheme.ActionBarStyle" parent="Widget.AppCompat.ActionBar">
+
+        <!-- テキストカスタマイズ -->
+        <item name="titleTextStyle">@style/AppTheme.ActionBar.TitleTextStyle</item>
+        <item name="subtitleTextStyle">@style/AppTheme.ActionBar.subtitleTextStyle</item>
+
+        <!-- アクションバーの色 -->
+        <item name="background">@android:color/holo_blue_light</item>
+    </style>
+
+    <!-- タイトルの文字サイズ -->
+    <style name="AppTheme.ActionBar.TitleTextStyle" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textSize">13sp</item>
+    </style>
+
+    <!-- サブタイトルの文字サイズ -->
+    <style name="AppTheme.ActionBar.subtitleTextStyle" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textSize">8sp</item>
+    </style>
+
+</resources>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="50dp"
+    android:weightSum="1">
+
+    <!--
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Large Text"
+        android:id="@+id/textViewId" />
+        -->
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="textViewTitle Text"
+        android:id="@+id/textViewTitle"
+        android:textColor="#ff292929"
+        android:textSize="16dp"
+        android:paddingTop="14dp"
+        android:paddingBottom="5dp"
+        android:textIsSelectable="false" />
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp">
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="vertical"
+            android:layout_width="200dip"
+            android:layout_height="28dp"
+            android:gravity="left" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="textViewTS Text"
+                android:id="@+id/textViewTS"
+                android:layout_weight="0.08"
+                android:textSize="8dp"
+                android:gravity="left"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="textViewSiteTitle Text"
+                android:id="@+id/textViewSiteTitle"
+                android:layout_weight="0.08"
+                android:textSize="8dp"
+                android:gravity="left"/>
+
+        </LinearLayout>
+
+
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="28dp"
+            android:gravity="right" >
+
+            <ImageView
+                android:id="@+id/image"
+                android:scaleType="fitEnd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:layout_weight="0.08"
+                android:gravity="right"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+</LinearLayout>

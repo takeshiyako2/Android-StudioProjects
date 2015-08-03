@@ -25,3 +25,6 @@
 [submodule "VolleySample2/modules/volley"]
 	path = VolleySample2/modules/volley
 	url = https://android.googlesource.com/platform/frameworks/volley
+[submodule "Splatoon/modules/volley"]
+	path = Splatoon/modules/volley
+	url = https://android.googlesource.com/platform/frameworks/volley
