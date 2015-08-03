@@ -22,12 +22,12 @@
 
     <!-- タイトルの文字サイズ -->
     <style name="AppTheme.ActionBar.TitleTextStyle" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">13sp</item>
     </style>
 
     <!-- サブタイトルの文字サイズ -->
     <style name="AppTheme.ActionBar.subtitleTextStyle" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
-        <item name="android:textSize">10sp</item>
+        <item name="android:textSize">8sp</item>
     </style>
 
 </resources>

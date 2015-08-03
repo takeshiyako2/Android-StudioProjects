@@ -301,6 +301,12 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
                 overridePendingTransition(0, 0);
                 break;
 
+            // アプリを評価
+            case R.id.action_play:
+                OpenPlay OpenPlay = new OpenPlay(this);
+                OpenPlay.makeIntent();
+                return true;
+
             // 戻る（<-）を押したときの処理
             case android.R.id.home:
                 makeBackFromFragment();

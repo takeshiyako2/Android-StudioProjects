@@ -52,7 +52,7 @@ public class RowDetail {
     }
 
     public String getImage(){
-        return this.site_title;
+        return this.image;
     }
 
     // js_flag

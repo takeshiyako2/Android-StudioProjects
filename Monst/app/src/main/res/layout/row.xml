@@ -27,29 +27,53 @@
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="28dp">
+        android:layout_width="fill_parent"
+        android:layout_height="40dp">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="textViewTS Text"
-            android:id="@+id/textViewTS"
-            android:layout_weight="0.08"
-            android:textSize="8dp"
-            android:paddingBottom="12dp"
-            android:gravity="left"/>
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="vertical"
+            android:layout_width="200dip"
+            android:layout_height="28dp"
+            android:gravity="left" >
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="textViewSiteTitle Text"
-            android:id="@+id/textViewSiteTitle"
-            android:layout_weight="0.08"
-            android:textSize="8dp"
-            android:gravity="right"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="textViewTS Text"
+                android:id="@+id/textViewTS"
+                android:layout_weight="0.08"
+                android:textSize="8dp"
+                android:gravity="left"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="textViewSiteTitle Text"
+                android:id="@+id/textViewSiteTitle"
+                android:layout_weight="0.08"
+                android:textSize="8dp"
+                android:gravity="left"/>
+
+        </LinearLayout>
 
 
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="28dp"
+            android:gravity="right" >
+
+            <ImageView
+                android:id="@+id/image"
+                android:scaleType="fitEnd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:layout_weight="0.08"
+                android:gravity="right"/>
+
+        </LinearLayout>
     </LinearLayout>
+
 
 </LinearLayout>
