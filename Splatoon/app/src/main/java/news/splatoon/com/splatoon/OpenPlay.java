@@ -16,7 +16,7 @@ public class OpenPlay {
 
     // PlayをIntentで開く
     public void makeIntent() {
-        String facebookUrl = "https://play.google.com/store/apps/details?id=com.splatoon.news";
+        String facebookUrl = "https://play.google.com/store/apps/details?id=news.splatoon.com.splatoon";
         this_context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(facebookUrl)));
 
     }

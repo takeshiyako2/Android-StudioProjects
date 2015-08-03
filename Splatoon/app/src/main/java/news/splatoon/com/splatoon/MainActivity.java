@@ -42,7 +42,7 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
     String app_titile = "ニュース for スプラトゥーン";
 
     // Play URL (短縮URL)
-    String play_url = "";
+    String play_url = "https://play.google.com/store/apps/details?id=news.splatoon.com.splatoon";
 
     //  Volleyでリクエスト時に設定するタグ名、キャンセル時に利用 クラス名をタグ指定
     private static final Object TAG_REQUEST_QUEUE = MainActivity.class.getName();
