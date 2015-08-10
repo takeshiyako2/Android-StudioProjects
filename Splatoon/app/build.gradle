@@ -8,8 +8,8 @@ android {
         applicationId "news.splatoon.com.splatoon"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 4
-        versionName "1.4"
+        versionCode 6
+        versionName "1.6"
     }
     buildTypes {
         release {

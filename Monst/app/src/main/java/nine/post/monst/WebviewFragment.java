@@ -3,6 +3,7 @@ package nine.post.monst;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,6 +20,9 @@ import android.view.WindowManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
+
+import java.net.URISyntaxException;
 
 
 /**
@@ -149,12 +153,12 @@ public class WebviewFragment extends Fragment {
 
             // スレッドのローディングダイアログをスタート
             sleep_time = 1300;
-            try{
+            try {
                 waitDialog.show();
                 // 実際に行いたい処理は、プログレスダイアログの裏側で行うため、別スレッドにて実行する
                 (new Thread(runnable)).start();
-            }catch(Exception ex){
-            }finally{
+            } catch (Exception ex) {
+            } finally {
             }
 
         }
@@ -164,6 +168,33 @@ public class WebviewFragment extends Fragment {
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
 
+        }
+
+        // リンクをタップしたときに呼ばれる
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            Uri uri = Uri.parse(url);
+            String scheme = uri.getScheme();
+            // リンクがニコニコ動画「アプリで再生」の場合
+            if (scheme.indexOf("intent") != -1 && url.indexOf("jp.nicovideo.android") != -1) {
+                Intent intent = null;
+                // インテントを作る
+                try {
+                    intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME);
+                } catch (URISyntaxException e) {
+                    e.printStackTrace();
+                }
+                // アクティビティを起動
+                try {
+                    getActivity().startActivityForResult(intent, 12345);
+                } catch (android.content.ActivityNotFoundException e) {
+                    // 指定パッケージのアプリがインストールされていないか
+                    // ACTION_SENDに対応していないか
+                    Toast.makeText(getActivity(), "not installed", Toast.LENGTH_SHORT).show();
+                }
+                return true;
+            }
+            return super.shouldOverrideUrlLoading(view, url);
         }
     }
 
