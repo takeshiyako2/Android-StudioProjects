@@ -28,3 +28,6 @@
 [submodule "Splatoon/modules/volley"]
 	path = Splatoon/modules/volley
 	url = https://android.googlesource.com/platform/frameworks/volley
+[submodule "kancolle/modules/volley"]
+	path = kancolle/modules/volley
+	url = https://android.googlesource.com/platform/frameworks/volley
