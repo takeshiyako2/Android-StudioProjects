@@ -56,9 +56,6 @@ public class MainActivity extends ActionBarActivity implements YouTubePlayer.OnI
     private static String top_url = "http://9post.jp/";
     private static String menu1_url = "http://9post.jp/";
     private static String menu2_url = "http://9post.jp/ranking";
-//    private static String top_url = "https://www.google.co.jp/";
-//    private static String menu1_url = "https://www.google.co.jp/";
-//    private static String menu2_url = "https://www.facebook.com/";
 
     // エラーページ
     private View mErrorPage;
@@ -148,7 +145,6 @@ public class MainActivity extends ActionBarActivity implements YouTubePlayer.OnI
         alarm.setRepeating(
                 AlarmManager.RTC_WAKEUP,
                 alarmStartTime,
-//                1 * 1000 * 30, // 30秒毎
                 AlarmManager.INTERVAL_DAY, // 1日毎
                 alarmIntent
         );
@@ -218,10 +214,10 @@ public class MainActivity extends ActionBarActivity implements YouTubePlayer.OnI
                 webSettings.setJavaScriptEnabled(false);
 
                 // ローディングダイアログの表示位置　下部に表示
-                WindowManager.LayoutParams wmlp=waitDialog.getWindow().getAttributes();
-                wmlp.gravity = Gravity.BOTTOM;
-                wmlp.y = 450;
-                waitDialog.getWindow().setAttributes(wmlp);
+//                WindowManager.LayoutParams wmlp=waitDialog.getWindow().getAttributes();
+//                wmlp.gravity = Gravity.BOTTOM;
+//                wmlp.y = 450;
+//                waitDialog.getWindow().setAttributes(wmlp);
 
                 // アクションバーに戻る(<-)を表示
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -336,6 +332,7 @@ public class MainActivity extends ActionBarActivity implements YouTubePlayer.OnI
 
     // YouTubeプレーヤーを初期化する処理をまとめる
     private void initYouTubeView() {
+        Log.d(TAG, "initYouTubeView");
         // フラグメントインスタンスを取得
         YouTubePlayerFragment youTubePlayerFragment = (YouTubePlayerFragment) getFragmentManager().findFragmentById(R.id.youtube_view);
         // フラグメントのプレーヤーを初期化する
@@ -370,6 +367,7 @@ public class MainActivity extends ActionBarActivity implements YouTubePlayer.OnI
             // プレーヤーの設定 すべてのインタラクティブなコントロールを表示
             player.setPlayerStyle(PlayerStyle.DEFAULT);
             player.setShowFullscreenButton(false);
+            player.play();
         }
     }
 
