@@ -8,8 +8,8 @@ android {
         applicationId "news.splatoon.com.splatoon"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 7
-        versionName "1.7"
+        versionCode 8
+        versionName "1.8"
     }
     buildTypes {
         release {
@@ -29,4 +29,5 @@ dependencies {
     compile 'com.github.castorflex.smoothprogressbar:library-circular:+'
     compile project(':modules:volley')
     compile 'com.github.bumptech.glide:glide:3.6.0'
+    compile 'com.google.android.gms:play-services:6.+'
 }
