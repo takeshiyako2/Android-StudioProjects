@@ -23,7 +23,8 @@ import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 import java.net.URISyntaxException;
-
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -126,6 +127,10 @@ public class WebviewFragment extends Fragment {
         mErrorPage = container.findViewById(R.id.webview_error_page);
         mWebView.setBackgroundColor(0);
         mWebView.loadUrl(url);
+
+        AdView mAdView = (AdView)v.findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
         return v;
     }
