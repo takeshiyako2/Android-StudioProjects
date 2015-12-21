@@ -128,6 +128,7 @@ public class WebviewFragment extends Fragment {
         mWebView.setBackgroundColor(0);
         mWebView.loadUrl(url);
 
+        // バナー
         AdView mAdView = (AdView)v.findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);

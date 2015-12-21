@@ -419,17 +419,18 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
             // アクションバーのタイトルを戻す
             getSupportActionBar().setTitle(R.string.app_name);
             getSupportActionBar().setSubtitle(null);
-
+        }
+        // アクティビティ終了
+        else{
             // インタースティシャル
             Random rnd = new Random();
-            int Omikuji = rnd.nextInt(4);
+            int Omikuji = rnd.nextInt(2);
             Log.e(TAG, "Omikuji " + Omikuji);
             if (Omikuji == 1) {
                 showInterstitialAd();
             }
-        }
-        // アクティビティ終了
-        else{
+
+            // 全て終了
             finish();
         }
     }
