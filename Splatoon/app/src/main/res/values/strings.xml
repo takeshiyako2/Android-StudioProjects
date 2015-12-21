@@ -6,9 +6,10 @@
     <!-- staging -->
     <!--
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="interstitial_ad_unit_id">ca-app-pub-3940256099942544/1033173712</string>
     -->
     <!-- production-->
-
     <string name="banner_ad_unit_id">ca-app-pub-1710991096996005/7700326178</string>
+    <string name="interstitial_ad_unit_id">ca-app-pub-1710991096996005/5053937376</string>
 
 </resources>
