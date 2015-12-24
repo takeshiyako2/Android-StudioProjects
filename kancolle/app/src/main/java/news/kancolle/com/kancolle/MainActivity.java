@@ -31,6 +31,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 
 public class MainActivity extends ActionBarActivity implements SwipeRefreshLayout.OnRefreshListener {
 
@@ -70,6 +75,10 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
 
     // リフレッシュ
     private SwipeRefreshLayout mSwipeRefreshLayout;
+
+    // インタースティシャル
+    private InterstitialAd interstitialAd;
+    private int mLevel = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,6 +184,19 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
 
         // スワイプで更新
         createSwipeRefreshLayout();
+
+        /// インタースティシャルを作成。
+        interstitialAd = new InterstitialAd(this);
+        interstitialAd.setAdUnitId(getString(R.string.interstitial_ad_unit_id));
+        loadInterstitialAd();
+
+        interstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                super.onAdClosed();
+                loadInterstitialAd();
+            }
+        });
     }
 
     // スワイプのレイアウト
@@ -342,6 +364,22 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
         builder.startChooser();
     }
 
+    /**インタースティシャル広告の読み込み*/
+    private void loadInterstitialAd()
+    {
+        AdRequest adRequest = new AdRequest.Builder().build();
+        interstitialAd.loadAd(adRequest);
+    }
+
+    /**インタースティシャル広告の表示*/
+    private void showInterstitialAd()
+    {
+        if (!interstitialAd.isLoaded()) {
+            return;
+        }
+        interstitialAd.show();
+    }
+
     // 戻るボタンを押した時
     @Override
     public void onBackPressed() {
@@ -379,6 +417,15 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
         }
         // アクティビティ終了
         else{
+            // インタースティシャル
+            Random rnd = new Random();
+            int Omikuji = rnd.nextInt(12);
+            Log.e(TAG, "Omikuji " + Omikuji);
+            if (Omikuji == 1) {
+                showInterstitialAd();
+            }
+
+            // 全て終了
             finish();
         }
     }
