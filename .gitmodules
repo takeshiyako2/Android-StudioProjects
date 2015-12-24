@@ -31,3 +31,6 @@
 [submodule "kancolle/modules/volley"]
 	path = kancolle/modules/volley
 	url = https://android.googlesource.com/platform/frameworks/volley
+[submodule "Pazdra/modules/volley"]
+	path = Pazdra/modules/volley
+	url = https://android.googlesource.com/platform/frameworks/volley
