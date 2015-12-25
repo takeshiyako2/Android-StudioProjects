@@ -9,13 +9,12 @@
 
 
     <!-- staging -->
-
+    <!--
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
     <string name="interstitial_ad_unit_id">ca-app-pub-3940256099942544/1033173712</string>
-
+    -->
     <!-- production-->
-    <!--
-<string name="banner_ad_unit_id">ca-app-pub-1710991096996005/7582574977</string>
-<string name="interstitial_ad_unit_id">ca-app-pub-1710991096996005/2904709778</string>
--->
+    <string name="banner_ad_unit_id">ca-app-pub-1710991096996005/2081634573</string>
+    <string name="interstitial_ad_unit_id">ca-app-pub-1710991096996005/5035100973</string>
+
 </resources>
