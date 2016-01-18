@@ -35,6 +35,7 @@ import java.util.Random;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 
 
@@ -185,6 +186,10 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
         // スワイプで更新
         createSwipeRefreshLayout();
 
+        // バナー広告
+        AdView mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
         /// インタースティシャルを作成。
         interstitialAd = new InterstitialAd(this);
