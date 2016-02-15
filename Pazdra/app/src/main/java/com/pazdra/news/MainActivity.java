@@ -426,12 +426,12 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
         // アクティビティ終了
         else{
             // インタースティシャル
-            Random rnd = new Random();
-            int Omikuji = rnd.nextInt(2);
-            Log.e(TAG, "Omikuji " + Omikuji);
-            if (Omikuji == 1) {
+//            Random rnd = new Random();
+//            int Omikuji = rnd.nextInt(2);
+//            Log.e(TAG, "Omikuji " + Omikuji);
+//            if (Omikuji == 1) {
                 showInterstitialAd();
-            }
+//            }
 
             // 全て終了
             finish();
