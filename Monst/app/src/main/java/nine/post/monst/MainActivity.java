@@ -358,7 +358,7 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
             articleURL = play_url;
         }
         // 文字結合
-        String sharedText = articleTitle + " " + articleURL;
+        String sharedText = articleTitle + " " + articleURL + " from https://goo.gl/o20a4w";
         // builderの生成　ShareCompat.IntentBuilder.from(Context context);
         ShareCompat.IntentBuilder builder = ShareCompat.IntentBuilder.from(this);
         // アプリ一覧が表示されるDialogのタイトルの設定
