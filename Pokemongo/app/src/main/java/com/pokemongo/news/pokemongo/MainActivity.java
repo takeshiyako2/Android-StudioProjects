@@ -48,10 +48,13 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
     private String URL_API;
 
     // アプリタイトル
-    String app_titile = "ニュース for ポケモンGO";
+    String app_titile = "ニュースforポケモンGO";
 
-    // Play URL (短縮URL)
-    String play_url = "https://play.google.com/store/apps/details?id=com.pokemongo.news.pokemongo";
+    // Play URL
+    String play_url = "https://play.google.com/store/apps/details?id=matomenews.for.pokemongo";
+
+    // Play 短縮URL
+    String play_url_min = "https://goo.gl/jiepRh";
 
     //  Volleyでリクエスト時に設定するタグ名、キャンセル時に利用 クラス名をタグ指定
     private static final Object TAG_REQUEST_QUEUE = MainActivity.class.getName();
@@ -331,7 +334,7 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
             // アプリを評価
             case R.id.action_play:
                 OpenPlay OpenPlay = new OpenPlay(this);
-                OpenPlay.makeIntent();
+                OpenPlay.makeIntent(play_url);
                 return true;
 
             // 戻る（<-）を押したときの処理
@@ -357,7 +360,7 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
             articleURL = play_url;
         }
         // 文字結合
-        String sharedText = articleTitle + " " + articleURL + " from https://goo.gl/TyeqEA";
+        String sharedText = articleTitle + " " + articleURL + " " + play_url_min;
         // builderの生成　ShareCompat.IntentBuilder.from(Context context);
         ShareCompat.IntentBuilder builder = ShareCompat.IntentBuilder.from(this);
         // アプリ一覧が表示されるDialogのタイトルの設定

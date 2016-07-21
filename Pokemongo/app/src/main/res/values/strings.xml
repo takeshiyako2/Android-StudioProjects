@@ -1,15 +1,16 @@
 <resources>
-    <string name="app_name">ニュース for ポケモンGO</string>
+    <string name="app_name">ニュースforポケモンGO</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
     <!-- staging -->
+    <!--
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
     <string name="interstitial_ad_unit_id">ca-app-pub-3940256099942544/1033173712</string>
+    -->
 
     <!-- production-->
-    <!--
-<string name="banner_ad_unit_id">ca-app-pub-1710991096996005/7700326178</string>
-<string name="interstitial_ad_unit_id">ca-app-pub-1710991096996005/5053937376</string>
--->
+    <string name="banner_ad_unit_id">ca-app-pub-1710991096996005/4599686974</string>
+    <string name="interstitial_ad_unit_id">ca-app-pub-1710991096996005/7553153373</string>
+
 </resources>
