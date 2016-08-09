@@ -48,13 +48,13 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
     private String URL_API;
 
     // アプリタイトル
-    String app_titile = "ニュースforポケモンGO";
+    String app_titile = "まとめアンテナforポケモンGO";
 
     // Play URL
-    String play_url = "https://play.google.com/store/apps/details?id=matomenews.for.pokemongo";
+    String play_url = "https://play.google.com/store/apps/details?id=matomeantenna.for.pokemongo";
 
     // Play 短縮URL
-    String play_url_min = "https://goo.gl/jiepRh";
+    String play_url_min = "https://goo.gl/y8OCqU";
 
     //  Volleyでリクエスト時に設定するタグ名、キャンセル時に利用 クラス名をタグ指定
     private static final Object TAG_REQUEST_QUEUE = MainActivity.class.getName();
@@ -92,6 +92,10 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
         setContentView(R.layout.activity_main);
 
         Log.e(TAG, "onCreate");
+
+        // アクションバーのタイトルを空に
+        getSupportActionBar().setTitle(null);
+        getSupportActionBar().setSubtitle(null);
 
         // リストビューへ紐付け
         listview = (ListView) findViewById(R.id.listview_forecasts);
@@ -147,23 +151,6 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
                 getSupportActionBar().setSubtitle(item.getSiteTitle());
             }
         });
-
-        /*
-        // リストビューの項目が長押しされたときのコールバックリスナーを登録
-        listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                // リストビューの項目を取得
-                ListView listview = (ListView) parent;
-                RowDetail item = (RowDetail) listview.getItemAtPosition(position);
-                String text = "長押ししました:" + item.getTitle() + ":" + item.getUrl();
-                // トースト表示
-                Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
-                // onItemClickを実行しない
-                return true;
-            }
-        });
-*/
 
         // スクロール処理
         listview.setOnScrollListener(new AbsListView.OnScrollListener() {
@@ -422,19 +409,14 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
             // アクションバーの戻る(<-)を消す
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
-            // アクションバーのタイトルを戻す
-            getSupportActionBar().setTitle(R.string.app_name);
+            // アクションバーのタイトルを空に
+            getSupportActionBar().setTitle(null);
             getSupportActionBar().setSubtitle(null);
         }
         // アクティビティ終了
         else{
             // インタースティシャル
-//            Random rnd = new Random();
-//            int Omikuji = rnd.nextInt(2);
-//            Log.e(TAG, "Omikuji " + Omikuji);
-//            if (Omikuji == 1) {
             showInterstitialAd();
-//            }
 
             // 全て終了
             finish();

@@ -35,7 +35,7 @@
             android:layout_width="200dip"
             android:layout_height="33dp"
             android:gravity="left" >
-
+<!--
             <ImageView
                 android:id="@+id/image"
                 android:scaleType="fitStart"
@@ -44,7 +44,7 @@
                 android:adjustViewBounds="true"
                 android:layout_weight="0.08"
                 android:gravity="left"/>
-
+-->
         </LinearLayout>
 
 

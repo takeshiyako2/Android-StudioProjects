@@ -5,11 +5,11 @@ android {
     buildToolsVersion "24.0.1"
 
     defaultConfig {
-        applicationId "matomenews.for.pokemongo"
+        applicationId "matomeantenna.for.pokemongo"
         minSdkVersion 15
         targetSdkVersion 24
-        versionCode 5
-        versionName "1.5"
+        versionCode 6
+        versionName "6"
     }
     buildTypes {
         release {

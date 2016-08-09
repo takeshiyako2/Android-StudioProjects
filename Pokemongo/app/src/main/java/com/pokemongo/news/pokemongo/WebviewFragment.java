@@ -119,7 +119,6 @@ public class WebviewFragment extends Fragment {
         mWebView.getSettings().setUserAgentString(ua);
         mWebView.getSettings().setLoadWithOverviewMode(true);
         mWebView.getSettings().setUseWideViewPort(true);
-        mWebView.getSettings().setBuiltInZoomControls(true);
         mWebView.clearCache(true);
         mWebView.clearHistory();
         mErrorPage = container.findViewById(R.id.webview_error_page);

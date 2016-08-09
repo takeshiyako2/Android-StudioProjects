@@ -55,6 +55,7 @@ public class RowDetailAdapter extends ArrayAdapter<RowDetail> {
 
         // Glideを設定
         String url = detail.getImage();
+        url = null; // ===========> 画像無効化
         if(null != url) {
 
             Log.d("getView", "image: " + detail.getImage());
