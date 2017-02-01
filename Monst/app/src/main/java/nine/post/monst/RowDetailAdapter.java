@@ -35,9 +35,7 @@ public class RowDetailAdapter extends ArrayAdapter<RowDetail> {
         }
 
         // 行のデータを項目へ設定
-        Log.d("getView", "id: " + detail.getId());
-//        TextView text1 = (TextView)convertView.findViewById(R.id.textViewId);
-//        text1.setText(detail.getId());
+//        Log.d("getView", "id: " + detail.getId());
 
         TextView text2 = (TextView)convertView.findViewById(R.id.textViewTitle);
         text2.setText(detail.getTitle());
@@ -52,7 +50,7 @@ public class RowDetailAdapter extends ArrayAdapter<RowDetail> {
         String url = detail.getImage();
         if(null != url) {
 
-            Log.d("getView", "image: " + detail.getImage());
+//            Log.d("getView", "image: " + detail.getImage());
 
             final ImageView myImageView;
             myImageView = (ImageView) convertView.findViewById(R.id.image);

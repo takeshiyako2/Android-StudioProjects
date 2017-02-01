@@ -1,5 +1,6 @@
 package nine.post.monst;
 
+import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -30,13 +31,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
-import java.util.Random;
-
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
+import com.five_corp.ad.*;
 
 public class MainActivity extends ActionBarActivity implements SwipeRefreshLayout.OnRefreshListener {
 
@@ -81,12 +82,16 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
     private InterstitialAd interstitialAd;
     private int mLevel = 0;
 
+    // Five
+    String five_app_id = "592299";
+    String five_slot_id_interstitial = "352853";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Log.e(TAG, "onCreate");
+//        Log.e(TAG, "onCreate");
 
         // リストビューへ紐付け
         listview = (ListView) findViewById(R.id.listview_forecasts);
@@ -143,26 +148,6 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
             }
         });
 
-        /*
-        // リストビューの項目が長押しされたときのコールバックリスナーを登録
-        listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-
-                // リストビューの項目を取得
-                ListView listview = (ListView) parent;
-                RowDetail item = (RowDetail) listview.getItemAtPosition(position);
-                String text = "長押ししました:" + item.getTitle() + ":" + item.getUrl();
-
-                // トースト表示
-                Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
-
-                // onItemClickを実行しない
-                return true;
-            }
-        });
-*/
-
         // スクロール処理
         listview.setOnScrollListener(new AbsListView.OnScrollListener() {
             private int mark = 0;
@@ -189,23 +174,20 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
         // スワイプで更新
         createSwipeRefreshLayout();
 
-        // バナー広告
-        AdView mAdView = (AdView) findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
-
-        /// インタースティシャルを作成。
-        interstitialAd = new InterstitialAd(this);
-        interstitialAd.setAdUnitId(getString(R.string.interstitial_ad_unit_id));
-        loadInterstitialAd();
-
-        interstitialAd.setAdListener(new AdListener() {
-            @Override
-            public void onAdClosed() {
-                super.onAdClosed();
-                loadInterstitialAd();
-            }
-        });
+        // Five
+        FiveAdConfig config = new FiveAdConfig(five_app_id);
+        config.formats = EnumSet.of(
+                FiveAdFormat.INTERSTITIAL_LANDSCAPE, // インタースティシャル（横向き）
+                FiveAdFormat.INTERSTITIAL_PORTRAIT,  // インタースティシャル（縦向き）
+                FiveAdFormat.IN_FEED                 // インフィード
+        );
+//        config.isTest = true;
+        FiveAd.initialize(
+                this,        // android.content.Context
+                config
+        );
+        FiveAd fiveAd = FiveAd.getSingleton();
+        fiveAd.enableLoading(true);
     }
 
     // スワイプのレイアウト
@@ -236,14 +218,14 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
 
     // リクエスト処理
     private void request() {
-        Log.d(TAG, "request URL_API: " + URL_API);
+//        Log.d(TAG, "request URL_API: " + URL_API);
         JsonArrayRequest jsonObjReq = new JsonArrayRequest(Request.Method.GET, URL_API, null,
                 new Response.Listener<JSONArray>() {
                     // レスポンス受信のリスナー
                     @Override
                     public void onResponse(JSONArray response) {
                         // ログ出力
-                        Log.d(TAG, "request onResponse: " + response.toString());
+//                        Log.d(TAG, "request onResponse: " + response.toString());
                         try {
                             for (int i = 0; i < response.length(); i++) {
                                 JSONObject forecast = response.getJSONObject(i);
@@ -273,7 +255,7 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // エラー処理
-                        Log.d(TAG, "request Error: " + error.getMessage());
+//                        Log.d(TAG, "request Error: " + error.getMessage());
 
                         if( error instanceof NetworkError) {
                         } else if( error instanceof ServerError) {
@@ -374,23 +356,6 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
     }
 
 
-    /**インタースティシャル広告の読み込み*/
-    private void loadInterstitialAd()
-    {
-        AdRequest adRequest = new AdRequest.Builder().build();
-        interstitialAd.loadAd(adRequest);
-    }
-
-    /**インタースティシャル広告の表示*/
-    private void showInterstitialAd()
-    {
-        if (!interstitialAd.isLoaded()) {
-            return;
-        }
-        interstitialAd.show();
-    }
-
-
     // 戻るボタンを押した時
     @Override
     public void onBackPressed() {
@@ -399,7 +364,7 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
 
     // 戻る処理
     public void makeBackFromFragment() {
-        int backStackCnt = getSupportFragmentManager().getBackStackEntryCount();
+//        int backStackCnt = getSupportFragmentManager().getBackStackEntryCount();
 
         // Fragmentから戻る処理
         if (ThisIsFlagment) {
@@ -427,18 +392,26 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
             getSupportActionBar().setSubtitle(null);
         }
         // アクティビティ終了
-        else{
-            // インタースティシャル
-//            Random rnd = new Random();
-//            int Omikuji = rnd.nextInt(2);
-//            Log.e(TAG, "Omikuji " + Omikuji);
-//            if (Omikuji == 1) {
-                showInterstitialAd();
-//            }
-
-            // 全て終了
-            finish();
+        else {
+            // Five インタースティシャル
+            // FiveAdState.LOADEDの場合は、ListenerクラスのonFiveAdCloseで、finish()する。
+            FiveAdInterstitial interstitial = new FiveAdInterstitial(this, five_slot_id_interstitial);
+            interstitial.setListener(new Listener(this, "Interstitial"));
+            interstitial.loadAd();
+            if (interstitial.getState() == FiveAdState.LOADED) {
+                boolean success = interstitial.show();
+                if (success) {
+                    interstitial = new FiveAdInterstitial(this, five_slot_id_interstitial);
+                    interstitial.loadAd();
+                }
+            }  else {
+                finish();
+            }
         }
     }
 
 }
+
+
+
+

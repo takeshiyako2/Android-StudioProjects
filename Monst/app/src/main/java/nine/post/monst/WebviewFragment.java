@@ -129,9 +129,9 @@ public class WebviewFragment extends Fragment {
         mWebView.loadUrl(url);
 
         // バナー
-        AdView mAdView = (AdView)v.findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
+//        AdView mAdView = (AdView)v.findViewById(R.id.adView);
+//        AdRequest adRequest = new AdRequest.Builder().build();
+//        mAdView.loadAd(adRequest);
 
         return v;
     }
