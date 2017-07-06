@@ -8,8 +8,8 @@ android {
         applicationId "com.monst.news3"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 1
-        versionName "1"
+        versionCode 3
+        versionName "3"
     }
     buildTypes {
         release {
@@ -31,5 +31,5 @@ dependencies {
     compile 'com.android.volley:volley:1.0.0'
     compile 'com.github.bumptech.glide:glide:3.6.0'
     compile 'com.google.android.gms:play-services:6.+'
-    compile files('/Users/yako/git/Android-StudioProjects/Monst/lib/FiveAd-20170629.jar')
+    compile files('/Users/yako/git/Android-StudioProjects/Monst3/lib/FiveAd-20170629.jar')
 }

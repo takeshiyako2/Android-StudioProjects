@@ -51,8 +51,8 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
     // アプリタイトル
     String app_titile = "モンストニュース";
 
-    // Play URL (短縮URL)
-    String play_url = "https://play.google.com/store/apps/details?id=com.monst.news3&hl=ja";
+    // Play URL (短縮URL) https://goo.gl/
+    String play_url = "https://goo.gl/cBdt5V";
 
     //  Volleyでリクエスト時に設定するタグ名、キャンセル時に利用 クラス名をタグ指定
     private static final Object TAG_REQUEST_QUEUE = MainActivity.class.getName();
@@ -311,14 +311,14 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
 
             // ブラウザで開く
             case R.id.open_browser:
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(current_url));
-                startActivity(intent);
+                Intent intent_url = new Intent(Intent.ACTION_VIEW, Uri.parse(current_url));
+                startActivity(intent_url);
                 return true;
 
             // アプリを評価
             case R.id.action_play:
-                OpenPlay OpenPlay = new OpenPlay(this);
-                OpenPlay.makeIntent();
+                Intent intent_play = new Intent(Intent.ACTION_VIEW, Uri.parse(play_url));
+                startActivity(intent_play);
                 return true;
 
             // 戻る（<-）を押したときの処理
