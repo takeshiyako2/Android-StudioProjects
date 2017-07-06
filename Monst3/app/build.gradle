@@ -5,11 +5,11 @@ android {
     buildToolsVersion "22.0.1"
 
     defaultConfig {
-        applicationId "com.monst.news2"
+        applicationId "com.monst.news3"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 27
-        versionName "27"
+        versionCode 1
+        versionName "1"
     }
     buildTypes {
         release {

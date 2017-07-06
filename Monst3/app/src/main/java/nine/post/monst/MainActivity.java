@@ -4,15 +4,20 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Handler;
 import android.support.v4.app.ShareCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -35,23 +40,19 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.InterstitialAd;
 import com.five_corp.ad.*;
 
 public class MainActivity extends ActionBarActivity implements SwipeRefreshLayout.OnRefreshListener {
 
     // JSONデータ取得URL
-    private String BASE_URL_API = "http://api.monst.hitokoto.co/feed.json";
+    private String BASE_URL_API = "http://api3.monst.hitokoto.co/feed.json";
     private String URL_API;
 
     // アプリタイトル
     String app_titile = "モンストニュース";
 
     // Play URL (短縮URL)
-    String play_url = "https://play.google.com/store/apps/details?id=com.monst.news2&hl=ja";
+    String play_url = "https://play.google.com/store/apps/details?id=com.monst.news3&hl=ja";
 
     //  Volleyでリクエスト時に設定するタグ名、キャンセル時に利用 クラス名をタグ指定
     private static final Object TAG_REQUEST_QUEUE = MainActivity.class.getName();
@@ -80,18 +81,11 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
     // リフレッシュ
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
-    // インタースティシャル
-    private InterstitialAd interstitialAd;
-    private int mLevel = 0;
+    // WebViewに遷移したときのurl
+    String current_url = play_url;
 
     // Five
     String five_app_id = "592299";
-    String five_slot_id_footer = "913416";
-
-
-    private FiveAd fiveAd;
-    private FiveAdCustomLayout w640h640;
-    private int width;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,6 +146,9 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
                 // アクションバーに選んだタイトルを表示
                 getSupportActionBar().setTitle(item.getTitle());
                 getSupportActionBar().setSubtitle(item.getSiteTitle());
+
+                // ブラウザで開く用のurlにセット
+                current_url = item.getUrl();
             }
         });
 
@@ -190,12 +187,11 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
         );
 //        config.isTest = true;
         FiveAd.initialize(
-                this,        // android.content.Context
+                this,
                 config
         );
         FiveAd fiveAd = FiveAd.getSingleton();
         fiveAd.enableLoading(true);
-
     }
 
     // スワイプのレイアウト
@@ -298,12 +294,6 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
 
         //noinspection SimplifiableIfStatement
         switch (id) {
-            /*
-            // Settingsを押したときの処理
-            case R.id.action_settings:
-                return true;
-                break;
-            */
             // シェアを押したときの処理
             case R.id.action_shere:
                 makeShere();
@@ -318,6 +308,12 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
                 // アクティビティ移行時のアニメーションを無効化
                 overridePendingTransition(0, 0);
                 break;
+
+            // ブラウザで開く
+            case R.id.open_browser:
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(current_url));
+                startActivity(intent);
+                return true;
 
             // アプリを評価
             case R.id.action_play:
@@ -398,6 +394,9 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
             // アクションバーのタイトルを戻す
             getSupportActionBar().setTitle(R.string.app_name);
             getSupportActionBar().setSubtitle(null);
+
+            // ブラウザで開く用のurlを戻す
+            current_url = play_url;
         }
         // アクティビティ終了
         else {
