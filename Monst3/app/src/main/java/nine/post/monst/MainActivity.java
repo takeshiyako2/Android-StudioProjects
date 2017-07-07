@@ -40,6 +40,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Random;
+
 import com.five_corp.ad.*;
 
 public class MainActivity extends ActionBarActivity implements SwipeRefreshLayout.OnRefreshListener {
@@ -86,13 +88,14 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
 
     // Five
     String five_app_id = "592299";
+    private FiveAdCustomLayout Custom;
+    private LinearLayout linearLayout;
+    private int width;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-//        Log.e(TAG, "onCreate");
 
         // リストビューへ紐付け
         listview = (ListView) findViewById(R.id.listview_forecasts);
@@ -192,6 +195,21 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
         );
         FiveAd fiveAd = FiveAd.getSingleton();
         fiveAd.enableLoading(true);
+
+        // AD おみくじ 10/100
+        Random rnd = new Random();
+        int Omikuji = rnd.nextInt(100);
+        if (Omikuji <= 10) {
+            // Go to Ad
+            linearLayout = (LinearLayout) this.findViewById(R.id.adView);
+            width = linearLayout.getWidth() - linearLayout.getPaddingLeft() - linearLayout.getPaddingRight();
+            Custom = new FiveAdCustomLayout(this, "913416", width);
+            Custom.setListener(new Listener(this, "Custom"));
+            Custom.loadAd();
+            if (Custom != null && Custom.getState() == FiveAdState.LOADED) {
+                linearLayout.addView(Custom);
+            }
+        }
     }
 
     // スワイプのレイアウト

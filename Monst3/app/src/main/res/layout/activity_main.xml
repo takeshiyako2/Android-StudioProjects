@@ -32,14 +32,15 @@
         </android.support.v4.widget.SwipeRefreshLayout>
 
     </LinearLayout>
-<!--
+
     <LinearLayout
         android:id="@+id/adView"
+        android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="80dp"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:background="#ff0000"
-        android:layout_gravity="center_horizontal|bottom"/>
--->
+        android:showDividers="none"
+        android:layout_gravity="center_horizontal|bottom" />
+
 </RelativeLayout>
