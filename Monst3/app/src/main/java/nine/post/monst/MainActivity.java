@@ -122,36 +122,38 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
                 // リストビューの項目を取得
                 ListView listview = (ListView) parent;
                 item = (RowDetail) listview.getItemAtPosition(position);
+                if (item != null) {
 
-                // MainActivity LinearLayout非表示
-                findViewById(R.id.layout_list).setVisibility(View.GONE);
+                    // MainActivity LinearLayout非表示
+                    findViewById(R.id.layout_list).setVisibility(View.GONE);
 
-                // Fragmentに受け渡す値
-                Bundle args = new Bundle();
-                args.putString("url", item.getUrl());
-                args.putInt("site_js_flag", item.getSiteJsFlag());
+                    // Fragmentに受け渡す値
+                    Bundle args = new Bundle();
+                    args.putString("url", item.getUrl());
+                    args.putInt("site_js_flag", item.getSiteJsFlag());
 
-                // Fragment表示
-                FragmentManager fragmentManager = getFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                WebviewFragment frag1 = new WebviewFragment();
-                frag1.setArguments(args);
-                fragmentTransaction.replace(R.id.framelayout1, frag1);
-                fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-                fragmentTransaction.commit();
+                    // Fragment表示
+                    FragmentManager fragmentManager = getFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    WebviewFragment frag1 = new WebviewFragment();
+                    frag1.setArguments(args);
+                    fragmentTransaction.replace(R.id.framelayout1, frag1);
+                    fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                    fragmentTransaction.commit();
 
-                // フラグをtrue
-                ThisIsFlagment = true;
+                    // フラグをtrue
+                    ThisIsFlagment = true;
 
-                // アクションバーに戻る(<-)を表示
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                    // アクションバーに戻る(<-)を表示
+                    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-                // アクションバーに選んだタイトルを表示
-                getSupportActionBar().setTitle(item.getTitle());
-                getSupportActionBar().setSubtitle(item.getSiteTitle());
+                    // アクションバーに選んだタイトルを表示
+                    getSupportActionBar().setTitle(item.getTitle());
+                    getSupportActionBar().setSubtitle(item.getSiteTitle());
 
-                // ブラウザで開く用のurlにセット
-                current_url = item.getUrl();
+                    // ブラウザで開く用のurlにセット
+                    current_url = item.getUrl();
+                }
             }
         });
 

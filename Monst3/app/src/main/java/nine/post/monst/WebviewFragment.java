@@ -139,10 +139,10 @@ public class WebviewFragment extends Fragment {
         mWebView.setBackgroundColor(0);
         mWebView.loadUrl(url);
 
-        // AD おみくじ 30/100
+        // AD おみくじ 10/100
         Random rnd = new Random();
         int Omikuji = rnd.nextInt(100);
-        if (Omikuji <= 30) {
+        if (Omikuji <= 10) {
             // Go to Ad
             linearLayout = (LinearLayout) v.findViewById(R.id.adView);
             width = linearLayout.getWidth() - linearLayout.getPaddingLeft() - linearLayout.getPaddingRight();
@@ -179,7 +179,7 @@ public class WebviewFragment extends Fragment {
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
 
             // スレッドのローディングダイアログをスタート
-            sleep_time = 1300;
+            sleep_time = 1000;
             try {
                 waitDialog.show();
                 // 実際に行いたい処理は、プログレスダイアログの裏側で行うため、別スレッドにて実行する
@@ -236,7 +236,9 @@ public class WebviewFragment extends Fragment {
                 Log.e("Runnable", "InterruptedException");
             }
             // 処理が完了したら、ローディングダイアログを消すためにdismiss()を実行する
-            waitDialog.dismiss();
+            if (waitDialog != null) {
+                waitDialog.dismiss();
+            }
         }
     };
 
