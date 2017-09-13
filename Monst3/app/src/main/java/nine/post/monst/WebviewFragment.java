@@ -32,6 +32,8 @@ import com.five_corp.ad.FiveAdState;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
+import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
+
 import static android.R.attr.width;
 
 /**
@@ -101,9 +103,6 @@ public class WebviewFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Log.e(TAG, "onCreate");
-
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -122,7 +121,7 @@ public class WebviewFragment extends Fragment {
         // WebViewの設定
         View v = inflater.inflate(R.layout.fragment_webview, container, false);
         mWebView = (WebView) v.findViewById(R.id.webView1);
-        mWebView.setWebViewClient(new MyWebViewClient(getActivity()));
+//        mWebView.setWebViewClient(new MyWebViewClient(getActivity()));
         WebSettings webSettings = mWebView.getSettings();
         // site_js_flagフラグが1なら、JavaScriptをオン
         if (site_js_flag == 1) {
@@ -139,10 +138,10 @@ public class WebviewFragment extends Fragment {
         mWebView.setBackgroundColor(0);
         mWebView.loadUrl(url);
 
-        // AD おみくじ 10/100
+        // AD おみくじ 90/100
         Random rnd = new Random();
         int Omikuji = rnd.nextInt(100);
-        if (Omikuji <= 10) {
+        if (Omikuji <= 90) {
             // Go to Ad
             linearLayout = (LinearLayout) v.findViewById(R.id.adView);
             width = linearLayout.getWidth() - linearLayout.getPaddingLeft() - linearLayout.getPaddingRight();
@@ -151,6 +150,9 @@ public class WebviewFragment extends Fragment {
             Custom.loadAd();
             if (Custom != null && Custom.getState() == FiveAdState.LOADED) {
                 linearLayout.addView(Custom);
+            } else if (Custom.getState() == FiveAdState.ERROR) {
+                Custom = new FiveAdCustomLayout(getActivity(), "913416", width);
+                Custom.loadAd();
             }
         }
 
@@ -159,14 +161,6 @@ public class WebviewFragment extends Fragment {
 
     // WebViewClientを継承
     public class MyWebViewClient extends WebViewClient {
-
-        // ローディングダイアログ
-        public MyWebViewClient(Context c) {
-            waitDialog = new Dialog(c, R.style.Theme_CustomProgressDialog);
-            waitDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            waitDialog.setContentView(R.layout.custom_progress_dialog);
-            waitDialog.getWindow().setFlags(0, WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-        }
 
         // エラーが発生した場合
         @Override

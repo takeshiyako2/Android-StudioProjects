@@ -190,7 +190,7 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
                 FiveAdFormat.INTERSTITIAL_PORTRAIT,
                 FiveAdFormat.CUSTOM_LAYOUT
         );
-//        config.isTest = true;
+//        config.isTest = true; ///////////////////////////////////////////
         FiveAd.initialize(
                 this,
                 config
@@ -198,10 +198,10 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
         FiveAd fiveAd = FiveAd.getSingleton();
         fiveAd.enableLoading(true);
 
-        // AD おみくじ 10/100
+        // AD おみくじ 20/100
         Random rnd = new Random();
         int Omikuji = rnd.nextInt(100);
-        if (Omikuji <= 10) {
+        if (Omikuji <= 20) {
             // Go to Ad
             linearLayout = (LinearLayout) this.findViewById(R.id.adView);
             width = linearLayout.getWidth() - linearLayout.getPaddingLeft() - linearLayout.getPaddingRight();
@@ -210,6 +210,9 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
             Custom.loadAd();
             if (Custom != null && Custom.getState() == FiveAdState.LOADED) {
                 linearLayout.addView(Custom);
+            } else if (Custom.getState() == FiveAdState.ERROR) {
+                Custom = new FiveAdCustomLayout(this, "913416", width);
+                Custom.loadAd();
             }
         }
     }

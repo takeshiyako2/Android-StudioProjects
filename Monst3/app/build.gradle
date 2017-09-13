@@ -2,14 +2,14 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 22
-    buildToolsVersion "22.0.1"
+    buildToolsVersion '26.0.1'
 
     defaultConfig {
         applicationId "com.monst.news3"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 6
-        versionName "6"
+        versionCode 7
+        versionName "7"
     }
     buildTypes {
         release {
@@ -23,10 +23,21 @@ repositories {
     mavenCentral()
 }
 
+buildscript {
+    repositories {
+        maven {
+            url 'https://maven.google.com'
+        }
+        jcenter()
+        maven { url 'https://maven.fabric.io/public' }
+    }
+}
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:22.2.0'
-    compile 'com.github.castorflex.smoothprogressbar:library-circular:+'
+    compile 'com.android.support:support-annotations:24.2.0'
+    compile 'com.github.castorflex.smoothprogressbar:library:1.1.0'
     compile fileTree(include: ['*.jar'], dir: 'modules')
     compile 'com.android.volley:volley:1.0.0'
     compile 'com.github.bumptech.glide:glide:3.6.0'
