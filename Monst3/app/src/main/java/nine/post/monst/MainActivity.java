@@ -197,7 +197,7 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
         );
         FiveAd fiveAd = FiveAd.getSingleton();
         fiveAd.enableLoading(true);
-
+/*
         // AD おみくじ 20/100
         Random rnd = new Random();
         int Omikuji = rnd.nextInt(100);
@@ -215,6 +215,7 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
                 Custom.loadAd();
             }
         }
+*/
     }
 
     // スワイプのレイアウト

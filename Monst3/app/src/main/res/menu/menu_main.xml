@@ -6,7 +6,7 @@
         android:id="@+id/action_reload"
         app:showAsAction="ifRoom"
         android:title="更新"
-        android:icon="@android:drawable/ic_menu_rotate" />
+        android:icon="@android:drawable/ic_popup_sync" />
 
     <item
         android:id="@+id/action_shere"
