@@ -197,11 +197,11 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
         );
         FiveAd fiveAd = FiveAd.getSingleton();
         fiveAd.enableLoading(true);
-/*
-        // AD おみくじ 20/100
+
+        // AD おみくじ 50/100
         Random rnd = new Random();
         int Omikuji = rnd.nextInt(100);
-        if (Omikuji <= 20) {
+        if (Omikuji <= 50) {
             // Go to Ad
             linearLayout = (LinearLayout) this.findViewById(R.id.adView);
             width = linearLayout.getWidth() - linearLayout.getPaddingLeft() - linearLayout.getPaddingRight();
@@ -215,7 +215,6 @@ public class MainActivity extends ActionBarActivity implements SwipeRefreshLayou
                 Custom.loadAd();
             }
         }
-*/
     }
 
     // スワイプのレイアウト

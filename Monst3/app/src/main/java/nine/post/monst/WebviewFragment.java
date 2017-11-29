@@ -89,7 +89,7 @@ public class WebviewFragment extends Fragment {
         mWebView.clearHistory();
         mWebView.setBackgroundColor(0);
         mWebView.loadUrl(url);
-
+/*
         // AD おみくじ 90/100
         Random rnd = new Random();
         int Omikuji = rnd.nextInt(100);
@@ -107,7 +107,7 @@ public class WebviewFragment extends Fragment {
                 Custom.loadAd();
             }
         }
-
+*/
         return v;
     }
 
